@@ -1,0 +1,49 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:components="clr-namespace:GamerVII.Launcher.Views.Components"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             xmlns:vm="clr-namespace:GamerVII.Launcher.ViewModels"
+             x:DataType="vm:ModsPageViewModel"
+             x:Class="GamerVII.Launcher.Views.Pages.ModsPageView">
+
+    <Border Padding="50, 30"
+            Background="#0E1011">
+        <Grid RowDefinitions="80, *" ColumnDefinitions="*, *">
+            <Grid Grid.ColumnDefinitions="*, *"
+                  Grid.ColumnSpan="2">
+
+                <components:ButtonControl Classes="Additional"
+                                          IconPath="/Assets/leftArrow.svg"
+                                          Text="НАЗАД"
+                                          Command="{Binding GoToMainPageCommand}" />
+
+
+                <TextBlock HorizontalAlignment="Right"
+                           Grid.Column="1"
+                           Classes="Headline">
+                    <Run Text="Список модов"/>
+                    <Run Text="/"/>
+                    <Run Text="{Binding SelectClient.Name}"/>
+                </TextBlock>
+
+            </Grid>
+
+
+            <StackPanel Grid.Row="1" Spacing="10">
+
+                <CheckBox Content="Мод 1" Classes="CheckBox" />
+                <CheckBox Content="Мод 2" Classes="CheckBox" />
+                <CheckBox Content="Мод 3" Classes="CheckBox" />
+                <CheckBox Content="Мод 4" Classes="CheckBox" />
+                <CheckBox Content="Мод 5" Classes="CheckBox" />
+                <CheckBox Content="Мод 6" Classes="CheckBox" />
+
+            </StackPanel>
+
+
+        </Grid>
+    </Border>
+</UserControl>
+
