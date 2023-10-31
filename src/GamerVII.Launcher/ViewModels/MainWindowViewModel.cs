@@ -128,11 +128,11 @@ namespace GamerVII.Launcher.ViewModels
         private PageViewModelBase _currentPage;
 
         // Array of available page view models.
-        private readonly PageViewModelBase[] Pages =
+        public readonly PageViewModelBase[] Pages =
         {
             new AuthPageViewModel(),
             new ProfilePageViewModel(),
-            new ClientSettingsPageViewModel(),
+            new SettingsPageViewModel(),
             new ModsPageViewModel(),
         };
 
@@ -195,8 +195,8 @@ namespace GamerVII.Launcher.ViewModels
 
             SettingsClientCommand =
                 ReactiveCommand.Create(
-                    () => OpenPage<ClientSettingsPageViewModel>(
-                        c => ((ClientSettingsPageViewModel)c).User = User),
+                    () => OpenPage<SettingsPageViewModel>(
+                        c => ((SettingsPageViewModel)c).User = User),
                     canLaunch);
 
             ModsListCommand = ReactiveCommand.Create(() =>
@@ -206,6 +206,14 @@ namespace GamerVII.Launcher.ViewModels
             }, canViewMods);
 
             // Subscribe to events from the game launch service to update processing information.
+            SubscribeToEvents();
+
+            // Load user data and set the appropriate initial page based on user status.
+            LoadData();
+        }
+
+        private void SubscribeToEvents()
+        {
             _gameLaunchService.FileChanged += (fileName) =>
             {
                 LoadingFile = fileName;
@@ -224,7 +232,7 @@ namespace GamerVII.Launcher.ViewModels
                     if (isSuccess)
                     {
                         var settings =
-                            GetPageViewModelByType<ClientSettingsPageViewModel>() as ClientSettingsPageViewModel ??
+                            GetPageViewModelByType<SettingsPageViewModel>() as SettingsPageViewModel ??
                             throw new Exception("Settings not found");
 
                         var process = await _gameLaunchService.LaunchClient(client, User, new StartupOptions
@@ -254,9 +262,6 @@ namespace GamerVII.Launcher.ViewModels
                     _loggerService.Log(ex.Message, ex);
                 }
             };
-
-            // Load user data and set the appropriate initial page based on user status.
-            LoadData();
         }
 
 
@@ -281,21 +286,17 @@ namespace GamerVII.Launcher.ViewModels
 
             if (!User.IsLogin) OpenPage<AuthPageViewModel>();
 
-            var authViewModel = Pages.FirstOrDefault(c => c.GetType() == typeof(AuthPageViewModel)) as AuthPageViewModel
+            var authViewModel = GetPageViewModelByType<AuthPageViewModel>() as AuthPageViewModel
                                 ?? throw new Exception(nameof(AuthPageViewModel) + " not found");
 
-            var profileViewModel =
-                Pages.FirstOrDefault(c => c.GetType() == typeof(ProfilePageViewModel)) as ProfilePageViewModel
-                ?? throw new Exception(nameof(ProfilePageViewModel) + " not found");
+            var profileViewModel = GetPageViewModelByType<ProfilePageViewModel>() as ProfilePageViewModel
+                                   ?? throw new Exception(nameof(ProfilePageViewModel) + " not found");
 
-            var settingsViewModel =
-                Pages.FirstOrDefault(c => c.GetType() == typeof(ClientSettingsPageViewModel)) as
-                    ClientSettingsPageViewModel
-                ?? throw new Exception(nameof(ClientSettingsPageViewModel) + " not found");
+            var settingsViewModel = GetPageViewModelByType<SettingsPageViewModel>() as SettingsPageViewModel
+                                    ?? throw new Exception(nameof(SettingsPageViewModel) + " not found");
 
-            var modsPageViewModel =
-                Pages.FirstOrDefault(c => c.GetType() == typeof(ModsPageViewModel)) as ModsPageViewModel
-                ?? throw new Exception(nameof(ModsPageViewModel) + " not found");
+            var modsPageViewModel = GetPageViewModelByType<ModsPageViewModel>() as ModsPageViewModel
+                                    ?? throw new Exception(nameof(ModsPageViewModel) + " not found");
 
             if (await _storageService.GetAsync<LocalSettings>("Settings") is { } settings)
             {
@@ -310,7 +311,7 @@ namespace GamerVII.Launcher.ViewModels
             modsPageViewModel.GoToMainPageCommand = ReactiveCommand.Create(ResetPage);
 
 
-            authViewModel.Authorized += async (user) =>
+            authViewModel.Authorized += (user) =>
             {
                 if (!user.IsLogin) return;
 
@@ -319,9 +320,9 @@ namespace GamerVII.Launcher.ViewModels
             };
         }
 
-        private async Task SaveSettings()
+        public async Task SaveSettings()
         {
-            if (GetPageViewModelByType<ClientSettingsPageViewModel>() is ClientSettingsPageViewModel settings)
+            if (GetPageViewModelByType<SettingsPageViewModel>() is SettingsPageViewModel settings)
             {
                 await _storageService.SetAsync("Settings", new LocalSettings
                 {
@@ -338,7 +339,7 @@ namespace GamerVII.Launcher.ViewModels
         /// <summary>
         /// Resets the current page by setting it to null.
         /// </summary>
-        private void ResetPage()
+        public void ResetPage()
         {
             CurrentPage = null!;
         }
@@ -347,7 +348,7 @@ namespace GamerVII.Launcher.ViewModels
         /// Opens the specified page view model and sets it as the current page.
         /// </summary>
         /// <typeparam name="T">The type of the page view model to open.</typeparam>
-        private void OpenPage<T>(Func<PageViewModelBase, object>? action = null)
+        public void OpenPage<T>(Func<PageViewModelBase, object>? action = null)
         {
             var page = GetPageViewModelByType<T>();
 
@@ -361,7 +362,7 @@ namespace GamerVII.Launcher.ViewModels
             }
         }
 
-        private PageViewModelBase? GetPageViewModelByType<T>()
+        public PageViewModelBase? GetPageViewModelByType<T>()
         {
             var type = typeof(T);
 
