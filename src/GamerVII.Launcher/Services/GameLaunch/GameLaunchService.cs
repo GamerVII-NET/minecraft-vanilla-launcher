@@ -7,15 +7,15 @@ using CmlLib.Core.Auth;
 using CmlLib.Core.Installer.Forge;
 using GamerVII.Launcher.Models.Client;
 using GamerVII.Launcher.Models.Users;
-using GamerVII.Launcher.Services.LoggerService;
+using GamerVII.Launcher.Services.Logger;
 using Splat;
 
-namespace GamerVII.Launcher.Services.GameLaunchService;
+namespace GamerVII.Launcher.Services.GameLaunch;
 
 public class GameLaunchService : IGameLaunchService
 {
     private readonly ILoggerService _loggerService;
-    public CMLauncher Launcher { get; private set; }
+    private CMLauncher _launcher;
 
     public event IGameLaunchService.ProgressChangedEventHandler ProgressChanged;
     public event IGameLaunchService.FileChangedEventHandler FileChanged;
@@ -27,7 +27,7 @@ public class GameLaunchService : IGameLaunchService
 
     private delegate void FileChangedEventHandler(string percentage);
 
-    private delegate void LoadClientEventHandler(bool loadClientEnded, string? message);
+    private delegate void LoadClientEventHandler(IGameClient client, bool loadClientEnded, string? message);
 
     public GameLaunchService(ILoggerService? loggerService = null)
     {
@@ -36,51 +36,51 @@ public class GameLaunchService : IGameLaunchService
         System.Net.ServicePointManager.DefaultConnectionLimit = 256;
 
         _path = new MinecraftPath();
-        Launcher = new CMLauncher(_path);
+        _launcher = new CMLauncher(_path);
 
-        Launcher.ProgressChanged += (sender, e) => ProgressChanged?.Invoke(((decimal)e.ProgressPercentage) / 100);
-        Launcher.FileChanged += (e) => FileChanged?.Invoke(e.FileName);
+        _launcher.ProgressChanged += (sender, e) => ProgressChanged?.Invoke(((decimal)e.ProgressPercentage) / 100);
+        _launcher.FileChanged += (e) => FileChanged?.Invoke(e.FileName);
     }
 
-    public async Task<Process> LaunchClient(IGameClient client, IUser user)
+    public async Task<Process> LaunchClient(IGameClient client, IUser user, IStartupOptions startupOptions)
     {
-        Process process = new Process();
+        var process = new Process();
 
-        try
+        var session = new MSession(user.Login, user.AccessToken, "uuid");
+        session = MSession.CreateOfflineSession(user.Login);
+
+        process = await _launcher.CreateProcessAsync(client.InstallationVersion, new MLaunchOption
         {
-            var session = new MSession(user.Login, user.AccessToken, "uuid");
+            MinimumRamMb = startupOptions.MinimumRamMb,
+            MaximumRamMb = startupOptions.MaximumRamMb,
+            FullScreen = startupOptions.FullScreen,
+            ScreenHeight = startupOptions.ScreenHeight,
+            ScreenWidth = startupOptions.ScreenWidth,
+            ServerIp = startupOptions.ServerIp,
+            ServerPort = startupOptions.ServerPort,
+            Session = session,
+        }, false);
 
-            process = await Launcher.CreateProcessAsync(client.InstallationVersion, new MLaunchOption
-            {
-                MaximumRamMb = 4096,
-                Session = session,
-            });
+        process.EnableRaisingEvents = true;
+        process.StartInfo.RedirectStandardError = true;
+        process.StartInfo.RedirectStandardOutput = true;
 
-            process.EnableRaisingEvents = true;
-            process.StartInfo.RedirectStandardError = true;
-            process.StartInfo.RedirectStandardOutput = true;
+        process.ErrorDataReceived += (s, e) => _loggerService.Log(e.Data);
+        process.OutputDataReceived += (s, e) => _loggerService.Log(e.Data);
 
-            process.ErrorDataReceived += (s, e) => _loggerService.Log(e.Data);
-            process.OutputDataReceived += (s, e) => _loggerService.Log(e.Data);
-
-            process.Start();
-            process.BeginErrorReadLine();
-            process.BeginOutputReadLine();
-        }
-        catch (Exception ex)
-        {
-            _loggerService.Log(ex.Message);
-            _loggerService.Log(ex.StackTrace);
-        }
+        process.Start();
+        process.BeginErrorReadLine();
+        process.BeginOutputReadLine();
 
         return process;
     }
 
     public Task<IGameClient> LoadClient(IGameClient client)
     {
-        var thread = new Thread(() => LoadClientFiles(client));
-
-        thread.IsBackground = true;
+        var thread = new Thread(() => LoadClientFiles(client))
+        {
+            IsBackground = true
+        };
 
         thread.Start();
 
@@ -91,13 +91,13 @@ public class GameLaunchService : IGameLaunchService
     {
         try
         {
-            var version = await Launcher.GetVersionAsync(client.Version);
+            var version = await _launcher.GetVersionAsync(client.Version);
             client.InstallationVersion = version.Id;
 
             switch (client.ModLoaderType)
             {
                 case Models.Enums.ModLoaderType.Vanilla:
-                    await Launcher.CheckAndDownloadAsync(version);
+                    await _launcher.CheckAndDownloadAsync(version);
                     break;
 
                 case Models.Enums.ModLoaderType.Forge:
@@ -112,17 +112,17 @@ public class GameLaunchService : IGameLaunchService
                     break;
             }
 
-            LoadClientEnded?.Invoke(true, "success");
+            LoadClientEnded?.Invoke(client, true, "success");
         }
         catch (Exception ex)
         {
-            LoadClientEnded?.Invoke(false, ex.Message);
+            LoadClientEnded?.Invoke(client,  false, ex.Message);
         }
     }
 
     private async Task LoadForge(IGameClient client)
     {
-        var forge = new MForge(Launcher);
+        var forge = new MForge(_launcher);
         forge.FileChanged += (e) => FileChanged?.Invoke(e.FileName);
         forge.ProgressChanged += (sender, e) => ProgressChanged?.Invoke(((decimal)e.ProgressPercentage) / 100);
 

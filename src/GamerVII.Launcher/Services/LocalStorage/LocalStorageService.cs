@@ -3,6 +3,8 @@ using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using GamerVII.Launcher.Services.Logger;
+using Splat;
 
 namespace GamerVII.Launcher.Services.LocalStorage;
 
@@ -11,6 +13,14 @@ public class LocalStorageService : ILocalStorageService
     private readonly string _storagePath = "config.data";
 
     private Dictionary<string, string>? _storage;
+    private readonly ILoggerService _loggerService;
+
+    public LocalStorageService(ILoggerService? loggerService = null)
+    {
+        _loggerService = loggerService
+                         ?? Locator.Current.GetService<ILoggerService>()
+                         ?? throw new Exception($"{nameof(ILoggerService)} not registered");
+    }
 
     public async Task<T?> GetAsync<T>(string key)
     {
@@ -53,6 +63,7 @@ public class LocalStorageService : ILocalStorageService
         }
         catch (Exception ex)
         {
+            _loggerService.Log(ex.Message, ex);
         }
 
         return data;

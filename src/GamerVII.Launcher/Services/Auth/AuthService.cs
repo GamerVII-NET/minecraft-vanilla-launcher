@@ -1,17 +1,12 @@
 ﻿using System;
-using System.IdentityModel.Tokens.Jwt;
-using System.IO;
 using System.Linq;
 using System.Net.Http;
-using System.Security.Cryptography;
-using System.Text;
 using System.Threading.Tasks;
 using GamerVII.Launcher.Models.Users;
 using GamerVII.Launcher.Services.LocalStorage;
-using Microsoft.IdentityModel.Tokens;
 using Splat;
 
-namespace GamerVII.Launcher.Services.AuthService;
+namespace GamerVII.Launcher.Services.Auth;
 
 public class AuthService : IAuthService
 {
@@ -65,7 +60,7 @@ public class AuthService : IAuthService
         await _localStorage.SetAsync("User", string.Empty);
     }
 
-    public async Task<IUser?> GetAuthorizedUser()
+    public async Task<IUser> GetAuthorizedUser()
     {
         return await _localStorage.GetAsync<User>("User");
     }

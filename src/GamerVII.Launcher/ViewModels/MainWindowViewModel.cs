@@ -10,9 +10,10 @@ using System.Windows.Input;
 using Avalonia.Threading;
 using GamerVII.Launcher.Models.Client;
 using GamerVII.Launcher.Models.Users;
-using GamerVII.Launcher.Services.AuthService;
-using GamerVII.Launcher.Services.GameLaunchService;
-using GamerVII.Launcher.Services.LoggerService;
+using GamerVII.Launcher.Services.Auth;
+using GamerVII.Launcher.Services.GameLaunch;
+using GamerVII.Launcher.Services.LocalStorage;
+using GamerVII.Launcher.Services.Logger;
 using Splat;
 
 namespace GamerVII.Launcher.ViewModels
@@ -117,6 +118,7 @@ namespace GamerVII.Launcher.ViewModels
 
         private readonly IAuthService _authService;
         private readonly IGameLaunchService _gameLaunchService;
+        private readonly ILocalStorageService _storageService;
         private readonly ILoggerService _loggerService;
 
         private bool _isProcessing = false;
@@ -143,27 +145,43 @@ namespace GamerVII.Launcher.ViewModels
         /// <param name="gameLaunchService">An optional IGameLaunchService implementation for game launching.</param>
         /// <param name="authService">An optional IAuthService implementation for user authentication.</param>
         /// <param name="loggerService">An optional ILoggerService implementation for logging messages.</param>
-        public MainWindowViewModel(IGameLaunchService gameLaunchService = null, IAuthService? authService = null,
-            ILoggerService loggerService = null)
+        public MainWindowViewModel(
+            IGameLaunchService? gameLaunchService = null,
+            IAuthService? authService = null,
+            ILocalStorageService? storageService = null,
+            ILoggerService? loggerService = null)
         {
             // Initialize the SidebarViewModel for the main window.
             SidebarViewModel = new SidebarViewModel();
 
             // Set the provided or default implementations for game launch service, authentication service, and logger service.
-            _gameLaunchService = gameLaunchService ?? Locator.Current.GetService<IGameLaunchService>()!;
-            _authService = authService ?? Locator.Current.GetService<IAuthService>()!;
-            _loggerService = loggerService ?? Locator.Current.GetService<ILoggerService>()!;
+            _gameLaunchService = gameLaunchService
+                                 ?? Locator.Current.GetService<IGameLaunchService>()
+                                 ?? throw new Exception($"{nameof(IGameLaunchService)} not registered");
+
+            _authService = authService
+                           ?? Locator.Current.GetService<IAuthService>()
+                           ?? throw new Exception($"{nameof(IAuthService)} not registered");
+
+            _loggerService = loggerService
+                             ?? Locator.Current.GetService<ILoggerService>()
+                             ?? throw new Exception($"{nameof(ILoggerService)} not registered");
+
+            _storageService = storageService
+                              ?? Locator.Current.GetService<ILocalStorageService>()
+                              ?? throw new Exception($"{nameof(ILocalStorageService)} not registered");
+
 
             // Define conditions for enabling certain commands based on view model properties.
             var canLaunch = this.WhenAnyValue(
-                x => x.IsProcessing, x => x.SidebarViewModel.ServersListViewModel.SelectClient,
+                x => x.IsProcessing, x => x.SidebarViewModel.ServersListViewModel.SelectedClient,
                 (isProcessing, gameClient) =>
                     isProcessing == false &&
                     gameClient != null
             );
 
             var canViewMods = this.WhenAnyValue(
-                x => x.IsProcessing, x => x.SidebarViewModel.ServersListViewModel.SelectClient,
+                x => x.IsProcessing, x => x.SidebarViewModel.ServersListViewModel.SelectedClient,
                 (isProcessing, gameClient) => gameClient != null
             );
 
@@ -184,8 +202,58 @@ namespace GamerVII.Launcher.ViewModels
             ModsListCommand = ReactiveCommand.Create(() =>
             {
                 OpenPage<ModsPageViewModel>(c =>
-                    ((ModsPageViewModel)c).SelectClient = SidebarViewModel.ServersListViewModel.SelectClient);
+                    ((ModsPageViewModel)c).SelectClient = SidebarViewModel.ServersListViewModel.SelectedClient!);
             }, canViewMods);
+
+            // Subscribe to events from the game launch service to update processing information.
+            _gameLaunchService.FileChanged += (fileName) =>
+            {
+                LoadingFile = fileName;
+                Console.WriteLine(LoadingFile);
+            };
+            _gameLaunchService.ProgressChanged += (percentage) =>
+            {
+                LoadingPercentage = percentage;
+                Console.WriteLine(LoadingPercentage);
+            };
+
+            _gameLaunchService.LoadClientEnded += async (client, isSuccess, message) =>
+            {
+                try
+                {
+                    if (isSuccess)
+                    {
+                        var settings =
+                            GetPageViewModelByType<ClientSettingsPageViewModel>() as ClientSettingsPageViewModel ??
+                            throw new Exception("Settings not found");
+
+                        var process = await _gameLaunchService.LaunchClient(client, User, new StartupOptions
+                        {
+                            ScreenWidth = settings.WindowWidth,
+                            ScreenHeight = settings.WindowHeight,
+                            FullScreen = settings.IsFullScreen,
+                            MaximumRamMb = settings.MemorySize,
+                            MinimumRamMb = settings.MemorySize,
+                        });
+
+                        process.Exited += async (sender, e) =>
+                        {
+                            await CancelUiProcessing();
+
+                            process.Dispose();
+                        };
+                    }
+                    else
+                    {
+                        await CancelUiProcessing();
+                        Console.WriteLine(message);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    _loggerService.Log(ex.Message, ex);
+                }
+            };
 
             // Load user data and set the appropriate initial page based on user status.
             LoadData();
@@ -229,9 +297,18 @@ namespace GamerVII.Launcher.ViewModels
                 Pages.FirstOrDefault(c => c.GetType() == typeof(ModsPageViewModel)) as ModsPageViewModel
                 ?? throw new Exception(nameof(ModsPageViewModel) + " not found");
 
+            if (await _storageService.GetAsync<LocalSettings>("Settings") is { } settings)
+            {
+                settingsViewModel.WindowWidth = settings.WindowWidth == 0 ? 900 : settings.WindowWidth;
+                settingsViewModel.WindowHeight = settings.WindowHeight == 0 ? 600 : settings.WindowWidth;
+                settingsViewModel.MemorySize = settings.MemorySize == 0 ? 1024 : settings.MemorySize;
+                settingsViewModel.IsFullScreen = settings.IsFullScreen;
+            }
+
             profileViewModel.GoToMainPageCommand = ReactiveCommand.Create(ResetPage);
-            settingsViewModel.GoToMainPageCommand = ReactiveCommand.Create(ResetPage);
+            settingsViewModel.GoToMainPageCommand = ReactiveCommand.CreateFromTask(SaveSettings);
             modsPageViewModel.GoToMainPageCommand = ReactiveCommand.Create(ResetPage);
+
 
             authViewModel.Authorized += async (user) =>
             {
@@ -242,12 +319,28 @@ namespace GamerVII.Launcher.ViewModels
             };
         }
 
+        private async Task SaveSettings()
+        {
+            if (GetPageViewModelByType<ClientSettingsPageViewModel>() is ClientSettingsPageViewModel settings)
+            {
+                await _storageService.SetAsync("Settings", new LocalSettings
+                {
+                    WindowWidth = settings.WindowWidth,
+                    WindowHeight = settings.WindowHeight,
+                    IsFullScreen = settings.IsFullScreen,
+                    MemorySize = settings.MemorySize
+                });
+            }
+
+            ResetPage();
+        }
+
         /// <summary>
         /// Resets the current page by setting it to null.
         /// </summary>
         private void ResetPage()
         {
-            CurrentPage = null;
+            CurrentPage = null!;
         }
 
         /// <summary>
@@ -256,9 +349,7 @@ namespace GamerVII.Launcher.ViewModels
         /// <typeparam name="T">The type of the page view model to open.</typeparam>
         private void OpenPage<T>(Func<PageViewModelBase, object>? action = null)
         {
-            var type = typeof(T);
-
-            var page = Pages.FirstOrDefault(c => c.GetType() == type);
+            var page = GetPageViewModelByType<T>();
 
             var index = Pages.IndexOf(page);
 
@@ -268,6 +359,15 @@ namespace GamerVII.Launcher.ViewModels
 
                 action?.Invoke(CurrentPage);
             }
+        }
+
+        private PageViewModelBase? GetPageViewModelByType<T>()
+        {
+            var type = typeof(T);
+
+            var page = Pages.FirstOrDefault(c => c.GetType() == type);
+
+            return page;
         }
 
         /// <summary>
@@ -282,35 +382,18 @@ namespace GamerVII.Launcher.ViewModels
                 IsProcessing = true;
 
                 IGameClient client =
-                    await _gameLaunchService.LoadClient(SidebarViewModel.ServersListViewModel.SelectClient);
-
-                // Subscribe to events from the game launch service to update processing information.
-                _gameLaunchService.FileChanged += (fileName) => LoadingFile = fileName;
-                _gameLaunchService.ProgressChanged += (percentage) => LoadingPercentage = percentage;
-
-                _gameLaunchService.LoadClientEnded += async (isSuccess, message) =>
-                {
-                    if (isSuccess)
-                    {
-                        Process process = await _gameLaunchService.LaunchClient(client, User);
-
-                        process.Exited += async (sender, e) =>
-                        {
-                            await Dispatcher.UIThread.InvokeAsync(() => IsProcessing = false);
-                        };
-                    }
-                    else
-                    {
-                        await Dispatcher.UIThread.InvokeAsync(() => IsProcessing = false);
-                        Console.WriteLine(message);
-                    }
-                };
+                    await _gameLaunchService.LoadClient(SidebarViewModel.ServersListViewModel.SelectedClient);
             }
             catch (Exception ex)
             {
                 _loggerService.Log(ex.Message);
                 _loggerService.Log(ex.StackTrace);
             }
+        }
+
+        private async Task CancelUiProcessing()
+        {
+            await Dispatcher.UIThread.InvokeAsync(() => IsProcessing = false);
         }
     }
 }

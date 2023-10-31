@@ -26,7 +26,7 @@
     <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
     <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.0.0" />
     <PackageReference Include="Avalonia.ReactiveUI" Version="11.0.0" />
-    <PackageReference Include="CmlLib.Core" Version="3.3.7" />
+    <PackageReference Include="CmlLib.Core" Version="3.3.8" />
     <PackageReference Include="CmlLib.Core.Installer.Forge" Version="0.0.2" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.1.0-preview" />
@@ -39,6 +39,36 @@
     </Compile>
     <Compile Update="Views\Components\SidebarView.axaml.cs">
       <DependentUpon>SidebarView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Models\Client\StartupOptions.cs">
+      <DependentUpon>IStartupOptions.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Models\Client\GameClient.cs">
+      <DependentUpon>IGameClient.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Models\Users\User.cs">
+      <DependentUpon>IUser.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Services\GameLaunchService\GameLaunchService.cs">
+      <DependentUpon>IGameLaunchService.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Models\Client\LocalSettings.cs">
+      <DependentUpon>ILocalSettings.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Services\AuthService\EmptyAuthService.cs">
+      <DependentUpon>IAuthService.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Services\AuthService\AuthService.cs">
+      <DependentUpon>IAuthService.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Services\ClientService\LocalGameClientService.cs">
+      <DependentUpon>IGameClientsService.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Services\LocalStorage\LocalStorageService.cs">
+      <DependentUpon>ILocalStorageService.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Services\Logger\FileLoggerService.cs">
+      <DependentUpon>ILoggerService.cs</DependentUpon>
     </Compile>
   </ItemGroup>
 </Project>

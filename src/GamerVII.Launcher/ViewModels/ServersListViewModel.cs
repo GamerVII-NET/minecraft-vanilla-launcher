@@ -1,10 +1,10 @@
 ﻿using GamerVII.Launcher.Models.Client;
-using GamerVII.Launcher.Services.ClientService;
 using GamerVII.Launcher.ViewModels.Base;
 using ReactiveUI;
 using Splat;
 using System.Collections.ObjectModel;
 using System.Linq;
+using GamerVII.Launcher.Services.Client;
 
 namespace GamerVII.Launcher.ViewModels;
 
@@ -35,7 +35,7 @@ public class ServersListViewModel : ViewModelBase
     /// <summary>
     /// Gets or sets the selected game client (server).
     /// </summary>
-    public IGameClient SelectClient
+    public IGameClient? SelectedClient
     {
         get => _selectedClient;
         set
@@ -48,7 +48,7 @@ public class ServersListViewModel : ViewModelBase
     private readonly IGameClientService _gameClientService;
 
     private ObservableCollection<IGameClient> _gameClients = null!;
-    private IGameClient _selectedClient = null!;
+    private IGameClient? _selectedClient;
 
     /// <summary>
     /// Initializes a new instance of the ServersListViewModel class.
@@ -72,6 +72,6 @@ public class ServersListViewModel : ViewModelBase
 
         GameClients = new ObservableCollection<IGameClient>(clients);
 
-        SelectClient = GameClients.FirstOrDefault();
+        SelectedClient = GameClients.FirstOrDefault();
     }
 }

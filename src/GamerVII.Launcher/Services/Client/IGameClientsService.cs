@@ -1,8 +1,8 @@
-﻿using GamerVII.Launcher.Models.Client;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using GamerVII.Launcher.Models.Client;
 
-namespace GamerVII.Launcher.Services.ClientService;
+namespace GamerVII.Launcher.Services.Client;
 
 /// <summary>
 /// Represents a service for managing game clients.

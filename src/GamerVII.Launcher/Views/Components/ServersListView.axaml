@@ -22,7 +22,7 @@
             <ListBox SelectedIndex="0"
                      x:Name="ServerList"
                      IsVisible="{Binding GameClients, Converter={converters:ListNotEmptyConverter}}"
-                     SelectedItem="{Binding SelectClient}"
+                     SelectedItem="{Binding SelectedClient}"
                      ItemsSource="{Binding GameClients, Mode=OneWay}"
                      Classes="SelectServer">
 

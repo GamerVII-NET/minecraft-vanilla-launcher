@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace GamerVII.Launcher.Services.LoggerService;
+namespace GamerVII.Launcher.Services.Logger;
 
 public class FileLoggerService : ILoggerService
 {
@@ -27,6 +27,11 @@ public class FileLoggerService : ILoggerService
     public void Log(string message)
     {
         // fileWriter.WriteLine($"[{DateTime.Now:dd.MM.yyyy HH:mm:ss / zz}] {message}");
+    }
+
+    public void Log(string message, Exception exception)
+    {
+        // throw new NotImplementedException();
     }
 
     public void Dispose()

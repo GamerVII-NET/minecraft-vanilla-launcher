@@ -4,7 +4,7 @@ using GamerVII.Launcher.Models.Users;
 using GamerVII.Launcher.Services.LocalStorage;
 using Splat;
 
-namespace GamerVII.Launcher.Services.AuthService;
+namespace GamerVII.Launcher.Services.Auth;
 
 public class EmptyAuthService : IAuthService
 {
@@ -17,9 +17,11 @@ public class EmptyAuthService : IAuthService
                         ?? throw new Exception(nameof(LocalStorageService) + " not registered");
     }
 
-    public Task<IUser?> GetAuthorizedUser()
+    public async Task<IUser> GetAuthorizedUser()
     {
-        return _localStorage.GetAsync<IUser>("User");
+        var user = await _localStorage.GetAsync<User>("User");
+
+        return user ?? new User { Login = string.Empty, Password = string.Empty};
     }
 
     public Task<IUser> OnLogin(string login, string password)

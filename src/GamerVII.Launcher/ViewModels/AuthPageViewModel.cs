@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using System.Windows.Input;
 using GamerVII.Launcher.Models.Users;
-using GamerVII.Launcher.Services.AuthService;
+using GamerVII.Launcher.Services.Auth;
 using GamerVII.Launcher.ViewModels.Base;
 using ReactiveUI;
 using Splat;

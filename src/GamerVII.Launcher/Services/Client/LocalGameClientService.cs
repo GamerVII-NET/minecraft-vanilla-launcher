@@ -1,9 +1,9 @@
-﻿using GamerVII.Launcher.Models.Client;
-using GamerVII.Launcher.Models.Enums;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using GamerVII.Launcher.Models.Client;
+using GamerVII.Launcher.Models.Enums;
 
-namespace GamerVII.Launcher.Services.ClientService;
+namespace GamerVII.Launcher.Services.Client;
 
 internal class LocalGameClientService : IGameClientService
 {
@@ -19,7 +19,7 @@ internal class LocalGameClientService : IGameClientService
                 Image = null,
                 Description = "Просто проект майнкрафт, без модов. Не знаю что ты тут ищешь",
                 Version = "1.7.10",
-                ModLoaderType = ModLoaderType.Forge
+                ModLoaderType = ModLoaderType.Vanilla
             });
         }
 

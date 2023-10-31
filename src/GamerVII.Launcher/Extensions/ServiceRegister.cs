@@ -1,9 +1,9 @@
 ﻿using Avalonia;
-using GamerVII.Launcher.Services.AuthService;
-using GamerVII.Launcher.Services.ClientService;
-using GamerVII.Launcher.Services.GameLaunchService;
+using GamerVII.Launcher.Services.Auth;
+using GamerVII.Launcher.Services.Client;
+using GamerVII.Launcher.Services.GameLaunch;
 using GamerVII.Launcher.Services.LocalStorage;
-using GamerVII.Launcher.Services.LoggerService;
+using GamerVII.Launcher.Services.Logger;
 using Splat;
 
 namespace GamerVII.Launcher.Extensions;
