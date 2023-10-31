@@ -1,7 +1,10 @@
-﻿using System.Windows.Input;
+﻿using System;
+using System.Windows.Input;
 using GamerVII.Launcher.Models.Users;
+using GamerVII.Launcher.Services.LocalStorage;
 using GamerVII.Launcher.ViewModels.Base;
 using ReactiveUI;
+using Splat;
 
 namespace GamerVII.Launcher.ViewModels;
 
@@ -10,6 +13,8 @@ namespace GamerVII.Launcher.ViewModels;
 /// </summary>
 public class ClientSettingsPageViewModel : PageViewModelBase
 {
+    private readonly ILocalStorageService _storageService;
+
     /// <summary>
     /// Command to navigate to the main page.
     /// </summary>
@@ -49,6 +54,5 @@ public class ClientSettingsPageViewModel : PageViewModelBase
     private int _windowHeight = 600;
     private bool _isFullScreen = false;
     private IUser _user = null;
-
 
 }

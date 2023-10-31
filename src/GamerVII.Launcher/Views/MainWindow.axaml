@@ -83,7 +83,7 @@
 
                     <!-- Content -->
                     <Grid ColumnDefinitions="*, *"
-                          IsVisible="{Binding SidebarViewModel.ServersListViewModel.SelectClient, Converter={converters:IsNotNullConverter}}"
+                          IsVisible="{Binding SidebarViewModel.ServersListViewModel.SelectedClient, Converter={converters:IsNotNullConverter}}"
                           Margin="0, 20, 0, 0"
                           Grid.ColumnSpan="2"
                           Grid.Column="0"
@@ -98,18 +98,18 @@
                                 <TextBlock Classes="Content"
                                            VerticalAlignment="Center"
                                            HorizontalAlignment="Center"
-                                           Text="{Binding SidebarViewModel.ServersListViewModel.SelectClient.Version}" />
+                                           Text="{Binding SidebarViewModel.ServersListViewModel.SelectedClient.Version}" />
                             </Border>
 
                             <TextBlock Classes="ServerName"
                                        TextWrapping="Wrap"
-                                       Text="{Binding SidebarViewModel.ServersListViewModel.SelectClient.Name}" />
+                                       Text="{Binding SidebarViewModel.ServersListViewModel.SelectedClient.Name}" />
 
                             <TextBlock Classes="Content"
                                        FontSize="16"
                                        LineHeight="30"
                                        TextWrapping="Wrap"
-                                       Text="{Binding SidebarViewModel.ServersListViewModel.SelectClient.Description}" />
+                                       Text="{Binding SidebarViewModel.ServersListViewModel.SelectedClient.Description}" />
 
                             <StackPanel Orientation="Horizontal"
                                         Spacing="20">
@@ -138,7 +138,7 @@
 
                         <components:ButtonControl Text="СПИСОК МОДОВ"
                                                   Classes="Additional"
-                                                  IsVisible="{Binding SidebarViewModel.ServersListViewModel.SelectClient, Converter={converters:IsNotNullConverter}}"
+                                                  IsVisible="{Binding SidebarViewModel.ServersListViewModel.SelectedClient, Converter={converters:IsNotNullConverter}}"
                                                   IconPath="/Assets/document.svg"
                                                   Command="{Binding ModsListCommand}" />
 

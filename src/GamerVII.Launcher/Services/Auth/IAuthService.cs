@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using GamerVII.Launcher.Models.Users;
 
-namespace GamerVII.Launcher.Services.AuthService;
+namespace GamerVII.Launcher.Services.Auth;
 
 /// <summary>
 /// Represents the service for managing user authentication.
@@ -12,7 +12,7 @@ public interface IAuthService
     /// Retrieves the authorized user.
     /// </summary>
     /// <returns>An instance of IUser representing the authorized user.</returns>
-    Task<IUser?> GetAuthorizedUser();
+    Task<IUser> GetAuthorizedUser();
 
     /// <summary>
     /// Performs login operation using the provided login credentials.

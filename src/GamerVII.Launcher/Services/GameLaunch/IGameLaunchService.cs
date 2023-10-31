@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using GamerVII.Launcher.Models.Client;
 using GamerVII.Launcher.Models.Users;
 
-namespace GamerVII.Launcher.Services.GameLaunchService;
+namespace GamerVII.Launcher.Services.GameLaunch;
 
 /// <summary>
 /// Represents a service for launching and managing Minecraft game clients.
@@ -13,9 +13,10 @@ public interface IGameLaunchService
     /// <summary>
     /// Delegate for handling the event when loading a client ends.
     /// </summary>
+    /// <param name="client">The Minecraft client instance to launch.</param>
     /// <param name="loadClientEnded">True if loading the client ended successfully, otherwise false.</param>
     /// <param name="message">An optional message related to the loading outcome.</param>
-    delegate void LoadClientEventHandler(bool loadClientEnded, string? message);
+    delegate void LoadClientEventHandler(IGameClient client, bool loadClientEnded, string? message);
 
     /// <summary>
     /// Delegate for handling the event when the progress changes during client loading or downloading.
@@ -49,8 +50,9 @@ public interface IGameLaunchService
     /// </summary>
     /// <param name="client">The Minecraft client instance to launch.</param>
     /// <param name="user">The user for whom the client is being launched.</param>
+    /// <param name="startupOptions">Launch Parameters</param>
     /// <returns>The process responsible for launching the client.</returns>
-    Task<Process> LaunchClient(IGameClient client, IUser user);
+    Task<Process> LaunchClient(IGameClient client, IUser user, IStartupOptions startupOptions);
 
     /// <summary>
     /// Downloads a Minecraft client of a certain version.

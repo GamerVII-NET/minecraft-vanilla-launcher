@@ -33,7 +33,7 @@
                 </StackPanel>
 
                 <StackPanel Classes="Input-Wrapper">
-                    <TextBlock Text="Логин" Classes="Content" />
+                    <TextBlock Text="Ваш ник" Classes="Content" />
                     <TextBox Classes="Input-Box" Text="{Binding Login, Mode=TwoWay}" />
                 </StackPanel>
 
