@@ -13,15 +13,17 @@ public static class ServiceRegister
 
     public static AppBuilder RegisterServices(this AppBuilder builder)
     {
+        RegisterServices();
 
+        return builder;
+    }
+
+    public static void RegisterServices()
+    {
         Locator.CurrentMutable.RegisterConstant(new FileLoggerService(), typeof(ILoggerService));
         Locator.CurrentMutable.RegisterConstant(new LocalStorageService(), typeof(ILocalStorageService));
         Locator.CurrentMutable.RegisterConstant(new LocalGameClientService(), typeof(IGameClientService));
         Locator.CurrentMutable.RegisterConstant(new GameLaunchService(), typeof(IGameLaunchService));
         Locator.CurrentMutable.RegisterConstant(new EmptyAuthService(), typeof(IAuthService));
-
-        return builder;
-
     }
-
 }

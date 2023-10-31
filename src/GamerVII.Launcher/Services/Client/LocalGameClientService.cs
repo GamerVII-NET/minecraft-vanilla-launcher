@@ -5,7 +5,7 @@ using GamerVII.Launcher.Models.Enums;
 
 namespace GamerVII.Launcher.Services.Client;
 
-internal class LocalGameClientService : IGameClientService
+public class LocalGameClientService : IGameClientService
 {
     public async Task<IEnumerable<IGameClient>> GetClientsAsync()
     {

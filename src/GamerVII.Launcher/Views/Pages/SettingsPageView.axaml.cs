@@ -4,9 +4,9 @@ using Avalonia.Markup.Xaml;
 
 namespace GamerVII.Launcher.Views.Pages;
 
-public partial class ClientSettingsPageView : UserControl
+public partial class SettingsPageView : UserControl
 {
-    public ClientSettingsPageView()
+    public SettingsPageView()
     {
         InitializeComponent();
     }

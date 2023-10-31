@@ -11,7 +11,7 @@ namespace GamerVII.Launcher.ViewModels;
 /// <summary>
 /// View model class for the client settings page, derived from PageViewModelBase.
 /// </summary>
-public class ClientSettingsPageViewModel : PageViewModelBase
+public class SettingsPageViewModel : PageViewModelBase
 {
     private readonly ILocalStorageService _storageService;
 
