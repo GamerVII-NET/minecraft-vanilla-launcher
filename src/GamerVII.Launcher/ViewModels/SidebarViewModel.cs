@@ -16,12 +16,12 @@ public class SidebarViewModel : ViewModelBase
     /// <summary>
     /// Command to open the profile page.
     /// </summary>
-    public ICommand OpenProfilePageCommand { get; set; }
+    public ICommand OpenProfilePageCommand { get; set; } = null!;
 
     /// <summary>
     /// Command to execute the logout operation.
     /// </summary>
-    public ICommand LogoutCommand { get; set; }
+    public ICommand LogoutCommand { get; set; } = null!;
 
     /// <summary>
     /// Initializes a new instance of the SidebarViewModel class.

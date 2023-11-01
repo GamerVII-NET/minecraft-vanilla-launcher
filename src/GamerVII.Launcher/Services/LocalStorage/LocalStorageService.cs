@@ -55,7 +55,7 @@ public class LocalStorageService : ILocalStorageService
         using var streamReader = new StreamReader(fileStream);
         var json = await streamReader.ReadToEndAsync();
 
-        var data = new Dictionary<string, string>();
+        Dictionary<string, string>? data = null;
 
         try
         {
@@ -66,6 +66,6 @@ public class LocalStorageService : ILocalStorageService
             _loggerService.Log(ex.Message, ex);
         }
 
-        return data;
+        return data ?? new Dictionary<string, string>();
     }
 }

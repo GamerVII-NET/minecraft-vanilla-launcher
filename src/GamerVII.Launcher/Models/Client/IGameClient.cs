@@ -7,6 +7,6 @@ public interface IGameClient
     string Version { get; set; }
     string InstallationVersion { get; set; }
     string Description { get; set; }
-    object Image { get; set; }
+    object? Image { get; set; }
     ModLoaderType ModLoaderType { get; set; }
 }

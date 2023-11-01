@@ -9,9 +9,9 @@ public class LocalGameClientService : IGameClientService
 {
     public async Task<IEnumerable<IGameClient>> GetClientsAsync()
     {
-        List<GameClient> servers = new List<GameClient>();
+        var servers = new List<GameClient>();
 
-        for (int i = 0; i < 2; i++)
+        for (var i = 0; i < 2; i++)
         {
             servers.Add(new GameClient
             {

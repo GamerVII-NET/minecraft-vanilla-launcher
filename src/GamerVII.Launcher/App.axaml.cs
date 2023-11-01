@@ -6,7 +6,7 @@ using GamerVII.Launcher.Views;
 
 namespace GamerVII.Launcher
 {
-    public partial class App : Application
+    public class App : Application
     {
         public override void Initialize()
         {

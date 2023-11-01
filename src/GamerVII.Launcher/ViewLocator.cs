@@ -9,31 +9,30 @@ namespace GamerVII.Launcher
     {
         public Control Build(object? data)
         {
-            
-            var name = data?.GetType().FullName!.Replace("ViewModel", "View");
-            
-            var componentName = data?.GetType().FullName!
-                .Replace("ViewModel", "View")
-                .Replace("Views", "Views.Components");
-            
-            var pageName = data?.GetType().FullName!
-                .Replace("ViewModel", "View")
-                .Replace("Views", "Views.Pages");
-            
-            var type = Type.GetType(name);
+            var name = data?
+                           .GetType().FullName!
+                           .Replace("ViewModel", "View")
+                       ?? string.Empty;
 
-            if (type == null) 
-                type = Type.GetType(componentName);
-            
-            if (type == null) 
-                type = Type.GetType(pageName);
+            var componentName = data?.GetType().FullName!
+                                    .Replace("ViewModel", "View")
+                                    .Replace("Views", "Views.Components")
+                                ?? string.Empty;
+
+            var pageName = data?.GetType().FullName!
+                               .Replace("ViewModel", "View")
+                               .Replace("Views", "Views.Pages")
+                           ?? string.Empty;
+
+            var type = (Type.GetType(name)
+                        ?? Type.GetType(componentName))
+                       ?? Type.GetType(pageName);
 
             if (type != null)
             {
                 return (Control)Activator.CreateInstance(type)!;
             }
-            
-            
+
             return new TextBlock { Text = "Not Found: " + name };
         }
 

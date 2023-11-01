@@ -6,8 +6,8 @@ public class GameClient : IGameClient
 {
     public required string Name { get; set; }
     public required string Version { get; set; }
-    public string? InstallationVersion { get; set; }
+    public string InstallationVersion { get; set; } = null!;
     public required string Description { get; set; }
-    public required object Image { get; set; }
+    public required object? Image { get; set; }
     public ModLoaderType ModLoaderType { get; set; }
 }

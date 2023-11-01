@@ -1,10 +1,8 @@
-﻿using System;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 using GamerVII.Launcher.Models.Users;
 using GamerVII.Launcher.Services.LocalStorage;
 using GamerVII.Launcher.ViewModels.Base;
 using ReactiveUI;
-using Splat;
 
 namespace GamerVII.Launcher.ViewModels;
 
@@ -13,12 +11,10 @@ namespace GamerVII.Launcher.ViewModels;
 /// </summary>
 public class SettingsPageViewModel : PageViewModelBase
 {
-    private readonly ILocalStorageService _storageService;
-
     /// <summary>
     /// Command to navigate to the main page.
     /// </summary>
-    public ICommand GoToMainPageCommand { get; set; }
+    public ICommand? GoToMainPageCommand { get; set; }
 
 
     public int MemorySize

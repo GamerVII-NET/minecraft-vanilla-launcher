@@ -1,7 +1,6 @@
 ﻿using Avalonia;
 using Avalonia.ReactiveUI;
 using GamerVII.Launcher.Extensions;
-using Splat;
 using System;
 
 namespace GamerVII.Launcher
@@ -25,7 +24,7 @@ namespace GamerVII.Launcher
 
 
 
-            return app; 
+            return app;
 
         }
     }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using GamerVII.Launcher.Models.Users;
 using GamerVII.Launcher.Services.Auth;
@@ -17,7 +16,7 @@ public class AuthPageViewModel : PageViewModelBase
     /// <summary>
     /// Delegate for handling the authorization event.
     /// </summary>
-    /// <param name="isSuccess">Indicates whether the authorization was successful.</param>
+    /// <param name="user">User.</param>
     public delegate void AuthorizeHandler(IUser user);
 
     /// <summary>
@@ -60,7 +59,7 @@ public class AuthPageViewModel : PageViewModelBase
     private readonly IAuthService _authService;
     private string _login = string.Empty;
     private string _password = string.Empty;
-    private bool _isAuthorizing = false;
+    private bool _isAuthorizing;
 
     /// <summary>
     /// Initializes a new instance of the AuthPageViewModel class.
