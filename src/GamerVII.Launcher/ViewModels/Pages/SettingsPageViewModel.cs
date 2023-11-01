@@ -1,10 +1,9 @@
 ﻿using System.Windows.Input;
 using GamerVII.Launcher.Models.Users;
-using GamerVII.Launcher.Services.LocalStorage;
 using GamerVII.Launcher.ViewModels.Base;
 using ReactiveUI;
 
-namespace GamerVII.Launcher.ViewModels;
+namespace GamerVII.Launcher.ViewModels.Pages;
 
 /// <summary>
 /// View model class for the client settings page, derived from PageViewModelBase.

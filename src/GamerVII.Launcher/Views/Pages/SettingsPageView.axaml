@@ -4,7 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:GamerVII.Launcher.ViewModels"
              xmlns:components="clr-namespace:GamerVII.Launcher.Views.Components"
-             x:DataType="vm:SettingsPageViewModel"
+             xmlns:pages="clr-namespace:GamerVII.Launcher.ViewModels.Pages"
+             x:DataType="pages:SettingsPageViewModel"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="GamerVII.Launcher.Views.Pages.SettingsPageView">
 

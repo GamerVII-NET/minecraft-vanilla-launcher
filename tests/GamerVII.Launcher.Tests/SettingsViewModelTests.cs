@@ -1,5 +1,6 @@
 using GamerVII.Launcher.Extensions;
 using GamerVII.Launcher.ViewModels;
+using GamerVII.Launcher.ViewModels.Pages;
 using ReactiveUI;
 
 namespace GamerVII.Launcher.Tests;

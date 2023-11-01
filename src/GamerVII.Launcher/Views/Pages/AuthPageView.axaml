@@ -5,7 +5,8 @@
              xmlns:components="clr-namespace:GamerVII.Launcher.Views.Components"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              xmlns:vm="using:GamerVII.Launcher.ViewModels"
-             x:DataType="vm:AuthPageViewModel"
+             xmlns:pages="clr-namespace:GamerVII.Launcher.ViewModels.Pages"
+             x:DataType="pages:AuthPageViewModel"
              x:Class="GamerVII.Launcher.Views.Pages.AuthPageView">
 
     <!-- <Design.DataContext> -->

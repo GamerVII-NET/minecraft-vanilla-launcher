@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using CmlLib.Core;
 using CmlLib.Core.Auth;
 using CmlLib.Core.Installer.Forge;
+using CmlLib.Core.Version;
 using GamerVII.Launcher.Models.Client;
 using GamerVII.Launcher.Models.Users;
 using GamerVII.Launcher.Services.Logger;
@@ -36,7 +39,6 @@ public class GameLaunchService : IGameLaunchService
 
     public async Task<Process> LaunchClient(IGameClient client, IUser user, IStartupOptions startupOptions)
     {
-
         // var session = new MSession(user.Login, user.AccessToken, "uuid");
         var session = MSession.CreateOfflineSession(user.Login);
 
@@ -86,6 +88,18 @@ public class GameLaunchService : IGameLaunchService
         return Task.FromResult(client);
     }
 
+    public async Task<IEnumerable<IMinecraftVersion>> GetAvailableVersions()
+    {
+        var versions = await _launcher.GetAllVersionsAsync();
+
+        return versions.Select(c => new MinecraftVersion
+            {
+                Version = c.Name,
+                MVersion = c
+            })
+            .OrderByDescending(c => c.MVersion.ReleaseTime);
+    }
+
     private async void LoadClientFiles(IGameClient client)
     {
         try
@@ -107,14 +121,13 @@ public class GameLaunchService : IGameLaunchService
                     break;
                 case Models.Enums.ModLoaderType.LiteLoader:
                     break;
-
             }
 
             LoadClientEnded?.Invoke(client, true, "success");
         }
         catch (Exception ex)
         {
-            LoadClientEnded?.Invoke(client,  false, ex.Message);
+            LoadClientEnded?.Invoke(client, false, ex.Message);
         }
     }
 

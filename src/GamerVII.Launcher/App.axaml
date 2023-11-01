@@ -2,7 +2,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="GamerVII.Launcher.App"
              xmlns:local="using:GamerVII.Launcher"
-             RequestedThemeVariant="Light">
+             RequestedThemeVariant="Dark">
     <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
 
     <Application.DataTemplates>
@@ -17,6 +17,7 @@
 
     <Application.Resources>
         <SolidColorBrush x:Key="PrimaryColor">#008C45</SolidColorBrush>
+        <SolidColorBrush x:Key="PrimaryTransparentColor">#36008C45</SolidColorBrush>
         <SolidColorBrush x:Key="PrimaryColorHover">#047A3D</SolidColorBrush>
 
         <SolidColorBrush x:Key="SecondaryColor">#0E0E0E</SolidColorBrush>

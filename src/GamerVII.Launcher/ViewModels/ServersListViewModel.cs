@@ -4,6 +4,7 @@ using ReactiveUI;
 using Splat;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows.Input;
 using GamerVII.Launcher.Services.Client;
 
 namespace GamerVII.Launcher.ViewModels;
@@ -44,6 +45,11 @@ public class ServersListViewModel : ViewModelBase
             SelectedServerChanged?.Invoke();
         }
     }
+
+    /// <summary>
+    /// Command to add the client settings page.
+    /// </summary>
+    public ICommand AddClientCommand { get; set; } = null!;
 
     private readonly IGameClientService _gameClientService;
 

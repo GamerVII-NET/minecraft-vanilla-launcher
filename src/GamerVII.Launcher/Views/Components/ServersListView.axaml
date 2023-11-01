@@ -9,7 +9,7 @@
     xmlns:components="clr-namespace:GamerVII.Launcher.Views.Components"
     xmlns:converters="clr-namespace:GamerVII.Launcher.Views.Converters"
     d:DesignHeight="450"
-    d:DesignWidth="80"
+    d:DesignWidth="180"
     x:DataType="vm:ServersListViewModel"
     mc:Ignorable="d">
 
@@ -17,45 +17,59 @@
     <!--     <vm:ServersListViewModel /> -->
     <!-- </Design.DataContext> -->
 
-    <Border Classes="SelectServerWrapper">
-        <StackPanel>
+    <StackPanel Spacing="10">
+
+        <Border Classes="SelectServerWrapper">
             <ListBox SelectedIndex="0"
-                     x:Name="ServerList"
-                     IsVisible="{Binding GameClients, Converter={converters:ListNotEmptyConverter}}"
+                     Margin="10, 0"
                      SelectedItem="{Binding SelectedClient}"
                      ItemsSource="{Binding GameClients, Mode=OneWay}"
                      Classes="SelectServer">
 
                 <ListBox.Styles>
                     <Style Selector="ListBoxItem">
-                        <Setter Property="CornerRadius" Value="50"/>
-                        <Setter Property="Width" Value="50"/>
-                        <Setter Property="Height" Value="50"/>
-                        <Setter Property="Cursor" Value="Hand"/>
-                        <Setter Property="Margin" Value="0, 0, 0, 5"/>
+                        <Setter Property="CornerRadius" Value="15" />
+                        <Setter Property="Height" Value="50" />
+                        <Setter Property="Cursor" Value="Hand" />
+                        <Setter Property="Margin" Value="0, 0, 0, 5" />
+                        <Setter Property="Foreground" Value="{StaticResource ContentColor}" />
                     </Style>
                     <Style Selector="ListBoxItem:selected /template/ ContentPresenter">
-                        <Setter Property="Background" Value="{DynamicResource PrimaryColor}"/>
+                        <Setter Property="Background" Value="{DynamicResource PrimaryColor}" />
+                        <Setter Property="Foreground" Value="{StaticResource HeadlineColor}" />
                     </Style>
                     <Style Selector="ListBoxItem:pointerover /template/ ContentPresenter">
-                        <Setter Property="Background" Value="#20FFFFFF"/>
+                        <Setter Property="Background" Value="#20FFFFFF" />
                     </Style>
                 </ListBox.Styles>
 
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <Image Source="/Assets/avalonia-logo.ico" Width="24"/>
+                        <StackPanel Orientation="Horizontal"
+                                    Spacing="10">
+                            <Image Source="/Assets/minecraft.png"
+                                   VerticalAlignment="Center"
+                                   Width="24" />
+                            <TextBlock Text="{Binding Name}"
+                                       FontWeight="Medium"
+                                       Width="150"
+                                       TextTrimming="CharacterEllipsis"
+                                       VerticalAlignment="Center" />
+                        </StackPanel>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
+        </Border>
 
-            <components:ButtonControl Classes="Icon"
-                                      IconPath="/Assets/plus.svg"
-                                      Width="50"
-                                      Height="50"/>
-        </StackPanel>
-    </Border>
 
+        <components:ButtonControl Classes="Secondary"
+                                  IconPath="/Assets/plus.svg"
+                                  Text="Добавить"
+                                  Foreground="{StaticResource ContentColor}"
+                                  HorizontalAlignment="Center"
+                                  Command="{Binding AddClientCommand}"
+                                  Height="50" />
+    </StackPanel>
 
 
 </UserControl>

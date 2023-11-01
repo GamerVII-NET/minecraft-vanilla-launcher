@@ -5,7 +5,8 @@
              xmlns:components="clr-namespace:GamerVII.Launcher.Views.Components"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              xmlns:vm="clr-namespace:GamerVII.Launcher.ViewModels"
-             x:DataType="vm:ModsPageViewModel"
+             xmlns:pages="clr-namespace:GamerVII.Launcher.ViewModels.Pages"
+             x:DataType="pages:ModsPageViewModel"
              x:Class="GamerVII.Launcher.Views.Pages.ModsPageView">
 
     <Border Padding="50, 30"

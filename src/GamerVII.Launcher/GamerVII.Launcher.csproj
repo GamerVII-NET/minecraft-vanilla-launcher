@@ -70,5 +70,20 @@
     <Compile Update="Services\Logger\FileLoggerService.cs">
       <DependentUpon>ILoggerService.cs</DependentUpon>
     </Compile>
+    <Compile Update="Services\Client\LocalGameClientService.cs">
+      <DependentUpon>IGameClientsService.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Services\GameLaunch\GameLaunchService.cs">
+      <DependentUpon>IGameLaunchService.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Services\Auth\EmptyAuthService.cs">
+      <DependentUpon>IAuthService.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Services\Auth\AuthService.cs">
+      <DependentUpon>IAuthService.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Models\Client\MinecraftVersion.cs">
+      <DependentUpon>IMinecraftVersion.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
 </Project>

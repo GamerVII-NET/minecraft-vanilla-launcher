@@ -6,7 +6,7 @@ using GamerVII.Launcher.ViewModels.Base;
 using ReactiveUI;
 using Splat;
 
-namespace GamerVII.Launcher.ViewModels;
+namespace GamerVII.Launcher.ViewModels.Pages;
 
 /// <summary>
 /// View model class for the authentication page, derived from PageViewModelBase.

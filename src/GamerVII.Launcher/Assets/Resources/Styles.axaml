@@ -4,7 +4,6 @@
     <Style Selector="ListBox.SelectServer">
         <Setter Property="MaxHeight" Value="350" />
         <Setter Property="Background" Value="Transparent" />
-        <Setter Property="HorizontalAlignment" Value="Center" />
         <Setter Property="AutoScrollToSelectedItem" Value="True" />
         <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Hidden" />
     </Style>
@@ -27,15 +26,14 @@
     </Style>
 
     <Style Selector="Border.SelectServerWrapper">
-        <Setter Property="CornerRadius" Value="50" />
-        <Setter Property="Background" Value="#0E0E0E" />
-        <Setter Property="Width" Value="60" />
+        <Setter Property="CornerRadius" Value="10" />
+        <Setter Property="Background" Value="{DynamicResource SecondaryColor}" />
         <Setter Property="Margin" Value="10, 0" />
-        <Setter Property="Padding" Value="0, 5" />
+        <Setter Property="Padding" Value="0, 15" />
     </Style>
 
     <Style Selector="Border.Online">
-        <Setter Property="Background" Value="#0E0E0E" />
+        <Setter Property="Background" Value="{DynamicResource SecondaryColor}" />
         <Setter Property="Padding" Value="18,20" />
         <Setter Property="CornerRadius" Value="20" />
         <Setter Property="VerticalAlignment" Value="Center" />
@@ -43,7 +41,7 @@
     </Style>
 
     <Style Selector="Border.Online-Icon">
-        <Setter Property="Background" Value="#008C45" />
+        <Setter Property="Background" Value="{DynamicResource PrimaryColor}" />
         <Setter Property="CornerRadius" Value="10" />
         <Setter Property="Width" Value="45" />
         <Setter Property="Height" Value="45" />
@@ -74,18 +72,16 @@
         <Setter Property="VerticalAlignment" Value="Center" />
     </Style>
 
-    <Style Selector="Button.Sidebar-Button">
-        <Setter Property="Background" Value="#0E0E0E" />
-        <Setter Property="CornerRadius" Value="50" />
-        <Setter Property="Width" Value="60" />
-        <Setter Property="Height" Value="60" />
-        <Setter Property="HorizontalAlignment" Value="Center" />
-    </Style>
-
-    <Style Selector="Button.Sidebar-Button:pointerover /template/ ContentPresenter">
-        <Setter Property="Background" Value="#181818" />
-        <Setter Property="Cursor" Value="Hand" />
-    </Style>
+    <!-- <Style Selector="Button.Sidebar-Button"> -->
+    <!--     <Setter Property="Background" Value="{DynamicResource SecondaryColor}" /> -->
+    <!--     <Setter Property="CornerRadius" Value="50" /> -->
+    <!--     <Setter Property="HorizontalAlignment" Value="Center" /> -->
+    <!-- </Style> -->
+    <!-- -->
+    <!-- <Style Selector="Button.Sidebar-Button:pointerover /template/ ContentPresenter"> -->
+    <!--     <Setter Property="Background" Value="#181818" /> -->
+    <!--     <Setter Property="Cursor" Value="Hand" /> -->
+    <!-- </Style> -->
 
     <Style Selector="StackPanel.Btn-Wrapper">
         <Setter Property="Orientation" Value="Horizontal" />
@@ -124,7 +120,7 @@
     <Style Selector="TextBox.Input-Box">
         <Setter Property="Background" Value="{DynamicResource AdditionalColor}" />
         <Setter Property="Foreground" Value="{DynamicResource ContentColor}" />
-        <Setter Property="BorderBrush" Value="#212121" />
+        <Setter Property="BorderBrush" Value="{DynamicResource AdditionalBorderColor}" />
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="CornerRadius" Value="15" />
         <Setter Property="Height" Value="45" />
