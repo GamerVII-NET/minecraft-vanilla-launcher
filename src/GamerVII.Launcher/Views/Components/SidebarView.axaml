@@ -7,7 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:vm="using:GamerVII.Launcher.ViewModels"
     d:DesignHeight="950"
-    d:DesignWidth="80"
+    d:DesignWidth="250"
     x:DataType="vm:SidebarViewModel"
     mc:Ignorable="d">
 
@@ -28,18 +28,22 @@
                         Spacing="15"
                         VerticalAlignment="Center">
 
-                <Button Classes="Sidebar-Button" Command="{Binding OpenProfilePageCommand}">
-                    <Svg Path="/Assets/profile.svg" Width="30"/>
-                </Button>
+                <components:ButtonControl Classes="Secondary"
+                                          HorizontalAlignment="Center"
+                                          Text="Профиль"
+                                          IconPath="/Assets/profile.svg"
+                                          Command="{Binding OpenProfilePageCommand}" />
+
 
                 <components:ServersListView DataContext="{Binding ServersListViewModel}"
                                             VerticalAlignment="Center" />
 
             </StackPanel>
 
-            <components:ButtonControl Classes="Icon"
+            <components:ButtonControl Classes="Secondary"
                                       HorizontalAlignment="Center"
                                       Grid.Row="2"
+                                      Text="Выход"
                                       IconPath="/Assets/logout.svg"
                                       Command="{Binding LogoutCommand}" />
 

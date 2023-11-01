@@ -1,14 +1,7 @@
-using System.Diagnostics;
 using GamerVII.Launcher.Extensions;
-using GamerVII.Launcher.Models.Users;
-using GamerVII.Launcher.Services.Auth;
-using GamerVII.Launcher.Services.Client;
-using GamerVII.Launcher.Services.GameLaunch;
-using GamerVII.Launcher.Services.LocalStorage;
-using GamerVII.Launcher.Services.Logger;
 using GamerVII.Launcher.ViewModels;
+using GamerVII.Launcher.ViewModels.Pages;
 using ReactiveUI;
-using Splat;
 
 namespace GamerVII.Launcher.Tests;
 

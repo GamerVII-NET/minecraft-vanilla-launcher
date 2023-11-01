@@ -2,6 +2,7 @@
 using GamerVII.Launcher.ViewModels.Base;
 using ReactiveUI;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
@@ -14,6 +15,7 @@ using GamerVII.Launcher.Services.Auth;
 using GamerVII.Launcher.Services.GameLaunch;
 using GamerVII.Launcher.Services.LocalStorage;
 using GamerVII.Launcher.Services.Logger;
+using GamerVII.Launcher.ViewModels.Pages;
 using Splat;
 
 namespace GamerVII.Launcher.ViewModels
@@ -108,6 +110,11 @@ namespace GamerVII.Launcher.ViewModels
         public ICommand SettingsClientCommand { get; }
 
         /// <summary>
+        /// Command to open link in browser
+        /// </summary>
+        public ICommand OpenLinkCommand { get; }
+
+        /// <summary>
         /// Command to view the list of mods.
         /// </summary>
         public ICommand ModsListCommand { get; }
@@ -134,6 +141,7 @@ namespace GamerVII.Launcher.ViewModels
             new ProfilePageViewModel(),
             new SettingsPageViewModel(),
             new ModsPageViewModel(),
+            new AddClientPageViewModel(),
         };
 
         #endregion
@@ -187,8 +195,11 @@ namespace GamerVII.Launcher.ViewModels
 
             // Set up commands with corresponding actions and conditions.
             SidebarViewModel.LogoutCommand = ReactiveCommand.CreateFromTask(Logout);
+            SidebarViewModel.ServersListViewModel.AddClientCommand =
+                ReactiveCommand.Create(() => OpenPage<AddClientPageViewModel>());
             LaunchGameCommand = ReactiveCommand.CreateFromTask(LaunchGame, canLaunch);
             SidebarViewModel.ServersListViewModel.SelectedServerChanged += ResetPage;
+
 
             SidebarViewModel.OpenProfilePageCommand = ReactiveCommand.Create(() =>
                 OpenPage<ProfilePageViewModel>(c => ((ProfilePageViewModel)c).User = User));
@@ -205,11 +216,22 @@ namespace GamerVII.Launcher.ViewModels
                     ((ModsPageViewModel)c).SelectClient = SidebarViewModel.ServersListViewModel.SelectedClient!);
             }, canViewMods);
 
+            OpenLinkCommand = ReactiveCommand.Create((string url) => OpenLink(url));
+
             // Subscribe to events from the game launch service to update processing information.
             SubscribeToEvents();
 
             // Load user data and set the appropriate initial page based on user status.
             LoadData();
+        }
+
+        private void OpenLink(string url)
+        {
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = url,
+                UseShellExecute = true
+            });
         }
 
         private void SubscribeToEvents()
@@ -295,6 +317,9 @@ namespace GamerVII.Launcher.ViewModels
             var settingsViewModel = GetPageViewModelByType<SettingsPageViewModel>() as SettingsPageViewModel
                                     ?? throw new Exception(nameof(SettingsPageViewModel) + " not found");
 
+            var addServerViewModel = GetPageViewModelByType<AddClientPageViewModel>() as AddClientPageViewModel
+                                     ?? throw new Exception(nameof(AddClientPageViewModel) + " not found");
+
             var modsPageViewModel = GetPageViewModelByType<ModsPageViewModel>() as ModsPageViewModel
                                     ?? throw new Exception(nameof(ModsPageViewModel) + " not found");
 
@@ -308,6 +333,9 @@ namespace GamerVII.Launcher.ViewModels
 
             profileViewModel.GoToMainPageCommand = ReactiveCommand.Create(ResetPage);
             settingsViewModel.GoToMainPageCommand = ReactiveCommand.CreateFromTask(SaveSettings);
+            addServerViewModel.GoToMainPageCommand = ReactiveCommand.Create(ResetPage);
+            addServerViewModel.SaveClientCommand =
+                ReactiveCommand.Create(() => AddGameClient(addServerViewModel.NewGameClient));
             modsPageViewModel.GoToMainPageCommand = ReactiveCommand.Create(ResetPage);
 
 
@@ -318,6 +346,19 @@ namespace GamerVII.Launcher.ViewModels
                 User = user;
                 ResetPage();
             };
+        }
+
+        private void AddGameClient(IGameClient? gameClient)
+        {
+            if (gameClient != null)
+            {
+                SidebarViewModel.ServersListViewModel.GameClients.Add(gameClient);
+                SidebarViewModel.ServersListViewModel.SelectedClient = gameClient;
+
+                _storageService.SetAsync("Clients", SidebarViewModel.ServersListViewModel.GameClients);
+
+                ResetPage();
+            }
         }
 
         public async Task SaveSettings()

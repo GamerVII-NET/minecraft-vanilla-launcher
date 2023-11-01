@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using GamerVII.Launcher.Models.Client;
 using GamerVII.Launcher.Models.Users;
@@ -60,4 +61,6 @@ public interface IGameLaunchService
     /// <param name="client">The Minecraft client instance to download.</param>
     /// <returns>Client information required to run.</returns>
     Task<IGameClient> LoadClient(IGameClient client);
+
+    Task<IEnumerable<IMinecraftVersion>> GetAvailableVersions();
 }

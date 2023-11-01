@@ -5,7 +5,7 @@ VisualStudioVersion = 17.7.33913.275
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{662268E9-BD01-43C7-924B-F4F285C8D391}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "source", "source", "{09A80297-F0EB-4A8F-8CD1-20DF8AD12D38}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "common", "common", "{09A80297-F0EB-4A8F-8CD1-20DF8AD12D38}"
 	ProjectSection(SolutionItems) = preProject
 		README.md = README.md
 		.editorconfig = .editorconfig

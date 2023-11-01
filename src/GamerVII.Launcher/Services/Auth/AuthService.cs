@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using GamerVII.Launcher.Models.Users;
@@ -13,14 +14,16 @@ public class AuthService : IAuthService
     private readonly ILocalStorageService _localStorage;
     private readonly HttpClient _httpClient;
 
-    public AuthService(ILocalStorageService localStorage = null)
+    public AuthService(ILocalStorageService? localStorage = null)
     {
         _httpClient = new HttpClient
         {
             BaseAddress = new Uri("http://localhost")
         };
 
-        _localStorage = localStorage ?? Locator.Current.GetService<ILocalStorageService>()!;
+        _localStorage = localStorage
+                        ?? Locator.Current.GetService<ILocalStorageService>()
+                        ?? throw new Exception($"{nameof(ILocalStorageService)} not registered");
     }
 
     public async Task<IUser> OnLogin(string login, string password)
@@ -40,18 +43,18 @@ public class AuthService : IAuthService
         request.Content = content;
         var response = await _httpClient.SendAsync(request);
 
-        if (response.StatusCode != System.Net.HttpStatusCode.OK) return user;
+        if (response.StatusCode != HttpStatusCode.OK) return user;
 
         var result = await response.Content.ReadAsStringAsync();
         user.IsLogin = true;
         user.AccessToken = result;
-        var refreshToken = response.Headers.FirstOrDefault(c => c.Key == "Refresh-Token").Value.FirstOrDefault() ?? string.Empty;
+        var refreshToken = response.Headers.FirstOrDefault(c => c.Key == "Refresh-Token").Value.FirstOrDefault() ??
+                           string.Empty;
 
         await _localStorage.SetAsync("RefreshToken", refreshToken);
         await _localStorage.SetAsync("User", user);
 
         return user;
-
     }
 
     public async Task OnLogout()
@@ -62,6 +65,6 @@ public class AuthService : IAuthService
 
     public async Task<IUser> GetAuthorizedUser()
     {
-        return await _localStorage.GetAsync<User>("User");
+        return await _localStorage.GetAsync<User>("User") ?? new User { Login = string.Empty, Password = string.Empty };
     }
 }

@@ -35,7 +35,7 @@
             </ExperimentalAcrylicBorder.Material>
         </ExperimentalAcrylicBorder>
 
-        <Grid ColumnDefinitions="90, *">
+        <Grid ColumnDefinitions="250, *">
 
             <Image Grid.ColumnSpan="2"
                    Stretch="UniformToFill"
@@ -51,43 +51,52 @@
                                     DataContext="{Binding SidebarViewModel}" />
 
             <Border Grid.Column="1" Classes="ContentPresenter">
-
                 <Grid RowDefinitions="80, *, 50" ColumnDefinitions="*, *">
 
+                    <StackPanel Spacing="5">
+                        <TextBlock Text="Привет,"
+                                   Foreground="{DynamicResource ContentColor}"/>
+                        <TextBlock Text="{Binding User.Login}"
+                                   FontWeight="Bold"
+                                   FontSize="22"/>
+                    </StackPanel>
+
                     <!-- Online -->
-                    <Border Classes="Online">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="50" />
-                                <ColumnDefinition Width="5" />
-                                <ColumnDefinition />
-                            </Grid.ColumnDefinitions>
-
-                            <Border Classes="Online-Icon">
-                                <Svg Path="/Assets/users.svg" Height="22" />
-                            </Border>
-
-                            <StackPanel Grid.Column="2" Classes="Online-Content">
-                                <TextBlock Text="На серверах:" Classes="Content" />
-                                <StackPanel Classes="Online-Players-Count">
-                                    <TextBlock Classes="Headline"
-                                               Text="123234" />
-                                    <TextBlock Classes="Content"
-                                               VerticalAlignment="Bottom"
-                                               Margin="5, 0, 0,2"
-                                               Text="чел." />
-                                </StackPanel>
-                            </StackPanel>
-                        </Grid>
-                    </Border>
+                    <!-- <Border Classes="Online"> -->
+                    <!--     <Grid> -->
+                    <!--         <Grid.ColumnDefinitions> -->
+                    <!--             <ColumnDefinition Width="50" /> -->
+                    <!--             <ColumnDefinition Width="5" /> -->
+                    <!--             <ColumnDefinition /> -->
+                    <!--         </Grid.ColumnDefinitions> -->
+                    <!-- -->
+                    <!--         <Border Classes="Online-Icon"> -->
+                    <!--             <Svg Path="/Assets/users.svg" Height="22" /> -->
+                    <!--         </Border> -->
+                    <!-- -->
+                    <!--         <StackPanel Grid.Column="2" Classes="Online-Content"> -->
+                    <!--             <TextBlock Text="На серверах:" Classes="Content" /> -->
+                    <!--             <StackPanel Classes="Online-Players-Count"> -->
+                    <!--                 <TextBlock Classes="Headline" -->
+                    <!--                            Text="123234" /> -->
+                    <!--                 <TextBlock Classes="Content" -->
+                    <!--                            VerticalAlignment="Bottom" -->
+                    <!--                            Margin="5, 0, 0,2" -->
+                    <!--                            Text="чел." /> -->
+                    <!--             </StackPanel> -->
+                    <!--         </StackPanel> -->
+                    <!--     </Grid> -->
+                    <!-- </Border> -->
 
                     <!-- Content -->
                     <Grid ColumnDefinitions="*, *"
                           IsVisible="{Binding SidebarViewModel.ServersListViewModel.SelectedClient, Converter={converters:IsNotNullConverter}}"
                           Margin="0, 20, 0, 0"
+                          VerticalAlignment="Center"
                           Grid.ColumnSpan="2"
                           Grid.Column="0"
-                          Grid.Row="1">
+                          Grid.RowSpan="2"
+                          Grid.Row="0">
 
                         <StackPanel
                             Spacing="20"
@@ -119,10 +128,11 @@
                                                           IconPath="/Assets/rightArrow.svg"
                                                           Command="{Binding LaunchGameCommand}" />
 
-                                <components:ButtonControl Text="НАСТРОИТЬ"
+                                <components:ButtonControl Text="СПИСОК МОДОВ"
                                                           Classes="Secondary"
-                                                          IconPath="/Assets/settings.svg"
-                                                          Command="{Binding SettingsClientCommand}" />
+                                                          IsVisible="{Binding SidebarViewModel.ServersListViewModel.SelectedClient, Converter={converters:IsNotNullConverter}}"
+                                                          IconPath="/Assets/document.svg"
+                                                          Command="{Binding ModsListCommand}" />
 
                             </StackPanel>
 
@@ -133,14 +143,15 @@
 
                     <!-- Footer -->
                     <Grid Grid.Row="2"
-                          Grid.ColumnSpan="3"
+                          Grid.ColumnSpan="2"
+                          Grid.Column="0"
                           ColumnDefinitions="*, *">
 
-                        <components:ButtonControl Text="СПИСОК МОДОВ"
+                        <components:ButtonControl Text="НАСТРОИТЬ"
                                                   Classes="Additional"
-                                                  IsVisible="{Binding SidebarViewModel.ServersListViewModel.SelectedClient, Converter={converters:IsNotNullConverter}}"
-                                                  IconPath="/Assets/document.svg"
-                                                  Command="{Binding ModsListCommand}" />
+                                                  IconPath="/Assets/settings.svg"
+                                                  Command="{Binding SettingsClientCommand}" />
+
 
                         <StackPanel Spacing="20"
                                     HorizontalAlignment="Right"
@@ -149,16 +160,19 @@
 
                             <components:ButtonControl Classes="Icon"
                                                       IconPath="/Assets/tg.svg"
-                                                      Command="{Binding SettingsClientCommand}" />
+                                                      CommandParameter="tg://resolve?domain=GamerVIIChannel"
+                                                      Command="{Binding OpenLinkCommand}" />
 
                             <components:ButtonControl Classes="Icon"
                                                       IconPath="/Assets/vk.svg"
-                                                      Command="{Binding SettingsClientCommand}" />
+                                                      CommandParameter="https://vk.com/recloud.studio"
+                                                      Command="{Binding OpenLinkCommand}" />
 
                             <components:ButtonControl Text="НАШ САЙТ"
                                                       Classes="Additional"
                                                       IconPath="/Assets/document.svg"
-                                                      Command="{Binding SettingsClientCommand}" />
+                                                      CommandParameter="https://launcher.recloud.tech"
+                                                      Command="{Binding OpenLinkCommand}" />
 
                         </StackPanel>
 

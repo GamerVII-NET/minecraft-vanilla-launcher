@@ -1,10 +1,15 @@
-﻿using GamerVII.Launcher.Models.Client;
+﻿using System;
+using System.Collections.Generic;
+using GamerVII.Launcher.Models.Client;
 using GamerVII.Launcher.ViewModels.Base;
 using ReactiveUI;
 using Splat;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows.Input;
+using DynamicData;
 using GamerVII.Launcher.Services.Client;
+using GamerVII.Launcher.Services.LocalStorage;
 
 namespace GamerVII.Launcher.ViewModels;
 
@@ -13,28 +18,15 @@ namespace GamerVII.Launcher.ViewModels;
 /// </summary>
 public class ServersListViewModel : ViewModelBase
 {
-    /// <summary>
-    /// Delegate for handling the selected server change event.
-    /// </summary>
     public delegate void SelectedServerHandler();
+    public event SelectedServerHandler? SelectedServerChanged;
 
-    /// <summary>
-    /// Event raised when the selected server is changed.
-    /// </summary>
-    public event SelectedServerHandler SelectedServerChanged;
-
-    /// <summary>
-    /// Gets or sets the collection of game clients (servers).
-    /// </summary>
     public ObservableCollection<IGameClient> GameClients
     {
         get => _gameClients;
         set => this.RaiseAndSetIfChanged(ref _gameClients, value);
     }
 
-    /// <summary>
-    /// Gets or sets the selected game client (server).
-    /// </summary>
     public IGameClient? SelectedClient
     {
         get => _selectedClient;
@@ -44,33 +36,52 @@ public class ServersListViewModel : ViewModelBase
             SelectedServerChanged?.Invoke();
         }
     }
+    public ICommand AddClientCommand { get; set; } = null!;
+    public ICommand RemoveClientCommand { get; set; } = null!;
 
     private readonly IGameClientService _gameClientService;
+    private readonly ILocalStorageService _localStorageService;
 
     private ObservableCollection<IGameClient> _gameClients = null!;
     private IGameClient? _selectedClient;
 
-    /// <summary>
-    /// Initializes a new instance of the ServersListViewModel class.
-    /// </summary>
-    /// <param name="gameClientService">An optional IGameClientService implementation for retrieving game clients.</param>
-    public ServersListViewModel(IGameClientService gameClientService = null)
+    public ServersListViewModel(
+        IGameClientService? gameClientService = null,
+        ILocalStorageService? localStorageService = null
+    )
     {
-        _gameClientService = gameClientService ?? Locator.Current.GetService<IGameClientService>()!;
+        _localStorageService = localStorageService
+                               ?? Locator.Current.GetService<ILocalStorageService>()
+                               ?? throw new Exception($"{nameof(ILocalStorageService)} not registered");
+
+        _gameClientService = gameClientService
+                             ?? Locator.Current.GetService<IGameClientService>()
+                             ?? throw new Exception($"{nameof(IGameClientService)} not registered");
+
+        RemoveClientCommand =
+            ReactiveCommand.CreateFromTask(async (IGameClient gameClient) => RemoveClient(gameClient));
 
         LoadData();
     }
 
-    // Private methods
+    private void RemoveClient(IGameClient gameClient)
+    {
+        _gameClients.Remove(gameClient);
 
-    /// <summary>
-    /// Loads the list of game clients asynchronously.
-    /// </summary>
+        _localStorageService.SetAsync("Clients", _gameClients);
+
+    }
+
     private async void LoadData()
     {
         var clients = await _gameClientService.GetClientsAsync();
 
         GameClients = new ObservableCollection<IGameClient>(clients);
+
+        if (await _localStorageService.GetAsync<IEnumerable<GameClient>>("Clients") is { } localClients)
+        {
+            GameClients.AddRange(localClients);
+        }
 
         SelectedClient = GameClients.FirstOrDefault();
     }

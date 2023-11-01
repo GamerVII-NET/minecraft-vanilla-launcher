@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using CmlLib.Core;
@@ -15,41 +18,31 @@ namespace GamerVII.Launcher.Services.GameLaunch;
 public class GameLaunchService : IGameLaunchService
 {
     private readonly ILoggerService _loggerService;
-    private CMLauncher _launcher;
+    private readonly CMLauncher _launcher;
 
-    public event IGameLaunchService.ProgressChangedEventHandler ProgressChanged;
-    public event IGameLaunchService.FileChangedEventHandler FileChanged;
-    public event IGameLaunchService.LoadClientEventHandler LoadClientEnded;
-
-    private readonly MinecraftPath _path;
-
-    private delegate void ProgressChangedEventHandler(decimal percentage);
-
-    private delegate void FileChangedEventHandler(string percentage);
-
-    private delegate void LoadClientEventHandler(IGameClient client, bool loadClientEnded, string? message);
+    public event IGameLaunchService.ProgressChangedEventHandler? ProgressChanged;
+    public event IGameLaunchService.FileChangedEventHandler? FileChanged;
+    public event IGameLaunchService.LoadClientEventHandler? LoadClientEnded;
 
     public GameLaunchService(ILoggerService? loggerService = null)
     {
         _loggerService = loggerService ?? Locator.Current.GetService<ILoggerService>()!;
 
-        System.Net.ServicePointManager.DefaultConnectionLimit = 256;
+        ServicePointManager.DefaultConnectionLimit = 256;
 
-        _path = new MinecraftPath();
-        _launcher = new CMLauncher(_path);
+        var path = new MinecraftPath();
+        _launcher = new CMLauncher(path);
 
-        _launcher.ProgressChanged += (sender, e) => ProgressChanged?.Invoke(((decimal)e.ProgressPercentage) / 100);
+        _launcher.ProgressChanged += (_, e) => ProgressChanged?.Invoke(((decimal)e.ProgressPercentage) / 100);
         _launcher.FileChanged += (e) => FileChanged?.Invoke(e.FileName);
     }
 
     public async Task<Process> LaunchClient(IGameClient client, IUser user, IStartupOptions startupOptions)
     {
-        var process = new Process();
+        // var session = new MSession(user.Login, user.AccessToken, "uuid");
+        var session = MSession.CreateOfflineSession(user.Login);
 
-        var session = new MSession(user.Login, user.AccessToken, "uuid");
-        session = MSession.CreateOfflineSession(user.Login);
-
-        process = await _launcher.CreateProcessAsync(client.InstallationVersion, new MLaunchOption
+        var process = await _launcher.CreateProcessAsync(client.InstallationVersion, new MLaunchOption
         {
             MinimumRamMb = startupOptions.MinimumRamMb,
             MaximumRamMb = startupOptions.MaximumRamMb,
@@ -65,8 +58,16 @@ public class GameLaunchService : IGameLaunchService
         process.StartInfo.RedirectStandardError = true;
         process.StartInfo.RedirectStandardOutput = true;
 
-        process.ErrorDataReceived += (s, e) => _loggerService.Log(e.Data);
-        process.OutputDataReceived += (s, e) => _loggerService.Log(e.Data);
+        process.ErrorDataReceived += (_, e) =>
+        {
+            if (e.Data != null)
+                _loggerService.Log(e.Data);
+        };
+        process.OutputDataReceived += (_, e) =>
+        {
+            if (e.Data != null)
+                _loggerService.Log(e.Data);
+        };
 
         process.Start();
         process.BeginErrorReadLine();
@@ -85,6 +86,18 @@ public class GameLaunchService : IGameLaunchService
         thread.Start();
 
         return Task.FromResult(client);
+    }
+
+    public async Task<IEnumerable<IMinecraftVersion>> GetAvailableVersions()
+    {
+        var versions = await _launcher.GetAllVersionsAsync();
+
+        return versions.Select(c => new MinecraftVersion
+            {
+                Version = c.Name,
+                MVersion = c
+            })
+            .OrderByDescending(c => c.MVersion.ReleaseTime);
     }
 
     private async void LoadClientFiles(IGameClient client)
@@ -108,15 +121,13 @@ public class GameLaunchService : IGameLaunchService
                     break;
                 case Models.Enums.ModLoaderType.LiteLoader:
                     break;
-                default:
-                    break;
             }
 
             LoadClientEnded?.Invoke(client, true, "success");
         }
         catch (Exception ex)
         {
-            LoadClientEnded?.Invoke(client,  false, ex.Message);
+            LoadClientEnded?.Invoke(client, false, ex.Message);
         }
     }
 
@@ -124,7 +135,7 @@ public class GameLaunchService : IGameLaunchService
     {
         var forge = new MForge(_launcher);
         forge.FileChanged += (e) => FileChanged?.Invoke(e.FileName);
-        forge.ProgressChanged += (sender, e) => ProgressChanged?.Invoke(((decimal)e.ProgressPercentage) / 100);
+        forge.ProgressChanged += (_, e) => ProgressChanged?.Invoke(((decimal)e.ProgressPercentage) / 100);
 
         client.InstallationVersion = await forge.Install(client.Version);
     }
