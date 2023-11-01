@@ -1,5 +1,6 @@
 
-![Frame 1](https://github.com/GamerVII-NET/minecraft-launcher/assets/111225722/e0a5035b-6898-4579-b8b5-0fcf1cd93ca6)
+![image](https://github.com/GamerVII-NET/minecraft-vanilla-launcher/assets/111225722/36740818-6ba3-4dbc-a431-ba3c9a041409)
+
 
 GamerVII Launcher
 =======
