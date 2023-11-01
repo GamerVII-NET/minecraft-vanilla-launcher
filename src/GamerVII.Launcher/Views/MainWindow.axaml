@@ -51,7 +51,15 @@
                                     DataContext="{Binding SidebarViewModel}" />
 
             <Border Grid.Column="1" Classes="ContentPresenter">
-                <Grid RowDefinitions="80, *, 50" ColumnDefinitions="*, *" >
+                <Grid RowDefinitions="80, *, 50" ColumnDefinitions="*, *">
+
+                    <StackPanel Spacing="5">
+                        <TextBlock Text="Привет,"
+                                   Foreground="{DynamicResource ContentColor}"/>
+                        <TextBlock Text="{Binding User.Login}"
+                                   FontWeight="Bold"
+                                   FontSize="22"/>
+                    </StackPanel>
 
                     <!-- Online -->
                     <!-- <Border Classes="Online"> -->
@@ -120,10 +128,11 @@
                                                           IconPath="/Assets/rightArrow.svg"
                                                           Command="{Binding LaunchGameCommand}" />
 
-                                <components:ButtonControl Text="НАСТРОИТЬ"
+                                <components:ButtonControl Text="СПИСОК МОДОВ"
                                                           Classes="Secondary"
-                                                          IconPath="/Assets/settings.svg"
-                                                          Command="{Binding SettingsClientCommand}" />
+                                                          IsVisible="{Binding SidebarViewModel.ServersListViewModel.SelectedClient, Converter={converters:IsNotNullConverter}}"
+                                                          IconPath="/Assets/document.svg"
+                                                          Command="{Binding ModsListCommand}" />
 
                             </StackPanel>
 
@@ -138,11 +147,11 @@
                           Grid.Column="0"
                           ColumnDefinitions="*, *">
 
-                        <components:ButtonControl Text="СПИСОК МОДОВ"
+                        <components:ButtonControl Text="НАСТРОИТЬ"
                                                   Classes="Additional"
-                                                  IsVisible="{Binding SidebarViewModel.ServersListViewModel.SelectedClient, Converter={converters:IsNotNullConverter}}"
-                                                  IconPath="/Assets/document.svg"
-                                                  Command="{Binding ModsListCommand}" />
+                                                  IconPath="/Assets/settings.svg"
+                                                  Command="{Binding SettingsClientCommand}" />
+
 
                         <StackPanel Spacing="20"
                                     HorizontalAlignment="Right"

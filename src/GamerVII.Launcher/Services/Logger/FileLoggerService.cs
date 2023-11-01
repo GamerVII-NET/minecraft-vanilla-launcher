@@ -31,7 +31,7 @@ public class FileLoggerService : ILoggerService
 
     public void Log(string message, Exception exception)
     {
-        // throw new NotImplementedException();
+        Console.WriteLine(message);
     }
 
     public void Dispose()

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using GamerVII.Launcher.Models.Users;
@@ -42,7 +43,7 @@ public class AuthService : IAuthService
         request.Content = content;
         var response = await _httpClient.SendAsync(request);
 
-        if (response.StatusCode != System.Net.HttpStatusCode.OK) return user;
+        if (response.StatusCode != HttpStatusCode.OK) return user;
 
         var result = await response.Content.ReadAsStringAsync();
         user.IsLogin = true;

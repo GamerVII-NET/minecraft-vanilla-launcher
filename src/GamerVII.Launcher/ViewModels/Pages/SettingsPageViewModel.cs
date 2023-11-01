@@ -1,7 +1,10 @@
-﻿using System.Windows.Input;
+﻿using System;
+using System.Windows.Input;
 using GamerVII.Launcher.Models.Users;
+using GamerVII.Launcher.Services.System;
 using GamerVII.Launcher.ViewModels.Base;
 using ReactiveUI;
+using Splat;
 
 namespace GamerVII.Launcher.ViewModels.Pages;
 
@@ -10,6 +13,7 @@ namespace GamerVII.Launcher.ViewModels.Pages;
 /// </summary>
 public class SettingsPageViewModel : PageViewModelBase
 {
+
     /// <summary>
     /// Command to navigate to the main page.
     /// </summary>
@@ -19,7 +23,18 @@ public class SettingsPageViewModel : PageViewModelBase
     public int MemorySize
     {
         get => _memorySize;
-        set => this.RaiseAndSetIfChanged(ref _memorySize, value);
+        set
+        {
+            if (value % 8 == 0)
+            {
+                this.RaiseAndSetIfChanged(ref _memorySize, value);
+            }
+        }
+    }
+    public int MaxMemorySize
+    {
+        get => _maxMemorySize;
+        set => this.RaiseAndSetIfChanged(ref _maxMemorySize, value);
     }
     public int WindowWidth
     {
@@ -45,9 +60,21 @@ public class SettingsPageViewModel : PageViewModelBase
 
 
     private int _memorySize = 1024;
+    private int _maxMemorySize = 1024;
     private int _windowWidth = 900;
     private int _windowHeight = 600;
     private bool _isFullScreen = false;
     private IUser _user = null;
+
+    private readonly ISystemService _systemService;
+
+    public SettingsPageViewModel(ISystemService? systemService = null)
+    {
+        _systemService = systemService
+                         ?? Locator.Current.GetService<ISystemService>()
+                         ?? throw new Exception($"{nameof(ISystemService)} not registered");
+
+        MaxMemorySize = Convert.ToInt32(_systemService.GetMaxAvailableRam());
+    }
 
 }

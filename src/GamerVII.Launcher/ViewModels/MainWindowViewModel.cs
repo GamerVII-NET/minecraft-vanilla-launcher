@@ -331,11 +331,6 @@ namespace GamerVII.Launcher.ViewModels
                 settingsViewModel.IsFullScreen = settings.IsFullScreen;
             }
 
-            if (await _storageService.GetAsync<IEnumerable<GameClient>>("Clients") is { } clients)
-            {
-                SidebarViewModel.ServersListViewModel.GameClients.AddRange(clients);
-            }
-
             profileViewModel.GoToMainPageCommand = ReactiveCommand.Create(ResetPage);
             settingsViewModel.GoToMainPageCommand = ReactiveCommand.CreateFromTask(SaveSettings);
             addServerViewModel.GoToMainPageCommand = ReactiveCommand.Create(ResetPage);

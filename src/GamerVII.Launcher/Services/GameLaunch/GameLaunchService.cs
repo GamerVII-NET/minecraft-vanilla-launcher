@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using CmlLib.Core;
 using CmlLib.Core.Auth;
 using CmlLib.Core.Installer.Forge;
-using CmlLib.Core.Version;
 using GamerVII.Launcher.Models.Client;
 using GamerVII.Launcher.Models.Users;
 using GamerVII.Launcher.Services.Logger;
@@ -28,7 +28,7 @@ public class GameLaunchService : IGameLaunchService
     {
         _loggerService = loggerService ?? Locator.Current.GetService<ILoggerService>()!;
 
-        System.Net.ServicePointManager.DefaultConnectionLimit = 256;
+        ServicePointManager.DefaultConnectionLimit = 256;
 
         var path = new MinecraftPath();
         _launcher = new CMLauncher(path);

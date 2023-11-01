@@ -38,10 +38,35 @@
                         Grid.Column="0"
                         Spacing="25">
                 <StackPanel Classes="Input-Wrapper">
-                    <TextBlock Text="Размер оперативной памяти"
-                               Classes="Content" />
-                    <TextBox Classes="Input-Box"
-                             Text="{Binding MemorySize, Mode=TwoWay}" />
+                    <Grid>
+                        <TextBlock Text="Размер оперативной памяти"
+                                   Classes="Content" />
+
+                        <TextBlock HorizontalAlignment="Right"
+                                   Classes="Content">
+
+                            <Run Text="{Binding MemorySize}"/>
+                            <Run Text="Мб"/>
+
+                        </TextBlock>
+                    </Grid>
+                    <Slider x:Name="ViewRamSlider"
+                            Orientation="Horizontal"
+                            Value="{Binding MemorySize}"
+                            Background="{DynamicResource AdditionalColorBorder}"
+                            Maximum="{Binding MaxMemorySize}">
+                        <Slider.Styles>
+                            <Style Selector="Slider /template/ RepeatButton#PART_DecreaseButton">
+                                <Setter Property="Background" Value="Red"/>
+                            </Style>
+                            <Style Selector="Slider /template/ Thumb#thumb">
+                                <Setter Property="Background" Value="Red"/>
+                            </Style>
+                        </Slider.Styles>
+                    </Slider>
+
+                    <!-- <TextBox Classes="Input-Box" -->
+                    <!--          Text="{Binding MemorySize, Mode=TwoWay}" /> -->
                 </StackPanel>
 
 

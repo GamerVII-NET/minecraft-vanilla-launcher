@@ -12,7 +12,7 @@
     <Border Padding="50, 30"
             Background="#0E1011">
         <Grid RowDefinitions="80, *" ColumnDefinitions="*, *">
-            <Grid Grid.ColumnDefinitions="*, *"
+            <Grid ColumnDefinitions="*, *"
                   Grid.ColumnSpan="2">
 
                 <components:ButtonControl Classes="Additional"
@@ -25,23 +25,32 @@
                            Grid.Column="1"
                            Classes="Headline">
                     <Run Text="Список модов"/>
-                    <Run Text="/"/>
-                    <Run Text="{Binding SelectClient.Name}"/>
+                    <Run Text="/" Foreground="{DynamicResource PrimaryColor}"/>
+                    <Run Text="{Binding SelectClient.Name}"
+                         Foreground="{DynamicResource SecondaryColor}"/>
                 </TextBlock>
 
             </Grid>
 
 
-            <StackPanel Grid.Row="1" Spacing="10">
+            <!-- <StackPanel Grid.Row="1" Spacing="10"> -->
+            <!-- -->
+            <!--     <CheckBox Content="Мод 1" Classes="CheckBox" /> -->
+            <!--     <CheckBox Content="Мод 2" Classes="CheckBox" /> -->
+            <!--     <CheckBox Content="Мод 3" Classes="CheckBox" /> -->
+            <!--     <CheckBox Content="Мод 4" Classes="CheckBox" /> -->
+            <!--     <CheckBox Content="Мод 5" Classes="CheckBox" /> -->
+            <!--     <CheckBox Content="Мод 6" Classes="CheckBox" /> -->
+            <!-- -->
+            <!-- </StackPanel> -->
 
-                <CheckBox Content="Мод 1" Classes="CheckBox" />
-                <CheckBox Content="Мод 2" Classes="CheckBox" />
-                <CheckBox Content="Мод 3" Classes="CheckBox" />
-                <CheckBox Content="Мод 4" Classes="CheckBox" />
-                <CheckBox Content="Мод 5" Classes="CheckBox" />
-                <CheckBox Content="Мод 6" Classes="CheckBox" />
-
-            </StackPanel>
+            <TextBlock Grid.Row="1"
+                       Grid.Column="0"
+                       Grid.ColumnSpan="2"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       Foreground="{DynamicResource ContentColor}"
+                       Text="В разработке..."/>
 
 
         </Grid>

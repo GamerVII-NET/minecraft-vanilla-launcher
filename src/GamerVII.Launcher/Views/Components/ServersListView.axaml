@@ -46,7 +46,17 @@
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal"
+                                    Background="Transparent"
                                     Spacing="10">
+
+                            <StackPanel.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Header="Удалить клиент"
+                                              CommandParameter="{Binding .}"
+                                              Command="{Binding $parent[ListBox].((vm:ServersListViewModel)DataContext).RemoveClientCommand}"/>
+                                </ContextMenu>
+                            </StackPanel.ContextMenu>
+
                             <Image Source="/Assets/minecraft.png"
                                    VerticalAlignment="Center"
                                    Width="24" />
@@ -64,7 +74,7 @@
 
         <components:ButtonControl Classes="Secondary"
                                   IconPath="/Assets/plus.svg"
-                                  Text="Добавить"
+                                  Text="Создать клиент"
                                   Foreground="{StaticResource ContentColor}"
                                   HorizontalAlignment="Center"
                                   Command="{Binding AddClientCommand}"
