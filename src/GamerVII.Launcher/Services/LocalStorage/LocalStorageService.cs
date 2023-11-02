@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
 using SQLite;
 
@@ -47,7 +47,7 @@ public class LocalStorageService : ILocalStorageService
         return default(T);
     }
 
-    [Table("StorageItemы")]
+    [Table("StorageItems")]
     private class StorageItem
     {
         [PrimaryKey] public string Key { get; set; } = null!;
