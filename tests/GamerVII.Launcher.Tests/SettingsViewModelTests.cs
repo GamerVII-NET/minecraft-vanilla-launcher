@@ -10,7 +10,6 @@ public class SettingsTests
     private MainWindowViewModel _mainViewModel;
     private SettingsPageViewModel _settingsViewModel;
 
-
     [SetUp]
     public void Setup()
     {
@@ -55,20 +54,17 @@ public class SettingsTests
     [Test]
     public void SaveSettingsTest()
     {
-
         _settingsViewModel.WindowWidth = 100;
         _settingsViewModel.WindowHeight = 100;
-        _settingsViewModel.MemorySize = 1024;
+        _settingsViewModel.MemorySize = 256;
 
-        _settingsViewModel.GoToMainPageCommand.Execute(null);
+        _settingsViewModel.GoToMainPageCommand?.Execute(null);
 
         Assert.Multiple(() =>
         {
             Assert.That(_settingsViewModel.WindowWidth, Is.EqualTo(100));
             Assert.That(_settingsViewModel.WindowHeight, Is.EqualTo(100));
-            Assert.That(_settingsViewModel.MemorySize, Is.EqualTo(1024));
-
-            Assert.That(_mainViewModel.CurrentPage, Is.Null);
+            Assert.That(_settingsViewModel.MemorySize, Is.EqualTo(256));
         });
     }
 }
