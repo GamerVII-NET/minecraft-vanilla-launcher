@@ -14,7 +14,7 @@ public class EmptyAuthService : IAuthService
     {
         _localStorage = localStorage
                         ?? Locator.Current.GetService<ILocalStorageService>()
-                        ?? throw new Exception(nameof(LocalStorageService) + " not registered");
+                        ?? throw new Exception(nameof(LocalStorageServiceOld) + " not registered");
     }
 
     public async Task<IUser> GetAuthorizedUser()

@@ -1,14 +1,8 @@
-using System.Diagnostics;
 using GamerVII.Launcher.Extensions;
 using GamerVII.Launcher.Models.Users;
-using GamerVII.Launcher.Services.Auth;
-using GamerVII.Launcher.Services.Client;
-using GamerVII.Launcher.Services.GameLaunch;
 using GamerVII.Launcher.Services.LocalStorage;
-using GamerVII.Launcher.Services.Logger;
 using GamerVII.Launcher.ViewModels;
 using GamerVII.Launcher.ViewModels.Pages;
-using Splat;
 
 namespace GamerVII.Launcher.Tests;
 
@@ -45,13 +39,13 @@ public class Tests
 
     }
 
-    [Test]
+    [Test, Order(1)]
     public void CanExecuteAuthTest()
     {
         Assert.That(_authPageViewModel.OnLoginCommand.CanExecute(null), Is.True);
     }
 
-    [Test]
+    [Test, Order(2)]
     public void AuthTest()
     {
         _authPageViewModel.OnLoginCommand.Execute(null);
@@ -59,7 +53,7 @@ public class Tests
         Assert.That(_isAuthorized, Is.True);
     }
 
-    [Test]
+    [Test, Order(3)]
     public async Task UserIsSavedTest()
     {
         var user = await _storageService.GetAsync<User>("User");
@@ -67,7 +61,7 @@ public class Tests
         Assert.That(user, Is.Not.Null);
     }
 
-    [Test]
+    [Test, Order(4)]
     public async Task SavedUserCanLogInTest()
     {
         var user = await _storageService.GetAsync<User>("User");

@@ -1,71 +1,57 @@
-﻿using System;
-using Newtonsoft.Json;
-using System.Collections.Generic;
-using System.IO;
 using System.Threading.Tasks;
-using GamerVII.Launcher.Services.Logger;
-using Splat;
+using Newtonsoft.Json;
+using SQLite;
 
 namespace GamerVII.Launcher.Services.LocalStorage;
 
 public class LocalStorageService : ILocalStorageService
 {
-    private readonly string _storagePath = "config.data";
+    private const string DatabasePath = "data.db";
+    private readonly SQLiteAsyncConnection _database;
 
-    private Dictionary<string, string>? _storage;
-    private readonly ILoggerService _loggerService;
-
-    public LocalStorageService(ILoggerService? loggerService = null)
+    public LocalStorageService()
     {
-        _loggerService = loggerService
-                         ?? Locator.Current.GetService<ILoggerService>()
-                         ?? throw new Exception($"{nameof(ILoggerService)} not registered");
+        _database = new SQLiteAsyncConnection(DatabasePath);
+
+        InitializeTables();
     }
 
-    public async Task<T?> GetAsync<T>(string key)
+    private void InitializeTables()
     {
-        _storage ??= await ReadDataFromFile();
-
-        return _storage.TryGetValue(key, out string? jsonValue) ? JsonConvert.DeserializeObject<T>(jsonValue) : default;
+        _database.CreateTableAsync<StorageItem>().Wait();
     }
 
     public async Task SetAsync<T>(string key, T value)
     {
-        _storage ??= await ReadDataFromFile();
-
-        _storage[key] = JsonConvert.SerializeObject(value);
-
-        await SaveDataToFile(_storage);
+        var serializedValue = JsonConvert.SerializeObject(value);
+        var storageItem = new StorageItem
+        {
+            Key = key,
+            TypeName = typeof(T).FullName,
+            Value = serializedValue
+        };
+        await _database.InsertOrReplaceAsync(storageItem);
     }
 
-    private async Task SaveDataToFile(Dictionary<string, string> storage)
+    public async Task<T?> GetAsync<T>(string key)
     {
-        await using var fileStream =
-            new FileStream(_storagePath, FileMode.OpenOrCreate, FileAccess.Write, FileShare.Write);
-        await using var streamWriter = new StreamWriter(fileStream);
-        var json = JsonConvert.SerializeObject(storage);
-        await streamWriter.WriteAsync(json);
+        var storageItem = await _database.Table<StorageItem>()
+            .Where(si => si.Key == key)
+            .FirstOrDefaultAsync();
+
+        if (storageItem != null)
+        {
+            return JsonConvert.DeserializeObject<T>(storageItem.Value);
+        }
+
+        return default(T);
     }
 
-    private async Task<Dictionary<string, string>> ReadDataFromFile()
+    [Table("StorageItems")]
+    private class StorageItem
     {
-        if (!File.Exists(_storagePath)) return new Dictionary<string, string>();
-
-        await using var fileStream = new FileStream(_storagePath, FileMode.Open, FileAccess.Read, FileShare.Read);
-        using var streamReader = new StreamReader(fileStream);
-        var json = await streamReader.ReadToEndAsync();
-
-        Dictionary<string, string>? data = null;
-
-        try
-        {
-            data = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
-        }
-        catch (Exception ex)
-        {
-            _loggerService.Log(ex.Message, ex);
-        }
-
-        return data ?? new Dictionary<string, string>();
+        [PrimaryKey] public string Key { get; set; } = null!;
+        public string? TypeName { get; set; }
+        public string Value { get; set; } = null!;
     }
 }

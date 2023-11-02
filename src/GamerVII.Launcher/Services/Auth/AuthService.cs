@@ -28,7 +28,7 @@ public class AuthService : IAuthService
 
     public async Task<IUser> OnLogin(string login, string password)
     {
-        IUser user = new User
+        var user = new User
         {
             Login = login,
             Password = password
