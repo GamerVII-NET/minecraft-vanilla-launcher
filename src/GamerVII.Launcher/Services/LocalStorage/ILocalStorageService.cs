@@ -23,5 +23,13 @@ public interface ILocalStorageService
     /// <param name="key">The key associated with the item.</param>
     /// <returns>An asynchronous operation that yields the retrieved value.</returns>
     Task<T?> GetAsync<T>(string key);
+
+    /// <summary>
+    /// Sets the value of an item in the local storage asynchronously.
+    /// </summary>
+    /// <typeparam name="T">The type of the value to retrieve.</typeparam>
+    /// <param name="value">The value to store.</param>
+    /// <returns>An asynchronous operation that yields the retrieved value.</returns>
+    Task<int> SaveRecord<T>(T value);
 }
 

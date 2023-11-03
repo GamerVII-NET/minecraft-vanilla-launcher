@@ -24,6 +24,7 @@
             <components:ButtonControl Classes="Additional"
                                       IconPath="/Assets/leftArrow.svg"
                                       Text="НАЗАД"
+                                      CornerRadius="50"
                                       Command="{Binding GoToMainPageCommand}" />
 
         </Border>
@@ -77,6 +78,7 @@
                         <components:ButtonControl Classes="Primary"
                                                   HorizontalAlignment="Center"
                                                   Margin="0, 40"
+                                                  IsEnabled="False"
                                                   IconPath="/Assets/rightArrow.svg"
                                                   Text="СМЕНИТЬ СКИН"
                                                   Command="{Binding GoToMainPageCommand}" />
@@ -103,18 +105,19 @@
                         <StackPanel MaxWidth="450"
                                     VerticalAlignment="Center"
                                     HorizontalAlignment="Left">
-                            <TextBlock Text="Летние скидки в магазине блоков!" Classes="Headline" />
+                            <TextBlock Text="Новый игровой лаунчер Minecraft!" Classes="Headline" />
                             <TextBlock Classes="Content"
                                        TextWrapping="Wrap"
                                        LineHeight="25"
                                        Margin="0, 20, 0, 0"
-                                       Text="Независимые государства представлены в исключительно положительном свете. Значимость этих проблем настолько очевидна, что сплочённость команды профессионалов играет важную роль в формировании инновационных методов управления процессами.!" />
+                                       Text="Лаунчер Minecraft от GamerVII - это удобное приложение, разработанное с учетом пользовательских потребностей, с целью упростить процесс запуска Minecraft и управления настройками игры. Этот лаунчер предоставляет интуитивный интерфейс, который делает процесс управления игрой более доступным даже для новичков." />
 
                             <components:ButtonControl Classes="Secondary"
                                                       Margin="0, 20, 0, 0"
-                                                      IconPath="/Assets/rightArrow.svg"
-                                                      Text="ПЕРЕЙТИ В МАГАЗИН"
-                                                      Command="{Binding GoToMainPageCommand}" />
+                                                      IconPath="/Assets/tg.svg"
+                                                      Text="Канал разработчика"
+                                                      CommandParameter="tg://resolve?domain=GamerVIIChannel"
+                                                      Command="{Binding OpenLinkCommand}" />
 
                         </StackPanel>
 

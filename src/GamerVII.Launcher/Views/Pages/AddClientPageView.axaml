@@ -20,6 +20,7 @@
                 <components:ButtonControl Classes="Additional"
                                           IconPath="/Assets/leftArrow.svg"
                                           Text="НАЗАД"
+                                          CornerRadius="50"
                                           Command="{Binding GoToMainPageCommand}" />
 
             </Grid>

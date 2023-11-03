@@ -1,4 +1,6 @@
+using System;
 using System.Threading.Tasks;
+using GamerVII.Launcher.Models.Entities;
 using Newtonsoft.Json;
 using SQLite;
 
@@ -19,6 +21,7 @@ public class LocalStorageService : ILocalStorageService
     private void InitializeTables()
     {
         _database.CreateTableAsync<StorageItem>().Wait();
+        _database.CreateTableAsync<LogItem>().Wait();
     }
 
     public async Task SetAsync<T>(string key, T value)
@@ -45,6 +48,11 @@ public class LocalStorageService : ILocalStorageService
         }
 
         return default(T);
+    }
+
+    public Task<int> SaveRecord<T>(T record)
+    {
+        return _database.InsertOrReplaceAsync(record);
     }
 
     [Table("StorageItems")]

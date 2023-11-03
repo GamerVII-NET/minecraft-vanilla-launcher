@@ -23,6 +23,7 @@
                 <components:ButtonControl Classes="Additional"
                                           IconPath="/Assets/leftArrow.svg"
                                           Text="НАЗАД"
+                                          CornerRadius="50"
                                           Command="{Binding GoToMainPageCommand}" />
 
 
@@ -67,6 +68,8 @@
 
                     <!-- <TextBox Classes="Input-Box" -->
                     <!--          Text="{Binding MemorySize, Mode=TwoWay}" /> -->
+                    <components:FolderPickerControl SelectedFolderPath="{Binding InstallationFolderPath}"
+                                                    SelectFolderCommand="{Binding SelectFolderCommand}"/>
                 </StackPanel>
 
 

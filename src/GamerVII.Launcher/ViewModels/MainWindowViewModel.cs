@@ -207,8 +207,7 @@ namespace GamerVII.Launcher.ViewModels
             SettingsClientCommand =
                 ReactiveCommand.Create(
                     () => OpenPage<SettingsPageViewModel>(
-                        c => ((SettingsPageViewModel)c).User = User),
-                    canLaunch);
+                        c => ((SettingsPageViewModel)c).User = User));
 
             ModsListCommand = ReactiveCommand.Create(() =>
             {
@@ -239,12 +238,10 @@ namespace GamerVII.Launcher.ViewModels
             _gameLaunchService.FileChanged += (fileName) =>
             {
                 LoadingFile = fileName;
-                Console.WriteLine(LoadingFile);
             };
             _gameLaunchService.ProgressChanged += (percentage) =>
             {
                 LoadingPercentage = percentage;
-                Console.WriteLine(LoadingPercentage);
             };
 
             _gameLaunchService.LoadClientEnded += async (client, isSuccess, message) =>
@@ -326,7 +323,7 @@ namespace GamerVII.Launcher.ViewModels
             if (await _storageService.GetAsync<LocalSettings>("Settings") is { } settings)
             {
                 settingsViewModel.WindowWidth = settings.WindowWidth == 0 ? 900 : settings.WindowWidth;
-                settingsViewModel.WindowHeight = settings.WindowHeight == 0 ? 600 : settings.WindowWidth;
+                settingsViewModel.WindowHeight = settings.WindowHeight == 0 ? 600 : settings.WindowHeight;
                 settingsViewModel.MemorySize = settings.MemorySize == 0 ? 1024 : settings.MemorySize;
                 settingsViewModel.IsFullScreen = settings.IsFullScreen;
             }
@@ -423,13 +420,16 @@ namespace GamerVII.Launcher.ViewModels
             {
                 IsProcessing = true;
 
-                IGameClient client =
-                    await _gameLaunchService.LoadClient(SidebarViewModel.ServersListViewModel.SelectedClient);
+                if (SidebarViewModel.ServersListViewModel.SelectedClient != null)
+                {
+                    var client =
+                        await _gameLaunchService.LoadClient(SidebarViewModel.ServersListViewModel.SelectedClient);
+                }
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                _loggerService.Log(ex.Message);
-                _loggerService.Log(ex.StackTrace);
+                await _loggerService.Log(e.Message, e);
+                IsProcessing = false;
             }
         }
 

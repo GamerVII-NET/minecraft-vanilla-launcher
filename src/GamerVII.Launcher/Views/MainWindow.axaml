@@ -149,6 +149,7 @@
 
                         <components:ButtonControl Text="НАСТРОИТЬ"
                                                   Classes="Additional"
+                                                  CornerRadius="50"
                                                   IconPath="/Assets/settings.svg"
                                                   Command="{Binding SettingsClientCommand}" />
 
@@ -171,6 +172,7 @@
                             <components:ButtonControl Text="НАШ САЙТ"
                                                       Classes="Additional"
                                                       IconPath="/Assets/document.svg"
+                                                      CornerRadius="50"
                                                       CommandParameter="https://launcher.recloud.tech"
                                                       Command="{Binding OpenLinkCommand}" />
 

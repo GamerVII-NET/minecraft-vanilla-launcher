@@ -11,6 +11,7 @@
 
     <Application.Styles>
         <FluentTheme />
+        <StyleInclude Source="/Views/Components/FolderPickerControl.axaml" />
         <StyleInclude Source="/Views/Components/ButtonControl.axaml" />
         <StyleInclude Source="/Assets/Resources/Styles.axaml" />
     </Application.Styles>
