@@ -66,8 +66,11 @@ public class GameLaunchService : IGameLaunchService
         // var session = new MSession(user.Login, user.AccessToken, "uuid");
         var session = MSession.CreateOfflineSession(user.Login);
 
+        var test = _launcher.GetDefaultJavaPath();
+
         var process = await _launcher.CreateProcessAsync(client.InstallationVersion, new MLaunchOption
         {
+            JavaPath = _launcher.GetDefaultJavaPath()?.Replace("javaw.exe", "java.exe"),
             MinimumRamMb = startupOptions.MinimumRamMb,
             MaximumRamMb = startupOptions.MaximumRamMb,
             FullScreen = startupOptions.FullScreen,
@@ -81,6 +84,9 @@ public class GameLaunchService : IGameLaunchService
         process.EnableRaisingEvents = true;
         process.StartInfo.RedirectStandardError = true;
         process.StartInfo.RedirectStandardOutput = true;
+        process.StartInfo.UseShellExecute = false;
+        process.StartInfo.CreateNoWindow = true;
+
 
         process.ErrorDataReceived += (_, e) =>
         {
