@@ -1,4 +1,3 @@
-using System;
 using System.Threading.Tasks;
 using GamerVII.Launcher.Models.Entities;
 using Newtonsoft.Json;

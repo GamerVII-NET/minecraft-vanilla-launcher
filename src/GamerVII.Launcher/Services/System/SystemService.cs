@@ -1,12 +1,10 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Security.AccessControl;
 using System.Threading.Tasks;
 using GamerVII.Launcher.Services.LocalStorage;
-using Mono.Unix;
 using Splat;
 
 namespace GamerVII.Launcher.Services.System;
