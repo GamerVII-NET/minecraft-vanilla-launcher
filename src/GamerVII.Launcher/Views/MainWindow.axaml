@@ -10,7 +10,7 @@
     Title="GamerVII.Launcher"
     d:DesignHeight="550"
     d:DesignWidth="800"
-    MinWidth="1315"
+    MinWidth="1000"
     MinHeight="700"
     WindowStartupLocation="CenterScreen"
     x:DataType="vm:MainWindowViewModel"
@@ -89,7 +89,7 @@
                     <!-- </Border> -->
 
                     <!-- Content -->
-                    <Grid ColumnDefinitions="*, *"
+                    <Grid ColumnDefinitions="0.6*, 0.4*"
                           IsVisible="{Binding SidebarViewModel.ServersListViewModel.SelectedClient, Converter={converters:IsNotNullConverter}}"
                           Margin="0, 20, 0, 0"
                           VerticalAlignment="Center"
