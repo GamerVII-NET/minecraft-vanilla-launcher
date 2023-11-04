@@ -21,9 +21,9 @@ public static class ServiceRegister
 
     public static void RegisterServices()
     {
-        Locator.CurrentMutable.RegisterConstant(new FileLoggerService(), typeof(ILoggerService));
-        Locator.CurrentMutable.RegisterConstant(new SystemService(), typeof(ISystemService));
         Locator.CurrentMutable.RegisterConstant(new LocalStorageService(), typeof(ILocalStorageService));
+        Locator.CurrentMutable.RegisterConstant(new DatabaseLoggerService(), typeof(ILoggerService));
+        Locator.CurrentMutable.RegisterConstant(new SystemService(), typeof(ISystemService));
         Locator.CurrentMutable.RegisterConstant(new LocalGameClientService(), typeof(IGameClientService));
         Locator.CurrentMutable.RegisterConstant(new GameLaunchService(), typeof(IGameLaunchService));
         Locator.CurrentMutable.RegisterConstant(new EmptyAuthService(), typeof(IAuthService));

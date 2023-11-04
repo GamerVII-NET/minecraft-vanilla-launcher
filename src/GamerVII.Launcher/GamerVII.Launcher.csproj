@@ -67,10 +67,7 @@
     <Compile Update="Services\ClientService\LocalGameClientService.cs">
       <DependentUpon>IGameClientsService.cs</DependentUpon>
     </Compile>
-    <Compile Update="Services\LocalStorage\LocalStorageServiceOld.cs">
-      <DependentUpon>ILocalStorageService.cs</DependentUpon>
-    </Compile>
-    <Compile Update="Services\Logger\FileLoggerService.cs">
+    <Compile Update="Services\Logger\DatabaseLoggerService.cs">
       <DependentUpon>ILoggerService.cs</DependentUpon>
     </Compile>
     <Compile Update="Services\Client\LocalGameClientService.cs">
@@ -90,6 +87,9 @@
     </Compile>
     <Compile Update="Services\LocalStorage\LocalStorageService.cs">
       <DependentUpon>ILocalStorageService.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Services\System\SystemService.cs">
+      <DependentUpon>ISystemService.cs</DependentUpon>
     </Compile>
   </ItemGroup>
 </Project>

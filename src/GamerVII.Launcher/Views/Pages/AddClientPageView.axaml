@@ -20,6 +20,7 @@
                 <components:ButtonControl Classes="Additional"
                                           IconPath="/Assets/leftArrow.svg"
                                           Text="НАЗАД"
+                                          CornerRadius="50"
                                           Command="{Binding GoToMainPageCommand}" />
 
             </Grid>
@@ -123,6 +124,7 @@
                     <TextBlock Text="Описание" Classes="Content" />
                     <TextBox Classes="Input-Box"
                              x:Name="ViewDescription"
+                             Padding="15, 14, 75, 0"
                              MaxLength="100"
                              Text="{Binding NewGameClient.Description, Mode=TwoWay}" />
                     <TextBlock HorizontalAlignment="Right"

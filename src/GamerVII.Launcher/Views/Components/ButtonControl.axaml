@@ -51,6 +51,14 @@
         </Setter>
     </Style>
 
+    <Style Selector="controls|ButtonControl.Primary:disabled /template/ Button /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource PrimaryColor}" />
+    </Style>
+    <Style Selector="controls|ButtonControl.Primary:disabled">
+        <Setter Property="Opacity" Value=".1" />
+        <Setter Property="Cursor" Value="Cross" />
+    </Style>
+
     <Style Selector="controls|ButtonControl.Secondary">
 
         <Setter Property="Background" Value="{DynamicResource SecondaryColor}" />
@@ -90,7 +98,6 @@
 
         <Setter Property="Background" Value="{DynamicResource AdditionalColor}" />
         <Setter Property="BorderBrush" Value="{DynamicResource AdditionalBorderColor}" />
-        <Setter Property="CornerRadius" Value="50" />
         <Setter Property="Padding" Value="15, 10" />
         <Setter Property="Cursor" Value="Hand" />
         <Setter Property="BorderThickness" Value="1" />

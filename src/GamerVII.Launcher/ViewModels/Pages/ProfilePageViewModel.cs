@@ -1,4 +1,5 @@
-﻿using System.Windows.Input;
+﻿using System.Diagnostics;
+using System.Windows.Input;
 using GamerVII.Launcher.Models.Users;
 using GamerVII.Launcher.ViewModels.Base;
 using ReactiveUI;
@@ -15,6 +16,7 @@ public class ProfilePageViewModel : PageViewModelBase
     /// Command to navigate to the main page.
     /// </summary>
     public ICommand GoToMainPageCommand { get; set; }
+    public ICommand OpenLinkCommand { get; set; }
 
     public IUser User
     {
@@ -29,6 +31,16 @@ public class ProfilePageViewModel : PageViewModelBase
     /// </summary>
     public ProfilePageViewModel()
     {
-        // Add any initialization logic or data loading here if required.
+        OpenLinkCommand = ReactiveCommand.Create((string url) => OpenLink(url));
+    }
+
+
+    private void OpenLink(string url)
+    {
+        Process.Start(new ProcessStartInfo
+        {
+            FileName = url,
+            UseShellExecute = true
+        });
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace GamerVII.Launcher.Services.Logger;
 
@@ -11,12 +12,12 @@ public interface ILoggerService : IDisposable
     /// Logs the specified message.
     /// </summary>
     /// <param name="message">The message to be logged.</param>
-    void Log(string message);
+    Task Log(string message);
 
     /// <summary>
     /// Logs the specified message.
     /// </summary>
     /// <param name="message">The message to be logged.</param>
     /// <param name="exception">Exception</param>
-    void Log(string message, Exception exception);
+    Task Log(string message, Exception exception);
 }

@@ -43,4 +43,6 @@ public class ButtonControl : TemplatedControl
         get => GetValue(CommandProperty);
         set => SetValue(CommandProperty, value);
     }
+
+
 }

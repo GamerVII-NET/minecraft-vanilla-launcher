@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -18,12 +19,12 @@ public class AddClientPageViewModel : PageViewModelBase
     /// <summary>
     /// Command to navigate to the main page.
     /// </summary>
-    public ICommand GoToMainPageCommand { get; set; }
+    public ICommand? GoToMainPageCommand { get; set; }
 
     /// <summary>
     /// Command to add new client
     /// </summary>
-    public ICommand SaveClientCommand { get; set; }
+    public ICommand? SaveClientCommand { get; set; }
 
     public IGameClient NewGameClient
     {
@@ -97,10 +98,10 @@ public class AddClientPageViewModel : PageViewModelBase
             .ObserveOn(RxApp.MainThreadScheduler)
             .Subscribe(DoSearch!);
 
-        LoadData();
+        RxApp.MainThreadScheduler.Schedule(LoadData);
     }
 
-    private async Task LoadData()
+    private async void LoadData()
     {
         await LoadVersions();
     }
