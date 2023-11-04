@@ -15,7 +15,7 @@ public class ReleaseDateFromMinecraftVersionConverter : MarkupExtension, IValueC
 
         if (value is MinecraftVersion minecraftVersion)
         {
-            return minecraftVersion.MVersion.ReleaseTime?.ToString("dd.mm.yyyy в HH:mm");
+            return minecraftVersion.MVersion.ReleaseTime?.ToString("dd.MM.yyyy в HH:mm");
         }
 
         return string.Empty;
