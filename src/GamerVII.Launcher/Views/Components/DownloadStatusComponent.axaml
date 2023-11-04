@@ -1,0 +1,65 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="using:GamerVII.Launcher.Views.Components">
+    <Design.PreviewWith>
+        <Border Padding="20">
+            <controls:DownloadStatusComponent />
+        </Border>
+    </Design.PreviewWith>
+
+    <Style Selector="Svg.LoadingInfinity">
+        <Style.Animations>
+            <Animation Duration="0:0:0:1" IterationCount="INFINITE">
+                <KeyFrame Cue="0%">
+                    <Setter Property="RotateTransform.Angle" Value="0.0"/>
+                </KeyFrame>
+                <KeyFrame Cue="100%">
+                    <Setter Property="RotateTransform.Angle" Value="-360.0"/>
+                </KeyFrame>
+            </Animation>
+        </Style.Animations>
+    </Style>
+
+    <Style Selector="controls|DownloadStatusComponent">
+
+        <Setter Property="Template">
+            <ControlTemplate>
+
+                <Border Classes="DownloadStatusWrapper" Padding="30 20">
+                    <StackPanel Orientation="Horizontal"
+                                Spacing="20">
+                        <Svg Path="/Assets/download.svg"
+                             Width="30"
+                             VerticalAlignment="Center"/>
+
+                        <StackPanel Spacing="5" VerticalAlignment="Center">
+                            <TextBlock Text="{TemplateBinding Title}" Classes="Headline"/>
+                            <TextBlock Text="{TemplateBinding Description}"
+                                       MaxWidth="150"
+                                       TextTrimming="CharacterEllipsis"
+                                       Classes="Content"/>
+
+                        </StackPanel>
+
+                        <Grid>
+
+                            <Svg Path="/Assets/progress-bar-circle.svg"
+                                 Width="50"
+                                 Classes="LoadingInfinity"
+                                 VerticalAlignment="Center" />
+
+                            <TextBlock Text="{TemplateBinding Percentage}"
+                                       VerticalAlignment="Center"
+                                       Classes="Content"
+                                       HorizontalAlignment="Center"/>
+                        </Grid>
+
+                    </StackPanel>
+
+                </Border>
+
+            </ControlTemplate>
+        </Setter>
+    </Style>
+</Styles>
+

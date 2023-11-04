@@ -32,6 +32,13 @@
         <Setter Property="Padding" Value="0, 15" />
     </Style>
 
+    <Style Selector="Border.DownloadStatusWrapper">
+        <Setter Property="Background" Value="{DynamicResource AdditionalColor}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource AdditionalColorBorder}"/>
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="CornerRadius" Value="50" />
+    </Style>
+
     <Style Selector="Border.Online">
         <Setter Property="Background" Value="{DynamicResource SecondaryColor}" />
         <Setter Property="Padding" Value="18,20" />

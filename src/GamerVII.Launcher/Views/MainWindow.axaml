@@ -8,8 +8,8 @@
     xmlns:vm="using:GamerVII.Launcher.ViewModels"
     xmlns:converters="clr-namespace:GamerVII.Launcher.Views.Converters"
     Title="GamerVII.Launcher"
-    d:DesignHeight="550"
-    d:DesignWidth="800"
+    d:DesignHeight="700"
+    d:DesignWidth="1000"
     MinWidth="1000"
     MinHeight="700"
     WindowStartupLocation="CenterScreen"
@@ -51,7 +51,7 @@
                                     DataContext="{Binding SidebarViewModel}" />
 
             <Border Grid.Column="1" Classes="ContentPresenter">
-                <Grid RowDefinitions="80, *, 50" ColumnDefinitions="*, *">
+                <Grid RowDefinitions="80, *, 50" ColumnDefinitions="*, *, *">
 
                     <StackPanel Spacing="5">
                         <TextBlock Text="Привет,"
@@ -60,6 +60,18 @@
                                    FontWeight="Bold"
                                    FontSize="22"/>
                     </StackPanel>
+
+                    <Grid IsVisible="{Binding IsProcessing}"
+                          Grid.Row="0"
+                          Grid.ColumnSpan="3"
+                          Grid.Column="0">
+
+                        <components:DownloadStatusComponent
+                            Title="Загрузка файлов"
+                            Percentage="{Binding LoadingPercentage}"
+                            Description="{Binding LoadingFile}"
+                            HorizontalAlignment="Center"/>
+                    </Grid>
 
                     <!-- Online -->
                     <!-- <Border Classes="Online"> -->
@@ -93,7 +105,7 @@
                           IsVisible="{Binding SidebarViewModel.ServersListViewModel.SelectedClient, Converter={converters:IsNotNullConverter}}"
                           Margin="0, 20, 0, 0"
                           VerticalAlignment="Center"
-                          Grid.ColumnSpan="2"
+                          Grid.ColumnSpan="3"
                           Grid.Column="0"
                           Grid.RowSpan="2"
                           Grid.Row="0">
@@ -143,7 +155,7 @@
 
                     <!-- Footer -->
                     <Grid Grid.Row="2"
-                          Grid.ColumnSpan="2"
+                          Grid.ColumnSpan="3"
                           Grid.Column="0"
                           ColumnDefinitions="*, *">
 

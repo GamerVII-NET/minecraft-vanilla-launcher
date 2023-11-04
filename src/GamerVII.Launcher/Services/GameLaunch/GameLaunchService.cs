@@ -49,7 +49,7 @@ public class GameLaunchService : IGameLaunchService
 
         _launcher = new CMLauncher(path);
 
-        _launcher.ProgressChanged += (_, e) => ProgressChanged?.Invoke(((decimal)e.ProgressPercentage) / 100);
+        _launcher.ProgressChanged += (_, e) => ProgressChanged?.Invoke(e.ProgressPercentage);
         _launcher.FileChanged += (e) =>
         {
             if (e.FileName != null)
@@ -175,7 +175,7 @@ public class GameLaunchService : IGameLaunchService
         {
             if (e.FileName != null) FileChanged?.Invoke(e.FileName);
         };
-        forge.ProgressChanged += (_, e) => ProgressChanged?.Invoke(((decimal)e.ProgressPercentage) / 100);
+        forge.ProgressChanged += (_, e) => ProgressChanged?.Invoke(e.ProgressPercentage);
 
         client.InstallationVersion = await forge.Install(client.Version);
     }
