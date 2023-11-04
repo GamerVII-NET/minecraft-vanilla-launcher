@@ -66,8 +66,6 @@ public class GameLaunchService : IGameLaunchService
         // var session = new MSession(user.Login, user.AccessToken, "uuid");
         var session = MSession.CreateOfflineSession(user.Login);
 
-        var test = _launcher.GetDefaultJavaPath();
-
         var process = await _launcher.CreateProcessAsync(client.InstallationVersion, new MLaunchOption
         {
             JavaPath = _launcher.GetDefaultJavaPath()?.Replace("javaw.exe", "java.exe"),
