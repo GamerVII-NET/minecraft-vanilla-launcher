@@ -72,62 +72,67 @@
                                      Watermark="Поиск по версии"
                                      Text="{Binding SearchText, Mode=TwoWay}" />
                         </StackPanel>
-                        <StackPanel Spacing="5">
+                        <Grid>
+                            <StackPanel Spacing="5">
 
-                            <Border Padding="5, 0, 5, 10"
-                                    BorderBrush="{DynamicResource AdditionalColorBorder}"
-                                    BorderThickness="0, 0, 0, 1">
-                                <Grid>
-                                    <TextBlock Text="Версия"
-                                               VerticalAlignment="Center"
-                                               HorizontalAlignment="Left"
-                                               Foreground="{DynamicResource ContentColor}"
-                                               FontWeight="Medium" />
-                                    <TextBlock Text="Дата релиза"
-                                               VerticalAlignment="Center"
-                                               Foreground="{DynamicResource ContentColor}"
-                                               HorizontalAlignment="Right" />
-                                </Grid>
-                            </Border>
+                                <Border Padding="5, 0, 5, 10"
+                                        BorderBrush="{DynamicResource AdditionalColorBorder}"
+                                        BorderThickness="0, 0, 0, 1">
+                                    <Grid>
+                                        <TextBlock Text="Версия"
+                                                   VerticalAlignment="Center"
+                                                   HorizontalAlignment="Left"
+                                                   Foreground="{DynamicResource ContentColor}"
+                                                   FontWeight="Medium" />
+                                        <TextBlock Text="Дата релиза"
+                                                   VerticalAlignment="Center"
+                                                   Foreground="{DynamicResource ContentColor}"
+                                                   HorizontalAlignment="Right" />
+                                    </Grid>
+                                </Border>
 
-                            <ListBox ItemsSource="{Binding MinecraftVersions}"
-                                     Background="Transparent"
-                                     SelectedIndex="0"
-                                     Height="150"
-                                     SelectedItem="{Binding SelectedVersion}">
-                                <ListBox.Styles>
-                                    <Style
-                                        Selector="ContentPresenter#PART_ContentPresenter">
-                                        <Setter Property="BorderThickness" Value="1" />
-                                    </Style>
-                                    <Style
-                                        Selector="ListBoxItem:selected /template/ ContentPresenter#PART_ContentPresenter">
-                                        <Setter Property="Background" Value="{DynamicResource PrimaryTransparentColor}" />
-                                    </Style>
-                                </ListBox.Styles>
-                                <ListBox.ItemTemplate>
-                                    <DataTemplate>
-                                        <Grid Margin="0, 3, 0, 0">
-                                            <TextBlock Text="{Binding Version}"
-                                                       VerticalAlignment="Center"
-                                                       HorizontalAlignment="Left"
-                                                       FontWeight="Medium" />
-                                            <TextBlock
-                                                Text="{Binding ., Converter={converters:ReleaseDateFromMinecraftVersionConverter}}"
-                                                VerticalAlignment="Center"
-                                                Foreground="{DynamicResource ContentColor}"
-                                                HorizontalAlignment="Right"
-                                                FontWeight="Medium" />
-                                        </Grid>
-                                    </DataTemplate>
-                                </ListBox.ItemTemplate>
-                            </ListBox>
+                                <ListBox ItemsSource="{Binding MinecraftVersions}"
+                                         Background="Transparent"
+                                         SelectedIndex="0"
+                                         Height="150"
+                                         SelectedItem="{Binding SelectedVersion}">
+                                    <ListBox.Styles>
+                                        <Style
+                                            Selector="ContentPresenter#PART_ContentPresenter">
+                                            <Setter Property="BorderThickness" Value="1" />
+                                        </Style>
+                                        <Style
+                                            Selector="ListBoxItem:selected /template/ ContentPresenter#PART_ContentPresenter">
+                                            <Setter Property="Background"
+                                                    Value="{DynamicResource PrimaryTransparentColor}" />
+                                        </Style>
+                                    </ListBox.Styles>
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid Margin="0, 3, 0, 0">
+                                                <TextBlock Text="{Binding Version}"
+                                                           VerticalAlignment="Center"
+                                                           HorizontalAlignment="Left"
+                                                           FontWeight="Medium" />
+                                                <TextBlock
+                                                    Text="{Binding ., Converter={converters:ReleaseDateFromMinecraftVersionConverter}}"
+                                                    VerticalAlignment="Center"
+                                                    Foreground="{DynamicResource ContentColor}"
+                                                    HorizontalAlignment="Right"
+                                                    FontWeight="Medium" />
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+
+                            </StackPanel>
 
                             <ProgressBar IsIndeterminate="{Binding IsBusy}"
                                          IsVisible="{Binding IsBusy}"
+                                         VerticalAlignment="Bottom"
                                          Background="#10FFFFFF"
                                          Foreground="{DynamicResource PrimaryColor}" />
-                        </StackPanel>
+                        </Grid>
                     </StackPanel>
                 </Border>
 

@@ -34,8 +34,13 @@
         <Setter Property="HorizontalAlignment" Value="Right" />
         <Setter Property="Cursor" Value="Hand" />
     </Style>
+
     <Style Selector="Button.ModalClose:pointerover /template/ ContentPresenter">
         <Setter Property="Background" Value="Transparent" />
+    </Style>
+
+    <Style Selector="Button.ModalClose:pointerover /template/ ContentPresenter /template/ Svg">
+        <Setter Property="Opacity" Value=".5" />
     </Style>
 
     <Style Selector="CheckBox.CheckBox">
