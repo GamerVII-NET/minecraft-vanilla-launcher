@@ -19,7 +19,7 @@
 
 
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="11.0.0" />
+    <PackageReference Include="Avalonia" Version="11.0.5" />
     <PackageReference Include="Avalonia.Desktop" Version="11.0.0" />
     <PackageReference Include="Avalonia.Svg.Skia" Version="11.0.0.3" />
     <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.0" />
