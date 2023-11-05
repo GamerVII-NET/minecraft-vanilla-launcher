@@ -8,18 +8,57 @@
         <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Hidden" />
     </Style>
 
+    <Style Selector="Border.ModalWrapper">
+        <Setter Property="Background" Value="{DynamicResource AdditionalColor}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource AdditionalColorBorder}" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="MinWidth" Value="360" />
+        <Setter Property="CornerRadius" Value="15" />
+        <Setter Property="Padding" Value="30" />
+    </Style>
+
+    <Style Selector="TextBlock.ModalTitle">
+        <Setter Property="Foreground" Value="{DynamicResource HeadlineColor}" />
+        <Setter Property="FontSize" Value="18" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="HorizontalAlignment" Value="Left" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+
+    <Style Selector="Grid.ModalHeader">
+    </Style>
+
+    <Style Selector="Button.ModalClose">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="HorizontalAlignment" Value="Right" />
+        <Setter Property="Cursor" Value="Hand" />
+    </Style>
+
+    <Style Selector="Button.ModalClose:pointerover /template/ ContentPresenter">
+        <Setter Property="Background" Value="Transparent" />
+    </Style>
+
+    <Style Selector="Button.ModalClose:pointerover /template/ ContentPresenter /template/ Svg">
+        <Setter Property="Opacity" Value=".5" />
+    </Style>
+
     <Style Selector="CheckBox.CheckBox">
         <Setter Property="Foreground" Value="{DynamicResource ContentColor}" />
     </Style>
+
     <Style Selector="CheckBox.CheckBox /template/ Border#NormalRectangle">
         <Setter Property="BorderBrush" Value="{DynamicResource AdditionalBorderColor}" />
     </Style>
+
     <Style Selector="CheckBox.CheckBox:pointerover /template/ ContentPresenter">
         <Setter Property="Foreground" Value="{DynamicResource HeadlineColor}" />
     </Style>
+
     <Style Selector="CheckBox.CheckBox:pointerover /template/ Border#NormalRectangle">
         <Setter Property="BorderBrush" Value="{DynamicResource AdditionalBorderColor}" />
     </Style>
+
     <Style Selector="CheckBox.CheckBox:checked /template/ Border#NormalRectangle">
         <Setter Property="BorderBrush" Value="{DynamicResource PrimaryColor}" />
         <Setter Property="Background" Value="{DynamicResource PrimaryColor}" />

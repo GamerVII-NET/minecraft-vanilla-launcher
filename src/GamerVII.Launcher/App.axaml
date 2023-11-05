@@ -15,6 +15,9 @@
         <StyleInclude Source="/Views/Components/FolderPickerControl.axaml" />
         <StyleInclude Source="/Views/Components/ButtonControl.axaml" />
         <StyleInclude Source="/Assets/Resources/Styles.axaml" />
+
+        <StyleInclude Source="avares://GamerVII.Notification.Avalonia/Themes/Generic.xaml" />
+
     </Application.Styles>
 
     <Application.Resources>

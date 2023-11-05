@@ -118,7 +118,6 @@ public class AddClientPageViewModel : PageViewModelBase
         IsBusy = true;
         MinecraftVersions.Clear();
 
-
         if (!string.IsNullOrWhiteSpace(text))
         {
             text = text.Replace(",", ".");
@@ -127,6 +126,7 @@ public class AddClientPageViewModel : PageViewModelBase
 
             versions = versions.Where(c => c.Version.Contains(text));
 
+            await Task.Delay(500);
             MinecraftVersions = new ObservableCollection<IMinecraftVersion>(versions);
         }
         else
