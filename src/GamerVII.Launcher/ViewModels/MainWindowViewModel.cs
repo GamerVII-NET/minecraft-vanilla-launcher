@@ -356,7 +356,7 @@ namespace GamerVII.Launcher.ViewModels
             if (string.IsNullOrWhiteSpace(gameClient.Name))
             {
                 Manager
-                    .CreateMessage(true, "#FF4444", "Ошибка", "Укажите наименование клиента" )
+                    .CreateMessage(true, "#D03E3E", "Ошибка", "Укажите наименование клиента" )
                     .Dismiss().WithDelay(TimeSpan.FromSeconds(2))
                     .Queue();
                 return;
