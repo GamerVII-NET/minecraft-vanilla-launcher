@@ -2,7 +2,6 @@
 using GamerVII.Launcher.ViewModels.Base;
 using ReactiveUI;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
@@ -16,6 +15,7 @@ using GamerVII.Launcher.Services.GameLaunch;
 using GamerVII.Launcher.Services.LocalStorage;
 using GamerVII.Launcher.Services.Logger;
 using GamerVII.Launcher.ViewModels.Pages;
+using GamerVII.Notification.Avalonia;
 using Splat;
 
 namespace GamerVII.Launcher.ViewModels
@@ -27,6 +27,8 @@ namespace GamerVII.Launcher.ViewModels
     {
         // Sidebar view model for the main window.
         public SidebarViewModel SidebarViewModel { get; }
+
+        public INotificationMessageManager Manager { get; } = new NotificationMessageManager();
 
         #region Public properties
 
@@ -235,14 +237,8 @@ namespace GamerVII.Launcher.ViewModels
 
         private void SubscribeToEvents()
         {
-            _gameLaunchService.FileChanged += (fileName) =>
-            {
-                LoadingFile = fileName;
-            };
-            _gameLaunchService.ProgressChanged += (percentage) =>
-            {
-                LoadingPercentage = percentage;
-            };
+            _gameLaunchService.FileChanged += (fileName) => { LoadingFile = fileName; };
+            _gameLaunchService.ProgressChanged += (percentage) => { LoadingPercentage = percentage; };
 
             _gameLaunchService.LoadClientEnded += async (client, isSuccess, message) =>
             {
@@ -347,15 +343,31 @@ namespace GamerVII.Launcher.ViewModels
 
         private void AddGameClient(IGameClient? gameClient)
         {
-            if (gameClient != null)
+            if (gameClient == null)
             {
-                SidebarViewModel.ServersListViewModel.GameClients.Add(gameClient);
-                SidebarViewModel.ServersListViewModel.SelectedClient = gameClient;
-
-                _storageService.SetAsync("Clients", SidebarViewModel.ServersListViewModel.GameClients);
-
-                ResetPage();
+                Manager
+                    .CreateMessage(true, "#151515", "Ошибка", "Не удалось получить информацию о клиенте" )
+                    .Dismiss().WithDelay(TimeSpan.FromSeconds(5))
+                    .Queue();
+                return;
             }
+
+
+            if (string.IsNullOrWhiteSpace(gameClient.Name))
+            {
+                Manager
+                    .CreateMessage(true, "#FF4444", "Ошибка", "Укажите наименование клиента" )
+                    .Dismiss().WithDelay(TimeSpan.FromSeconds(2))
+                    .Queue();
+                return;
+            }
+
+            SidebarViewModel.ServersListViewModel.GameClients.Add(gameClient);
+            SidebarViewModel.ServersListViewModel.SelectedClient = gameClient;
+
+            _storageService.SetAsync("Clients", SidebarViewModel.ServersListViewModel.GameClients);
+
+            ResetPage();
         }
 
         public async Task SaveSettings()

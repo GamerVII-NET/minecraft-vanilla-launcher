@@ -1,0 +1,3 @@
+[submodule "src/GamerVII.Notification.Avalonia"]
+	path = src/GamerVII.Notification.Avalonia
+	url = https://github.com/GamerVII-NET/GamerVII.Notification.Avalonia.git

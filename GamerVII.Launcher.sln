@@ -10,6 +10,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "common", "common", "{09A802
 		README.md = README.md
 		.editorconfig = .editorconfig
 		.gitignore = .gitignore
+		.gitmodules = .gitmodules
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GamerVII.Launcher", "src\GamerVII.Launcher\GamerVII.Launcher.csproj", "{31859677-ACD0-48C0-A4EB-502CDBB7F07A}"
@@ -17,6 +18,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{793FCF04-CB68-4093-9A0F-57A0CA4475AA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GamerVII.Launcher.Tests", "tests\GamerVII.Launcher.Tests\GamerVII.Launcher.Tests.csproj", "{787232DD-3F4F-4B12-8297-455C9A4C3A43}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GamerVII.Notification.Avalonia", "src\GamerVII.Notification.Avalonia\GamerVII.Notification.Avalonia\GamerVII.Notification.Avalonia.csproj", "{B792AA78-60F3-4EEF-B0FD-129ACD2ACD89}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -32,6 +35,10 @@ Global
 		{787232DD-3F4F-4B12-8297-455C9A4C3A43}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{787232DD-3F4F-4B12-8297-455C9A4C3A43}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{787232DD-3F4F-4B12-8297-455C9A4C3A43}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B792AA78-60F3-4EEF-B0FD-129ACD2ACD89}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B792AA78-60F3-4EEF-B0FD-129ACD2ACD89}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B792AA78-60F3-4EEF-B0FD-129ACD2ACD89}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B792AA78-60F3-4EEF-B0FD-129ACD2ACD89}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -42,5 +49,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{31859677-ACD0-48C0-A4EB-502CDBB7F07A} = {662268E9-BD01-43C7-924B-F4F285C8D391}
 		{787232DD-3F4F-4B12-8297-455C9A4C3A43} = {793FCF04-CB68-4093-9A0F-57A0CA4475AA}
+		{B792AA78-60F3-4EEF-B0FD-129ACD2ACD89} = {662268E9-BD01-43C7-924B-F4F285C8D391}
 	EndGlobalSection
 EndGlobal
