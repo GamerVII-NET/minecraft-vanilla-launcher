@@ -3,6 +3,7 @@
         xmlns:controls="using:GamerVII.Launcher.Views.Components">
     <Design.PreviewWith>
         <Border Background="{DynamicResource SecondaryColorHover}"
+                Width="300"
                 Padding="50">
             <StackPanel Spacing="20">
                 <controls:ButtonControl Classes="Primary" />
