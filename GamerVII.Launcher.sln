@@ -11,6 +11,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "common", "common", "{09A802
 		.editorconfig = .editorconfig
 		.gitignore = .gitignore
 		.gitmodules = .gitmodules
+		.github\workflows\dotnet-desktop.yml = .github\workflows\dotnet-desktop.yml
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GamerVII.Launcher", "src\GamerVII.Launcher\GamerVII.Launcher.csproj", "{31859677-ACD0-48C0-A4EB-502CDBB7F07A}"
