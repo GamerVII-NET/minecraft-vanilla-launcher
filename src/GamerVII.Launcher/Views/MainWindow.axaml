@@ -138,7 +138,7 @@
 
                                 <components:ButtonControl Text="ИГРАТЬ"
                                                           Classes="Primary"
-                                                          IconPath="/Assets/rightArrow.svg"
+                                                          IconPath="/Assets/right-arrow.svg"
                                                           Command="{Binding LaunchGameCommand}" />
 
                                 <components:ButtonControl Text="СПИСОК МОДОВ"

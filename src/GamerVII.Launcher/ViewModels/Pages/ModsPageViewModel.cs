@@ -3,31 +3,39 @@ using GamerVII.Launcher.Models.Client;
 using GamerVII.Launcher.ViewModels.Base;
 using ReactiveUI;
 
-namespace GamerVII.Launcher.ViewModels.Pages;
-
-/// <summary>
-/// View model class for the profile page, derived from PageViewModelBase.
-/// </summary>
-public class ModsPageViewModel : PageViewModelBase
+namespace GamerVII.Launcher.ViewModels.Pages
 {
     /// <summary>
-    /// Command to navigate to the main page.
+    /// View model class for the profile page, derived from PageViewModelBase.
     /// </summary>
-    public ICommand GoToMainPageCommand { get; set; }
-
-    public IGameClient SelectClient
+    public class ModsPageViewModel : PageViewModelBase
     {
-        get => _selectedClient;
-        set => this.RaiseAndSetIfChanged(ref _selectedClient, value);
-    }
+        #region Public properties
 
-    private IGameClient _selectedClient;
+        /// <summary>
+        /// Gets or sets the selected game client.
+        /// </summary>
+        public IGameClient? SelectClient
+        {
+            get => _selectedClient;
+            set => this.RaiseAndSetIfChanged(ref _selectedClient, value);
+        }
 
-    /// <summary>
-    /// Initializes a new instance of the ProfilePageViewModel class.
-    /// </summary>
-    public ModsPageViewModel()
-    {
-        // Add any initialization logic or data loading here if required.
+        #endregion
+
+        #region Commands
+
+        /// <summary>
+        /// Command to navigate to the main page.
+        /// </summary>
+        public ICommand? GoToMainPageCommand { get; set; }
+
+        #endregion
+
+        #region Private properties
+
+        private IGameClient? _selectedClient;
+
+        #endregion
     }
 }

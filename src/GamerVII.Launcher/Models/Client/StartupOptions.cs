@@ -1,6 +1,6 @@
 ﻿namespace GamerVII.Launcher.Models.Client;
 
-public class StartupOptions : IStartupOptions
+internal class StartupOptions : IStartupOptions
 {
     public int MinimumRamMb { get; set; }
     public int MaximumRamMb { get; set; }

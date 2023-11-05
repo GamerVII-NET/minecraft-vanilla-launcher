@@ -22,7 +22,7 @@
     <Border Classes="Sidebar" Padding="0, 20">
         <Grid RowDefinitions="80, *, 80">
 
-            <Svg Path="/Assets/logo.svg" Width="40"/>
+            <Svg Path="/Assets/logo.svg" Width="40" />
 
             <StackPanel Grid.Row="1"
                         Spacing="15"

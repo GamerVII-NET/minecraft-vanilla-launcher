@@ -1,23 +1,24 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace GamerVII.Launcher.Services.Logger;
-
-/// <summary>
-/// Defines a logger service contract for logging messages.
-/// </summary>
-public interface ILoggerService : IDisposable
+namespace GamerVII.Launcher.Services.Logger
 {
     /// <summary>
-    /// Logs the specified message.
+    /// Defines a logger service contract for logging messages.
     /// </summary>
-    /// <param name="message">The message to be logged.</param>
-    Task Log(string message);
+    public interface ILoggerService : IDisposable
+    {
+        /// <summary>
+        /// Logs the specified message.
+        /// </summary>
+        /// <param name="message">The message to be logged.</param>
+        Task Log(string message);
 
-    /// <summary>
-    /// Logs the specified message.
-    /// </summary>
-    /// <param name="message">The message to be logged.</param>
-    /// <param name="exception">Exception</param>
-    Task Log(string message, Exception exception);
+        /// <summary>
+        /// Logs the specified message and associated exception.
+        /// </summary>
+        /// <param name="message">The message to be logged.</param>
+        /// <param name="exception">An exception associated with the message.</param>
+        Task Log(string message, Exception exception);
+    }
 }

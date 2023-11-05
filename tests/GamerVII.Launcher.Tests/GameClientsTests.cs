@@ -3,6 +3,7 @@ using GamerVII.Launcher.Models.Client;
 using GamerVII.Launcher.Models.Enums;
 using GamerVII.Launcher.Services.Client;
 using GamerVII.Launcher.Services.GameLaunch;
+using GamerVII.Launcher.Tests.Models;
 using GamerVII.Launcher.ViewModels;
 using GamerVII.Launcher.ViewModels.Pages;
 using ReactiveUI;
@@ -70,6 +71,8 @@ public class GameClientsTests
 
         Assert.That(_mainViewModel.SidebarViewModel.ServersListViewModel.GameClients.Last(), Is.EqualTo(_addClientViewModel.NewGameClient));
     }
+
+
 
     private async Task CreateMinecraftClient()
     {

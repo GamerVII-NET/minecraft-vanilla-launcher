@@ -4,43 +4,72 @@ using GamerVII.Launcher.Models.Users;
 using GamerVII.Launcher.ViewModels.Base;
 using ReactiveUI;
 
-namespace GamerVII.Launcher.ViewModels.Pages;
-
-/// <summary>
-/// View model class for the profile page, derived from PageViewModelBase.
-/// </summary>
-public class ProfilePageViewModel : PageViewModelBase
+namespace GamerVII.Launcher.ViewModels.Pages
 {
-
     /// <summary>
-    /// Command to navigate to the main page.
+    /// View model class for the profile page, derived from PageViewModelBase.
     /// </summary>
-    public ICommand GoToMainPageCommand { get; set; }
-    public ICommand OpenLinkCommand { get; set; }
-
-    public IUser User
+    public class ProfilePageViewModel : PageViewModelBase
     {
-        get => _user;
-        set => this.RaiseAndSetIfChanged(ref _user, value);
-    }
+        #region Commands
 
-    private IUser _user;
+        /// <summary>
+        /// Command to navigate to the main page.
+        /// </summary>
+        public ICommand? GoToMainPageCommand { get; set; }
 
-    /// <summary>
-    /// Initializes a new instance of the ProfilePageViewModel class.
-    /// </summary>
-    public ProfilePageViewModel()
-    {
-        OpenLinkCommand = ReactiveCommand.Create((string url) => OpenLink(url));
-    }
+        /// <summary>
+        /// Command to open a web link.
+        /// </summary>
+        public ICommand? OpenLinkCommand { get; set; }
 
+        #endregion
 
-    private void OpenLink(string url)
-    {
-        Process.Start(new ProcessStartInfo
+        #region Public properties
+
+        /// <summary>
+        /// Gets or sets the user associated with the profile.
+        /// </summary>
+        public IUser User
         {
-            FileName = url,
-            UseShellExecute = true
-        });
+            get => _user ?? new User();
+            set => this.RaiseAndSetIfChanged(ref _user, value);
+        }
+
+        #endregion
+
+        #region Private variables
+
+        private IUser? _user;
+
+        #endregion
+
+        #region Constructors
+
+        /// <summary>
+        /// Initializes a new instance of the ProfilePageViewModel class.
+        /// </summary>
+        public ProfilePageViewModel()
+        {
+            OpenLinkCommand = ReactiveCommand.Create((string url) => OpenLink(url));
+        }
+
+        #endregion
+
+        #region Private methods
+
+        /// <summary>
+        /// Opens a web link using the default system browser.
+        /// </summary>
+        private void OpenLink(string url)
+        {
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = url,
+                UseShellExecute = true
+            });
+        }
+
+        #endregion
     }
 }

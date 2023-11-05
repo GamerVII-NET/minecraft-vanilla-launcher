@@ -1,6 +1,7 @@
-﻿using GamerVII.Launcher.Models.Enums;
+﻿using GamerVII.Launcher.Models.Client;
+using GamerVII.Launcher.Models.Enums;
 
-namespace GamerVII.Launcher.Models.Client;
+namespace GamerVII.Launcher.Tests.Models;
 
 internal class GameClient : IGameClient
 {

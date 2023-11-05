@@ -4,18 +4,12 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:models="using:GamerVII.Launcher.Models.Client"
     xmlns:vm="using:GamerVII.Launcher.ViewModels"
     xmlns:components="clr-namespace:GamerVII.Launcher.Views.Components"
-    xmlns:converters="clr-namespace:GamerVII.Launcher.Views.Converters"
     d:DesignHeight="450"
     d:DesignWidth="180"
     x:DataType="vm:ServersListViewModel"
     mc:Ignorable="d">
-
-    <!-- <Design.DataContext> -->
-    <!--     <vm:ServersListViewModel /> -->
-    <!-- </Design.DataContext> -->
 
     <StackPanel Spacing="10">
 
@@ -39,7 +33,7 @@
                         <Setter Property="Foreground" Value="{StaticResource HeadlineColor}" />
                     </Style>
                     <Style Selector="ListBoxItem:pointerover /template/ ContentPresenter">
-                        <Setter Property="Background" Value="#20FFFFFF" />
+                        <Setter Property="Background" Value="{DynamicResource AdditionalColor}" />
                     </Style>
                 </ListBox.Styles>
 
@@ -53,13 +47,14 @@
                                 <ContextMenu>
                                     <MenuItem Header="Удалить клиент"
                                               CommandParameter="{Binding .}"
-                                              Command="{Binding $parent[ListBox].((vm:ServersListViewModel)DataContext).RemoveClientCommand}"/>
+                                              Command="{Binding $parent[ListBox].((vm:ServersListViewModel)DataContext).RemoveClientCommand}" />
                                 </ContextMenu>
                             </StackPanel.ContextMenu>
 
                             <Image Source="/Assets/minecraft.png"
                                    VerticalAlignment="Center"
                                    Width="24" />
+
                             <TextBlock Text="{Binding Name}"
                                        FontWeight="Medium"
                                        Width="150"

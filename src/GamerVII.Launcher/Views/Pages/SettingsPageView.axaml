@@ -2,7 +2,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:vm="clr-namespace:GamerVII.Launcher.ViewModels"
              xmlns:components="clr-namespace:GamerVII.Launcher.Views.Components"
              xmlns:pages="clr-namespace:GamerVII.Launcher.ViewModels.Pages"
              x:DataType="pages:SettingsPageViewModel"
@@ -15,13 +14,14 @@
 
 
     <Border Padding="40, 10"
-            Background="#0E1011">
+            Background="{DynamicResource SecondaryColor}">
+
         <Grid RowDefinitions="80, 20, *" ColumnDefinitions="*, *">
             <Grid ColumnDefinitions="*, *"
                   Grid.ColumnSpan="2">
 
                 <components:ButtonControl Classes="Additional"
-                                          IconPath="/Assets/leftArrow.svg"
+                                          IconPath="/Assets/left-arrow.svg"
                                           Text="НАЗАД"
                                           CornerRadius="50"
                                           Command="{Binding GoToMainPageCommand}" />
@@ -46,8 +46,8 @@
                         <TextBlock HorizontalAlignment="Right"
                                    Classes="Content">
 
-                            <Run Text="{Binding MemorySize}"/>
-                            <Run Text="Мб"/>
+                            <Run Text="{Binding MemorySize}" />
+                            <Run Text="Мб" />
 
                         </TextBlock>
                     </Grid>
@@ -55,21 +55,28 @@
                             Orientation="Horizontal"
                             Value="{Binding MemorySize}"
                             Background="{DynamicResource AdditionalColorBorder}"
-                            Maximum="{Binding MaxMemorySize}">
-                        <Slider.Styles>
-                            <Style Selector="Slider /template/ RepeatButton#PART_DecreaseButton">
-                                <Setter Property="Background" Value="Red"/>
-                            </Style>
-                            <Style Selector="Slider /template/ Thumb#thumb">
-                                <Setter Property="Background" Value="Red"/>
-                            </Style>
-                        </Slider.Styles>
-                    </Slider>
+                            Maximum="{Binding MaxMemorySize}" />
 
-                    <!-- <TextBox Classes="Input-Box" -->
-                    <!--          Text="{Binding MemorySize, Mode=TwoWay}" /> -->
+                        <Grid>
+                            <TextBlock Text="Кол-во одновременно загружаемых файлов"
+                                       Classes="Content" />
+
+                            <TextBlock HorizontalAlignment="Right"
+                                       Classes="Content">
+
+                                <Run Text="{Binding ConnectionLimit}" />
+
+                            </TextBlock>
+                        </Grid>
+
+                    <Slider x:Name="ViewConnectionLimitSlider" Orientation="Horizontal"
+                            Value="{Binding ConnectionLimit}"
+                            Background="{DynamicResource AdditionalColorBorder}"
+                            Minimum="8"
+                            Maximum="256" />
+
                     <components:FolderPickerControl SelectedFolderPath="{Binding InstallationFolderPath}"
-                                                    SelectFolderCommand="{Binding SelectFolderCommand}"/>
+                                                    SelectFolderCommand="{Binding SelectFolderCommand}" />
                 </StackPanel>
 
 

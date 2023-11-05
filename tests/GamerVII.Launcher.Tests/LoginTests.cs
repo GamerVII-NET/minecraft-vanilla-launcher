@@ -1,6 +1,7 @@
 using GamerVII.Launcher.Extensions;
 using GamerVII.Launcher.Models.Users;
 using GamerVII.Launcher.Services.LocalStorage;
+using GamerVII.Launcher.Tests.Models;
 using GamerVII.Launcher.ViewModels;
 using GamerVII.Launcher.ViewModels.Pages;
 

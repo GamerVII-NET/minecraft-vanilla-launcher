@@ -10,6 +10,7 @@ namespace GamerVII.Launcher.Views.Converters;
 public class ListNotEmptyConverter : MarkupExtension, IValueConverter
 {
     public override object ProvideValue(IServiceProvider serviceProvider) => this;
+    public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) => null;
 
     public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
@@ -21,5 +22,4 @@ public class ListNotEmptyConverter : MarkupExtension, IValueConverter
         return true;
     }
 
-    public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) => null;
 }

@@ -52,7 +52,8 @@
         </Setter>
     </Style>
 
-    <Style Selector="controls|ButtonControl.Primary:disabled /template/ Button /template/ ContentPresenter#PART_ContentPresenter">
+    <Style
+        Selector="controls|ButtonControl.Primary:disabled /template/ Button /template/ ContentPresenter#PART_ContentPresenter">
         <Setter Property="Background" Value="{DynamicResource PrimaryColor}" />
     </Style>
     <Style Selector="controls|ButtonControl.Primary:disabled">
@@ -84,7 +85,10 @@
                     </Button.Styles>
                     <StackPanel Orientation="Horizontal"
                                 Spacing="10">
-                        <Svg Path="{TemplateBinding IconPath}" Height="28" />
+
+                        <Svg Path="{TemplateBinding IconPath}"
+                             Height="28" />
+
                         <TextBlock Text="{TemplateBinding Text}"
                                    FontWeight="{TemplateBinding FontWeight}"
                                    Foreground="{TemplateBinding Foreground}"
@@ -124,8 +128,10 @@
                     </Button.Styles>
                     <StackPanel Orientation="Horizontal"
                                 Spacing="10">
+
                         <Svg Path="{TemplateBinding IconPath}"
                              Height="28" />
+
                         <TextBlock Text="{TemplateBinding Text}"
                                    FontWeight="{TemplateBinding FontWeight}"
                                    Foreground="{TemplateBinding Foreground}"

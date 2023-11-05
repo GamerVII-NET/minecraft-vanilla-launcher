@@ -3,7 +3,7 @@ using CmlLib.Core;
 
 namespace GamerVII.Launcher.Models.Client;
 
-public class CustomMinecraftPath : MinecraftPath
+internal class CustomMinecraftPath : MinecraftPath
 {
     public CustomMinecraftPath(string basePath)
     {

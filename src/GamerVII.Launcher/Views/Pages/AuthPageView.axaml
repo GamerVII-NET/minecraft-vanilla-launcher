@@ -4,14 +4,9 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:components="clr-namespace:GamerVII.Launcher.Views.Components"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             xmlns:vm="using:GamerVII.Launcher.ViewModels"
              xmlns:pages="clr-namespace:GamerVII.Launcher.ViewModels.Pages"
              x:DataType="pages:AuthPageViewModel"
              x:Class="GamerVII.Launcher.Views.Pages.AuthPageView">
-
-    <!-- <Design.DataContext> -->
-    <!--     <vm:AuthPageViewModel /> -->
-    <!-- </Design.DataContext> -->
 
     <UserControl.Styles>
         <StyleInclude Source="/Assets/Resources/Styles.axaml" />
@@ -56,7 +51,7 @@
                     <components:ButtonControl Classes="Primary"
                                               Grid.ColumnSpan="2"
                                               HorizontalAlignment="Center"
-                                              IconPath="/Assets/rightArrow.svg"
+                                              IconPath="/Assets/right-arrow.svg"
                                               Text="Продолжить"
                                               Command="{Binding OnLoginCommand}" />
 
@@ -64,7 +59,7 @@
                     <ProgressBar IsVisible="{Binding IsAuthorizing}"
                                  IsIndeterminate="{Binding IsAuthorizing}"
                                  Height="1"
-                                 Foreground="#008C45"
+                                 Foreground="{DynamicResource PrimaryColor}"
                                  Margin="0, 0, 0,-20"
                                  VerticalAlignment="Bottom" />
                 </Grid>

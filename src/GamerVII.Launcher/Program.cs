@@ -10,9 +10,9 @@ using Splat;
 
 namespace GamerVII.Launcher
 {
-    internal class Program
+    internal abstract class Program
     {
-        private static ILoggerService _loggerService;
+        private static ILoggerService _loggerService = null!;
 
         [STAThread]
         public static void Main(string[] args)
@@ -32,7 +32,7 @@ namespace GamerVII.Launcher
         }
 
 
-        public static AppBuilder BuildAvaloniaApp()
+        private static AppBuilder BuildAvaloniaApp()
         {
 
             var app = AppBuilder.Configure<App>()
@@ -42,7 +42,8 @@ namespace GamerVII.Launcher
                                 .RegisterServices()
                                 .UseReactiveUI();
 
-            _loggerService = Locator.Current.GetService<ILoggerService>() ?? throw new Exception($"{nameof(ILoggerService)} not registered");
+            _loggerService = Locator.Current.GetService<ILoggerService>()
+                             ?? throw new Exception($"{nameof(ILoggerService)} not registered");
 
             return app;
 

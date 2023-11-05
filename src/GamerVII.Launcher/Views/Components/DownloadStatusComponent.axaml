@@ -9,12 +9,13 @@
 
     <Style Selector="Svg.LoadingInfinity">
         <Style.Animations>
-            <Animation Duration="0:0:0:1" IterationCount="INFINITE">
+            <Animation Duration="0:0:0:1"
+                       IterationCount="INFINITE">
                 <KeyFrame Cue="0%">
-                    <Setter Property="RotateTransform.Angle" Value="0.0"/>
+                    <Setter Property="RotateTransform.Angle" Value="0.0" />
                 </KeyFrame>
                 <KeyFrame Cue="100%">
-                    <Setter Property="RotateTransform.Angle" Value="-360.0"/>
+                    <Setter Property="RotateTransform.Angle" Value="-360.0" />
                 </KeyFrame>
             </Animation>
         </Style.Animations>
@@ -25,19 +26,24 @@
         <Setter Property="Template">
             <ControlTemplate>
 
-                <Border Classes="DownloadStatusWrapper" Padding="30 20">
+                <Border Classes="DownloadStatusWrapper"
+                        Padding="30 20">
                     <StackPanel Orientation="Horizontal"
                                 Spacing="20">
+
                         <Svg Path="/Assets/download.svg"
                              Width="30"
-                             VerticalAlignment="Center"/>
+                             VerticalAlignment="Center" />
 
                         <StackPanel Spacing="5" VerticalAlignment="Center">
-                            <TextBlock Text="{TemplateBinding Title}" Classes="Headline"/>
+
+                            <TextBlock Text="{TemplateBinding Title}"
+                                       Classes="Headline" />
+
                             <TextBlock Text="{TemplateBinding Description}"
                                        MaxWidth="150"
                                        TextTrimming="CharacterEllipsis"
-                                       Classes="Content"/>
+                                       Classes="Content" />
 
                         </StackPanel>
 
@@ -51,7 +57,7 @@
                             <TextBlock Text="{TemplateBinding Percentage}"
                                        VerticalAlignment="Center"
                                        Classes="Content"
-                                       HorizontalAlignment="Center"/>
+                                       HorizontalAlignment="Center" />
                         </Grid>
 
                     </StackPanel>
@@ -62,4 +68,3 @@
         </Setter>
     </Style>
 </Styles>
-

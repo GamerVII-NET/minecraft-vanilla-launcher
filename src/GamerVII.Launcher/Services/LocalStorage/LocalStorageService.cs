@@ -41,24 +41,11 @@ public class LocalStorageService : ILocalStorageService
             .Where(si => si.Key == key)
             .FirstOrDefaultAsync();
 
-        if (storageItem != null)
-        {
-            return JsonConvert.DeserializeObject<T>(storageItem.Value);
-        }
-
-        return default(T);
+        return storageItem != null ? JsonConvert.DeserializeObject<T>(storageItem.Value) : default;
     }
 
     public Task<int> SaveRecord<T>(T record)
     {
         return _database.InsertOrReplaceAsync(record);
-    }
-
-    [Table("StorageItems")]
-    private class StorageItem
-    {
-        [PrimaryKey] public string Key { get; set; } = null!;
-        public string? TypeName { get; set; }
-        public string Value { get; set; } = null!;
     }
 }

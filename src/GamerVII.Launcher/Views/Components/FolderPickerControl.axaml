@@ -8,7 +8,7 @@
     </Design.PreviewWith>
 
     <Style Selector="controls|FolderPickerControl">
-        <!-- Set Defaults -->
+
         <Setter Property="Template">
             <ControlTemplate>
                 <Border Background="{DynamicResource AdditionalColor}"

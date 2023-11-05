@@ -1,4 +1,5 @@
 ﻿namespace GamerVII.Launcher.Models.Enums;
+
 public enum ModLoaderType
 {
     /// <summary>

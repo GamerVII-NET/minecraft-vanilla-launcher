@@ -1,6 +1,7 @@
 ﻿using GamerVII.Launcher.Models.Enums;
 
 namespace GamerVII.Launcher.Models.Client;
+
 public interface IGameClient
 {
     string Name { get; set; }

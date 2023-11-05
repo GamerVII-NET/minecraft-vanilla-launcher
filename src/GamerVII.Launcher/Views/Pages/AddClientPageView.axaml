@@ -11,7 +11,7 @@
              x:Class="GamerVII.Launcher.Views.Pages.AddClientPageView">
 
     <Border Padding="50, 30"
-            Background="#DC0E1011">
+            Background="{DynamicResource ModalBackgroundColor}">
 
         <Border Classes="ModalWrapper" Width="470">
             <StackPanel Spacing="10">
@@ -130,7 +130,7 @@
                             <ProgressBar IsIndeterminate="{Binding IsBusy}"
                                          IsVisible="{Binding IsBusy}"
                                          VerticalAlignment="Bottom"
-                                         Background="#10FFFFFF"
+                                         Background="{DynamicResource SecondaryColor}"
                                          Foreground="{DynamicResource PrimaryColor}" />
                         </Grid>
                     </StackPanel>
@@ -146,143 +146,6 @@
 
 
         </Border>
-        <!-- <Grid RowDefinitions="80, 20, *" Background="red" -->
-        <!--       ColumnDefinitions="*, 20, *"> -->
-        <!-- -->
-        <!--     <Grid ColumnDefinitions="*, *" -->
-        <!--           Grid.ColumnSpan="2"> -->
-        <!-- -->
-        <!--         <components:ButtonControl Classes="Additional" -->
-        <!--                                   IconPath="/Assets/leftArrow.svg" -->
-        <!--                                   Text="НАЗАД" -->
-        <!--                                   CornerRadius="50" -->
-        <!--                                   Command="{Binding GoToMainPageCommand}" /> -->
-        <!-- -->
-        <!--     </Grid> -->
-        <!-- -->
-        <!--     <StackPanel Grid.Row="2" Grid.Column="0" Spacing="10"> -->
-        <!-- -->
-        <!--         <TextBlock Text="Версия" Classes="Content" /> -->
-        <!-- -->
-        <!--         <Border Padding="10" -->
-        <!--                 CornerRadius="15" -->
-        <!--                 BorderThickness="1" -->
-        <!--                 Background="{DynamicResource AdditionalColor}" -->
-        <!--                 BorderBrush="{DynamicResource AdditionalBorderColor}"> -->
-        <!--             <StackPanel Spacing="20"> -->
-        <!--                 <StackPanel Classes="Input-Wrapper"> -->
-        <!--                     <TextBox Classes="Input-Box" -->
-        <!--                              Watermark="Поиск по версии" -->
-        <!--                              Text="{Binding SearchText, Mode=TwoWay}" /> -->
-        <!--                 </StackPanel> -->
-        <!--                 <StackPanel Spacing="5"> -->
-        <!-- -->
-        <!--                     <Border Padding="5, 0, 5, 10" -->
-        <!--                             BorderBrush="{DynamicResource AdditionalColorBorder}" -->
-        <!--                             BorderThickness="0, 0, 0, 1"> -->
-        <!--                         <Grid> -->
-        <!--                             <TextBlock Text="Версия" -->
-        <!--                                        VerticalAlignment="Center" -->
-        <!--                                        HorizontalAlignment="Left" -->
-        <!--                                        Foreground="{DynamicResource ContentColor}" -->
-        <!--                                        FontWeight="Medium" /> -->
-        <!--                             <TextBlock Text="Дата релиза" -->
-        <!--                                        VerticalAlignment="Center" -->
-        <!--                                        Foreground="{DynamicResource ContentColor}" -->
-        <!--                                        HorizontalAlignment="Right" /> -->
-        <!--                         </Grid> -->
-        <!--                     </Border> -->
-        <!-- -->
-        <!--                     <ListBox ItemsSource="{Binding MinecraftVersions}" -->
-        <!--                              Background="Transparent" -->
-        <!--                              SelectedIndex="0" -->
-        <!--                              MaxHeight="400" -->
-        <!--                              SelectedItem="{Binding SelectedVersion}"> -->
-        <!--                         <ListBox.Styles> -->
-        <!--                             <Style -->
-        <!--                                 Selector="ContentPresenter#PART_ContentPresenter"> -->
-        <!--                                 <Setter Property="BorderThickness" Value="1" /> -->
-        <!--                             </Style> -->
-        <!--                             <Style -->
-        <!--                                 Selector="ListBoxItem:selected /template/ ContentPresenter#PART_ContentPresenter"> -->
-        <!--                                 <Setter Property="Background" Value="{DynamicResource PrimaryTransparentColor}" /> -->
-        <!--                             </Style> -->
-        <!--                         </ListBox.Styles> -->
-        <!--                         <ListBox.ItemTemplate> -->
-        <!--                             <DataTemplate> -->
-        <!--                                 <Grid Margin="0, 3, 0, 0"> -->
-        <!--                                     <TextBlock Text="{Binding Version}" -->
-        <!--                                                VerticalAlignment="Center" -->
-        <!--                                                HorizontalAlignment="Left" -->
-        <!--                                                FontWeight="Medium" /> -->
-        <!--                                     <TextBlock -->
-        <!--                                         Text="{Binding ., Converter={converters:ReleaseDateFromMinecraftVersionConverter}}" -->
-        <!--                                         VerticalAlignment="Center" -->
-        <!--                                         Foreground="{DynamicResource ContentColor}" -->
-        <!--                                         HorizontalAlignment="Right" -->
-        <!--                                         FontWeight="Medium" /> -->
-        <!--                                 </Grid> -->
-        <!--                             </DataTemplate> -->
-        <!--                         </ListBox.ItemTemplate> -->
-        <!--                     </ListBox> -->
-        <!-- -->
-        <!--                     <ProgressBar IsIndeterminate="{Binding IsBusy}" -->
-        <!--                                  IsVisible="{Binding IsBusy}" -->
-        <!--                                  Background="#10FFFFFF" -->
-        <!--                                  Foreground="{DynamicResource PrimaryColor}" /> -->
-        <!--                 </StackPanel> -->
-        <!--             </StackPanel> -->
-        <!--         </Border> -->
-        <!-- -->
-        <!--     </StackPanel> -->
-        <!-- -->
-        <!--     <StackPanel Grid.Row="2" Grid.Column="2" Spacing="20"> -->
-        <!-- -->
-        <!--         <StackPanel Classes="Input-Wrapper"> -->
-        <!--             <TextBlock Text="Наименование" Classes="Content" /> -->
-        <!--             <TextBox Classes="Input-Box" -->
-        <!--                      x:Name="ViewClientName" -->
-        <!--                      MaxLength="24" -->
-        <!--                      Text="{Binding NewGameClient.Name, Mode=TwoWay}" /> -->
-        <!--             <TextBlock HorizontalAlignment="Right" -->
-        <!--                        Margin="0 -40, 15 ,0" -->
-        <!--                        FontSize="12" -->
-        <!--                        Foreground="{DynamicResource ContentColor}" -->
-        <!--                        FontWeight="Medium"> -->
-        <!--                 <Run Text="{Binding ElementName=ViewClientName, Path=Text.Length}" /> -->
-        <!--                 <Run Text="/" /> -->
-        <!--                 <Run Text="{Binding ElementName=ViewClientName, Path=MaxLength}" /> -->
-        <!--             </TextBlock> -->
-        <!--         </StackPanel> -->
-        <!-- -->
-        <!--         <StackPanel Classes="Input-Wrapper"> -->
-        <!--             <TextBlock Text="Описание" Classes="Content" /> -->
-        <!--             <TextBox Classes="Input-Box" -->
-        <!--                      x:Name="ViewDescription" -->
-        <!--                      Padding="15, 14, 75, 0" -->
-        <!--                      MaxLength="100" -->
-        <!--                      Text="{Binding NewGameClient.Description, Mode=TwoWay}" /> -->
-        <!--             <TextBlock HorizontalAlignment="Right" -->
-        <!--                        Margin="0 -40, 15 ,0" -->
-        <!--                        FontSize="12" -->
-        <!--                        Foreground="{DynamicResource ContentColor}" -->
-        <!--                        FontWeight="Medium"> -->
-        <!--                 <Run Text="{Binding ElementName=ViewDescription, Path=Text.Length}" /> -->
-        <!--                 <Run Text="/" /> -->
-        <!--                 <Run Text="{Binding ElementName=ViewDescription, Path=MaxLength}" /> -->
-        <!--             </TextBlock> -->
-        <!-- -->
-        <!--         </StackPanel> -->
-        <!-- -->
-        <!-- -->
-        <!--         <components:ButtonControl Text="Добавить" -->
-        <!--                                   Classes="Primary" -->
-        <!--                                   IconPath="/Assets/rightArrow.svg" -->
-        <!--                                   Command="{Binding SaveClientCommand}" /> -->
-        <!-- -->
-        <!-- -->
-        <!--     </StackPanel> -->
-        <!-- </Grid> -->
     </Border>
 
 </UserControl>

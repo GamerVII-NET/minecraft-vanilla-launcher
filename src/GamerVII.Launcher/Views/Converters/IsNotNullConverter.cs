@@ -7,12 +7,13 @@ namespace GamerVII.Launcher.Views.Converters;
 
 public class IsNotNullConverter : MarkupExtension, IValueConverter
 {
-    public override object ProvideValue(IServiceProvider serviceProvider) => this;
+    public override object ProvideValue(IServiceProvider serviceProvider)
+        => this;
+
+    public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
+        => null;
 
     public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
-    {
-        return value is not null;
-    }
+        => value is not null;
 
-    public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) => null;
 }

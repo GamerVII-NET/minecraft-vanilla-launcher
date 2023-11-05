@@ -5,7 +5,6 @@ using GamerVII.Launcher.Services.GameLaunch;
 using GamerVII.Launcher.Services.LocalStorage;
 using GamerVII.Launcher.Services.Logger;
 using GamerVII.Launcher.Services.System;
-using GamerVII.Notification.Avalonia;
 using Splat;
 
 namespace GamerVII.Launcher.Extensions;

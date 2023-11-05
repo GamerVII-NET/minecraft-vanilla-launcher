@@ -1,4 +1,5 @@
 ﻿namespace GamerVII.Launcher.Models.Users;
+
 public interface IUser
 {
     string Login { get; set; }

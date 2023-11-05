@@ -2,8 +2,8 @@
 
 namespace GamerVII.Launcher.Models.Client;
 
-public class MinecraftVersion : IMinecraftVersion
+internal class MinecraftVersion : IMinecraftVersion
 {
-    public string Version { get; set; }
-    public MVersionMetadata MVersion { get; set; }
+    public string Version { get; set; } = null!;
+    public MVersionMetadata? MVersion { get; set; }
 }

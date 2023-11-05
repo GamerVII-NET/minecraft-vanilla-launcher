@@ -9,21 +9,15 @@ namespace GamerVII.Launcher.Views.Converters;
 public class ReleaseDateFromMinecraftVersionConverter : MarkupExtension, IValueConverter
 {
     public override object ProvideValue(IServiceProvider serviceProvider) => this;
+    public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) => null;
 
     public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
+        if (value is not MinecraftVersion minecraftVersion) return string.Empty;
 
-        if (value is MinecraftVersion minecraftVersion)
-        {
-            return minecraftVersion.MVersion.ReleaseTime?.ToString("dd.MM.yyyy в HH:mm");
-        }
-
-        return string.Empty;
-
+        return minecraftVersion.MVersion != null
+            ? minecraftVersion.MVersion.ReleaseTime?.ToString("dd.MM.yyyy в HH:mm")
+            : string.Empty;
     }
 
-    public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
-    {
-        return null;
-    }
 }

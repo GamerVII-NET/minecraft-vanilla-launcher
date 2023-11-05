@@ -5,16 +5,22 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using GamerVII.Launcher.Services.LocalStorage;
+using GamerVII.Launcher.Services.Logger;
 using Splat;
 
 namespace GamerVII.Launcher.Services.System;
 
 public class SystemService : ISystemService
 {
+    private readonly ILoggerService _loggerService;
     private readonly ILocalStorageService _localStorage;
 
-    public SystemService(ILocalStorageService? localStorage = null)
+    public SystemService(ILocalStorageService? localStorage = null, ILoggerService? loggerService = null)
     {
+        _loggerService = loggerService
+                         ?? Locator.Current.GetService<ILoggerService>()
+                         ?? throw new Exception($"{nameof(ILoggerService)} not registered!");
+
         _localStorage = localStorage
                         ?? Locator.Current.GetService<ILocalStorageService>()
                         ?? throw new Exception($"{nameof(ILocalStorageService)} not registered!");
@@ -22,7 +28,7 @@ public class SystemService : ISystemService
 
     [DllImport("kernel32.dll", SetLastError = true)]
     [return: MarshalAs(UnmanagedType.Bool)]
-    static extern bool GetPhysicallyInstalledSystemMemory(out ulong totalMemoryInKb);
+    private static extern bool GetPhysicallyInstalledSystemMemory(out ulong totalMemoryInKb);
 
     public ulong GetMaxAvailableRam()
     {
@@ -43,7 +49,6 @@ public class SystemService : ISystemService
 
     public async Task<string> GetInstallationDirectory()
     {
-
         var appDirectory = await _localStorage.GetAsync<string>("InstallationPath");
 
         if (!string.IsNullOrEmpty(appDirectory))
@@ -64,7 +69,7 @@ public class SystemService : ISystemService
             appDirectory = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
         }
 
-        if (string.IsNullOrEmpty(appDirectory) || CanCreateDirectory(appDirectory) == false)
+        if (string.IsNullOrEmpty(appDirectory) || await CanCreateDirectory(appDirectory) == false)
         {
             appDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? AppDomain.CurrentDomain.BaseDirectory;
         }
@@ -84,7 +89,7 @@ public class SystemService : ISystemService
         await _localStorage.SetAsync("InstallationPath", appDirectory);
     }
 
-    private static bool CanCreateDirectory(string path)
+    private async Task<bool> CanCreateDirectory(string path)
     {
         try
         {
@@ -93,12 +98,14 @@ public class SystemService : ISystemService
             Directory.Delete(tempDirectory);
             return true;
         }
-        catch (UnauthorizedAccessException)
+        catch (UnauthorizedAccessException ex)
         {
+            await _loggerService.Log(ex.Message, ex);
             return false;
         }
         catch (Exception ex)
         {
+            await _loggerService.Log(ex.Message, ex);
             return false;
         }
     }
