@@ -11,4 +11,21 @@ The Minecraft Launcher is a user-friendly application designed to streamline the
 - [x] Authorization by nickname
 - [x] Creating game clients
 - [x] Deleting game clients (Right-click on the project)
-- [ ] Add https://github.com/Lachee/discord-rpc-csharp
+- [ ] Advanced client editing capabilities
+• Changing the client after creation
+• The ability to install a custom icon
+- [ ] Reinstalling the client / fixing errors
+- [ ] Ability to duplicate builds
+- [ ] The ability to add global resource packs, worlds
+- [ ] Connect the Morinth API
+- [ ] The ability to share assemblies
+- [ ] Switchable DiscordRPC with information output (https://github.com/Lachee/discord-rpc-csharp)
+- [ ] Support for Neoforce and Quilt
+- [ ] Quick Builds / Random Builds (Own or Unpack)
+- [ ] Viewing logs with error highlighting, warns, info
+- [ ] Customization of the launcher
+- [ ] The ability to add a license account, an account ely.by (Skin system)
+- [ ] Ability to limit the number of simultaneous downloads/recordings for weak/slow PCs
+- [ ] The ability to globally and separately select Java 17 and 8 for new and old versions of the main
+- [ ] Ability to set java arguments and variables
+- [ ] Add the ability to translate the launcher into different languages
