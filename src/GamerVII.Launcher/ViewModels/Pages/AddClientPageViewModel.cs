@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using GamerVII.Launcher.Models.Client;
@@ -156,7 +157,7 @@ namespace GamerVII.Launcher.ViewModels.Pages
 
         private async Task LoadVersions()
         {
-            var versions = await _gameLaunchService.GetAvailableVersions();
+            var versions = await _gameLaunchService.GetAvailableVersionsAsync(CancellationToken.None);
 
             MinecraftVersions = new ObservableCollection<IMinecraftVersion>(versions);
         }
@@ -170,7 +171,7 @@ namespace GamerVII.Launcher.ViewModels.Pages
             {
                 text = text.Replace(",", ".");
 
-                var versions = await _gameLaunchService.GetAvailableVersions();
+                var versions = await _gameLaunchService.GetAvailableVersionsAsync(CancellationToken.None);
 
                 versions = versions.Where(c => c.Version.Contains(text));
 

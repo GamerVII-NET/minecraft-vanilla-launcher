@@ -42,7 +42,7 @@ public class GameLaunchService : IGameLaunchService
         ServicePointManager.DefaultConnectionLimit = ConnectionLimit;
     }
 
-    public async Task<CMLauncher> InitMinecraftLauncher()
+    public async Task<CMLauncher> InitMinecraftLauncherAsync(CancellationToken cancellationToken)
     {
         var gamePath = await _systemService.GetGamePath();
 
@@ -61,9 +61,10 @@ public class GameLaunchService : IGameLaunchService
         return _launcher;
     }
 
-    public async Task<Process> LaunchClient(IGameClient client, IUser user, IStartupOptions startupOptions)
+    public async Task<Process> LaunchClientAsync(IGameClient client, IUser user, IStartupOptions startupOptions,
+        CancellationToken cancellationToken)
     {
-        _launcher ??= await InitMinecraftLauncher();
+        _launcher ??= await InitMinecraftLauncherAsync(cancellationToken);
 
         // var session = new MSession(user.Login, user.AccessToken, "uuid");
         var session = MSession.CreateOfflineSession(user.Login);
@@ -105,21 +106,17 @@ public class GameLaunchService : IGameLaunchService
         return process;
     }
 
-    public Task<IGameClient> LoadClient(IGameClient client)
+    public async Task<IGameClient> LoadClientAsync(IGameClient client, CancellationToken cancellationToken)
     {
-        var thread = new Thread(() => LoadClientFiles(client))
-        {
-            IsBackground = true
-        };
+        await LoadClientFilesAsync(client, cancellationToken);
 
-        thread.Start();
+        return client;
 
-        return Task.FromResult(client);
     }
 
-    public async Task<IEnumerable<IMinecraftVersion>> GetAvailableVersions()
+    public async Task<IEnumerable<IMinecraftVersion>> GetAvailableVersionsAsync(CancellationToken cancellationToken)
     {
-        _launcher ??= await InitMinecraftLauncher();
+        _launcher ??= await InitMinecraftLauncherAsync(cancellationToken);
 
         var versions = await _launcher.GetAllVersionsAsync();
 
@@ -132,13 +129,14 @@ public class GameLaunchService : IGameLaunchService
             .OrderByDescending(c => c.MVersion?.ReleaseTime);
     }
 
-    private async void LoadClientFiles(IGameClient client)
+    private async Task LoadClientFilesAsync(IGameClient client, CancellationToken cancellationToken)
     {
         try
         {
-            _launcher ??= await InitMinecraftLauncher();
+            _launcher ??= await InitMinecraftLauncherAsync(cancellationToken);
 
             var version = await _launcher.GetVersionAsync(client.Version);
+
             client.InstallationVersion = version.Id;
 
             switch (client.ModLoaderType)
@@ -151,7 +149,7 @@ public class GameLaunchService : IGameLaunchService
                     break;
 
                 case Models.Enums.ModLoaderType.Forge:
-                    await LoadForge(client);
+                    await LoadForgeAsync(client, cancellationToken);
                     break;
 
                 case Models.Enums.ModLoaderType.Fabric:
@@ -170,9 +168,9 @@ public class GameLaunchService : IGameLaunchService
         }
     }
 
-    private async Task LoadForge(IGameClient client)
+    private async Task LoadForgeAsync(IGameClient client, CancellationToken cancellationToken)
     {
-        _launcher ??= await InitMinecraftLauncher();
+        _launcher ??= await InitMinecraftLauncherAsync(cancellationToken);
 
         var forge = new MForge(_launcher);
 

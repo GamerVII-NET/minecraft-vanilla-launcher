@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading;
 using System.Threading.Tasks;
 using GamerVII.Launcher.Models.Client;
 using GamerVII.Launcher.Models.Users;
@@ -57,20 +58,23 @@ namespace GamerVII.Launcher.Services.GameLaunch
         /// <param name="client">The Minecraft client instance to launch.</param>
         /// <param name="user">The user for whom the client is being launched.</param>
         /// <param name="startupOptions">Launch Parameters</param>
+        /// <param name="cancellationToken"></param>
         /// <returns>The process responsible for launching the client.</returns>
-        Task<Process> LaunchClient(IGameClient client, IUser user, IStartupOptions startupOptions);
+        Task<Process> LaunchClientAsync(IGameClient client, IUser user, IStartupOptions startupOptions,
+            CancellationToken cancellationToken);
 
         /// <summary>
         /// Downloads a Minecraft client of a certain version.
         /// </summary>
         /// <param name="client">The Minecraft client instance to download.</param>
+        /// <param name="cancellationToken"></param>
         /// <returns>Client information required to run.</returns>
-        Task<IGameClient> LoadClient(IGameClient client);
+        Task<IGameClient> LoadClientAsync(IGameClient client, CancellationToken cancellationToken);
 
         /// <summary>
         /// Retrieves a collection of available Minecraft versions.
         /// </summary>
         /// <returns>An asynchronous operation that yields a collection of available Minecraft versions.</returns>
-        Task<IEnumerable<IMinecraftVersion>> GetAvailableVersions();
+        Task<IEnumerable<IMinecraftVersion>> GetAvailableVersionsAsync(CancellationToken cancellationToken);
     }
 }

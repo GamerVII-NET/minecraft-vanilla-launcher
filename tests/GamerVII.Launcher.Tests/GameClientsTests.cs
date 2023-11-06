@@ -45,7 +45,7 @@ public class GameClientsTests
     {
         Random random = new();
 
-        var versions = (await _gameLaunchService.GetAvailableVersions()).ToList();
+        var versions = (await _gameLaunchService.GetAvailableVersionsAsync(CancellationToken.None)).ToList();
 
         var randomMinecraftVersion = versions[random.Next(0, versions.Count - 1)];
         return randomMinecraftVersion;

@@ -81,7 +81,9 @@ public class SystemService : ISystemService
 
     public async Task<string> GetGamePath()
     {
-        return Path.GetFullPath(Path.Combine(await GetInstallationDirectory(), "gamervii-launcher"));
+        var installationDirectory = await GetInstallationDirectory();
+
+        return Path.GetFullPath(Path.Combine(installationDirectory, "gamervii-launcher"));
     }
 
     public async Task SetInstallationDirectory(string appDirectory)

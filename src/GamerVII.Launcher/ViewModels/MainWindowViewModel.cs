@@ -141,6 +141,9 @@ namespace GamerVII.Launcher.ViewModels
         private IUser? _user;
         private PageViewModelBase? _currentPage;
 
+        private static CancellationTokenSource CancelStartGameTokenSource = new();
+        private CancellationToken _token = CancelStartGameTokenSource.Token;
+
         // Array of available page view models.
         private readonly PageViewModelBase[] _pages =
         {
@@ -309,7 +312,7 @@ namespace GamerVII.Launcher.ViewModels
                         await _loggerService.Log(message);
 
                         Manager
-                            .CreateMessage(true, "#151515", "Error", message)
+                            .CreateMessage(true, "#151515", "Ошибка", message)
                             .Dismiss().WithDelay(TimeSpan.FromSeconds(5))
                             .Queue();
                     }
@@ -321,14 +324,14 @@ namespace GamerVII.Launcher.ViewModels
 
                 if (User == null) return;
 
-                var process = await _gameLaunchService.LaunchClient(client, User, new StartupOptions
+                var process = await _gameLaunchService.LaunchClientAsync(client, User, new StartupOptions
                 {
                     ScreenWidth = settings.WindowWidth,
                     ScreenHeight = settings.WindowHeight,
                     FullScreen = settings.IsFullScreen,
                     MaximumRamMb = settings.MemorySize,
                     MinimumRamMb = settings.MemorySize,
-                });
+                }, _token);
 
                 // Event handler for the client process exit.
                 process.Exited += async (sender, e) =>
@@ -433,25 +436,24 @@ namespace GamerVII.Launcher.ViewModels
         /// <summary>
         /// Launches the game based on the selected game client.
         /// </summary>
-        /// <param name="arg">The cancellation token for the async task.</param>
         /// <returns>An asynchronous task.</returns>
-        private async Task LaunchGame(CancellationToken arg)
+        private async Task LaunchGame()
         {
             try
             {
+                CancelStartGameTokenSource = new CancellationTokenSource();
+                _token = CancelStartGameTokenSource.Token;
+
                 IsProcessing = true;
 
                 if (SidebarViewModel.ServersListViewModel.SelectedClient != null)
                 {
-                    var client = await _gameLaunchService.LoadClient(SidebarViewModel.ServersListViewModel.SelectedClient);
+                    var client = await _gameLaunchService.LoadClientAsync(SidebarViewModel.ServersListViewModel.SelectedClient, _token);
                 }
             }
             catch (Exception e)
             {
                 await _loggerService.Log(e.Message, e);
-            }
-            finally
-            {
                 IsProcessing = false;
             }
         }
@@ -465,7 +467,7 @@ namespace GamerVII.Launcher.ViewModels
             if (gameClient == null)
             {
                 Manager
-                    .CreateMessage(true, "#151515", "Error", "Failed to retrieve client information")
+                    .CreateMessage(true, "#151515", "Ошибка", "Ошибка получения информации")
                     .Dismiss().WithDelay(TimeSpan.FromSeconds(5))
                     .Queue();
                 return;
@@ -474,7 +476,7 @@ namespace GamerVII.Launcher.ViewModels
             if (string.IsNullOrWhiteSpace(gameClient.Name))
             {
                 Manager
-                    .CreateMessage(true, "#D03E3E", "Error", "Specify a client name")
+                    .CreateMessage(true, "#D03E3E", "Ошибка", "Заполните наименование клиента")
                     .Dismiss().WithDelay(TimeSpan.FromSeconds(2))
                     .Queue();
                 return;
@@ -483,7 +485,7 @@ namespace GamerVII.Launcher.ViewModels
             if (string.IsNullOrEmpty(gameClient.Version))
             {
                 Manager
-                    .CreateMessage(true, "#D03E3E", "Error", "Select a game client version!")
+                    .CreateMessage(true, "#D03E3E", "Ошибка", "Не выбрана версия Minecraft!")
                     .Dismiss().WithDelay(TimeSpan.FromSeconds(2))
                     .Queue();
                 return;

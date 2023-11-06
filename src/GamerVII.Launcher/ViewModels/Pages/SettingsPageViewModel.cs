@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Reactive.Concurrency;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Avalonia;
@@ -198,7 +199,7 @@ namespace GamerVII.Launcher.ViewModels.Pages
 
             if (_gameLaunchService is GameLaunchService launchService)
             {
-                await launchService.InitMinecraftLauncher();
+                await launchService.InitMinecraftLauncherAsync(CancellationToken.None);
             }
         }
 
