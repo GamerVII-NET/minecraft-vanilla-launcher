@@ -10,6 +10,7 @@
 
     <Application.Styles>
         <FluentTheme />
+        <StyleInclude Source="/Views/Components/BadgeComponent.axaml" />
         <StyleInclude Source="/Views/Components/DownloadStatusComponent.axaml" />
         <StyleInclude Source="/Views/Components/FolderPickerControl.axaml" />
         <StyleInclude Source="/Views/Components/ButtonControl.axaml" />

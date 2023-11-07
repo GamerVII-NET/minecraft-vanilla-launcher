@@ -19,12 +19,12 @@
             <StackPanel Spacing="20">
 
                 <StackPanel>
-                    <Svg Path="/Assets/logo.svg" Width="40"/>
+                    <Svg Path="/Assets/logo.svg" Width="40" />
                     <TextBlock
-                               Classes="AuthLogoText">
-                        <Run Text="GamerVII"/>
-                        <Run Text="/" Foreground="{DynamicResource PrimaryColor}"/>
-                        <Run Text="Launcher" Foreground="{DynamicResource ContentColor}"/>
+                        Classes="AuthLogoText">
+                        <Run Text="GamerVII" />
+                        <Run Text="/" Foreground="{DynamicResource PrimaryColor}" />
+                        <Run Text="Launcher" Foreground="{DynamicResource ContentColor}" />
                     </TextBlock>
                 </StackPanel>
 

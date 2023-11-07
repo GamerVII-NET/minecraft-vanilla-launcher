@@ -1,11 +1,61 @@
 ﻿<Styles xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:components="clr-namespace:GamerVII.Launcher.Views.Components">
+
+    <Style Selector="ComboBox.ComboBox">
+        <Setter Property="Background" Value="{DynamicResource AdditionalColor}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource AdditionalBorderColor}" />
+        <Setter Property="CornerRadius" Value="15" />
+        <Setter Property="Height" Value="45" />
+        <Setter Property="TextBlock.Foreground" Value="{DynamicResource ContentColor}" />
+        <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Hidden" />
+    </Style>
+
+    <Style Selector="ComboBox.ComboBox:pointerover">
+        <Setter Property="Background" Value="{DynamicResource AdditionalColor}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource AdditionalBorderColor}" />
+    </Style>
 
     <Style Selector="ListBox.SelectServer">
         <Setter Property="MaxHeight" Value="350" />
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="AutoScrollToSelectedItem" Value="True" />
         <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Hidden" />
+    </Style>
+
+    <Style Selector="ListBox.SelectBadge">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Hidden" />
+    </Style>
+
+    <Style Selector="ListBoxItem /template/ ContentPresenter">
+        <Setter Property="Background" Value="red" />
+    </Style>
+
+    <Style Selector="ListBoxItem:pointerover /template/ ContentPresenter">
+        <Setter Property="Background" Value="Transparent" />
+    </Style>
+
+    <Style Selector="ListBoxItem:selected /template/ ContentPresenter">
+        <Setter Property="Background" Value="Transparent" />
+    </Style>
+
+    <!-- ToDo: Доделать выбранный элемент красить в зеленый -->
+    <Style Selector="ListBoxItem:selected components|BadgeComponent">
+        <Setter Property="Background" Value="Red" />
+    </Style>
+
+    <Style Selector="Border.ModsControlWrapper">
+        <Setter Property="Background" Value="{DynamicResource AdditionalColor}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource AdditionalColorBorder}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="CornerRadius" Value="20" />
+        <Setter Property="Padding" Value="25" />
+    </Style>
+
+    <Style Selector="TextBlock.ModsControlHeadline">
+        <Setter Property="Foreground" Value="{DynamicResource ContentColor}" />
+        <Setter Property="FontWeight" Value="Medium" />
     </Style>
 
     <Style Selector="Border.ModalWrapper">

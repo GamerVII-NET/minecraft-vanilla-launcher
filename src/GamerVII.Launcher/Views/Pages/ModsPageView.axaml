@@ -2,57 +2,173 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:components="clr-namespace:GamerVII.Launcher.Views.Components"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             mc:Ignorable="d" d:DesignWidth="1920" d:DesignHeight="2080"
              xmlns:pages="clr-namespace:GamerVII.Launcher.ViewModels.Pages"
+             xmlns:components="clr-namespace:GamerVII.Launcher.Views.Components"
              x:DataType="pages:ModsPageViewModel"
              x:Class="GamerVII.Launcher.Views.Pages.ModsPageView">
 
-    <Border Padding="50, 30"
-            Background="{DynamicResource SecondaryColor}">
-        <Grid RowDefinitions="80, *" ColumnDefinitions="*, *">
-            <Grid ColumnDefinitions="*, *"
-                  Grid.ColumnSpan="2">
+    <Border Background="{DynamicResource SecondaryColor}">
+        <Grid RowDefinitions="300, *">
+            <components:ModsPageHeader />
+            <components:ButtonControl Grid.Row="0"
+                                      Classes="Additional"
+                                      VerticalAlignment="Top"
+                                      Margin="40"
+                                      IconPath="/Assets/left-arrow.svg"
+                                      Text="НАЗАД"
+                                      CornerRadius="50"
+                                      Command="{Binding GoToMainPageCommand}" />
 
-                <components:ButtonControl Classes="Additional"
-                                          IconPath="/Assets/left-arrow.svg"
-                                          Text="НАЗАД"
-                                          CornerRadius="50"
-                                          Command="{Binding GoToMainPageCommand}" />
+            <Border Grid.Row="1"
+                    Padding="30">
+
+                <Grid ColumnDefinitions="300, 20, *">
+
+                    <ScrollViewer Grid.Column="0" VerticalScrollBarVisibility="Auto">
+                        <StackPanel Spacing="30">
+                            <Border Classes="ModsControlWrapper">
+                                <StackPanel Spacing="15">
+                                    <Grid>
+                                        <TextBlock Classes="ModsControlHeadline" Text="Версия"/>
+                                    </Grid>
+
+                                    <TextBox Classes="Input-Box" Watermark="Поиск" />
+
+                                    <ListBox SelectionMode="Multiple"
+                                             HorizontalAlignment="Stretch"
+                                             Classes="SelectBadge">
+
+                                        <ListBox.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <UniformGrid Columns="4" />
+                                            </ItemsPanelTemplate>
+                                        </ListBox.ItemsPanel>
 
 
-                <TextBlock HorizontalAlignment="Right"
-                           Grid.Column="1"
-                           Classes="Headline">
-                    <Run Text="Список модов" />
-                    <Run Text="/" Foreground="{DynamicResource PrimaryColor}" />
-                    <Run Text="{Binding SelectClient.Name}"
-                         Foreground="{DynamicResource SecondaryColor}" />
-                </TextBlock>
+                                        <components:BadgeComponent Width="50" Text="1.7.10"/>
+                                        <components:BadgeComponent Width="50" Text="1.7.10"/>
+                                        <components:BadgeComponent Width="50" Text="1.7.10"/>
+                                        <components:BadgeComponent Width="50" Text="1.7.10"/>
+                                        <components:BadgeComponent Width="50" Text="1.7.10"/>
+                                        <components:BadgeComponent Width="50" Text="1.7.10"/>
 
-            </Grid>
+                                    </ListBox>
+                                </StackPanel>
+
+                            </Border>
+
+                            <Border Classes="ModsControlWrapper">
+                                <StackPanel Spacing="15">
+                                    <Grid>
+                                        <TextBlock Classes="ModsControlHeadline" Text="Категории"/>
+                                    </Grid>
+
+                                    <TextBox Classes="Input-Box" Watermark="Поиск" />
+
+                                    <StackPanel>
+                                        <CheckBox Classes="CheckBox" Content="Приключения"/>
+                                        <CheckBox Classes="CheckBox" Content="Приключения"/>
+                                        <CheckBox Classes="CheckBox" Content="Приключения"/>
+                                        <CheckBox Classes="CheckBox" Content="Приключения"/>
+                                        <CheckBox Classes="CheckBox" Content="Приключения"/>
+                                        <CheckBox Classes="CheckBox" Content="Приключения"/>
+                                    </StackPanel>
+                                </StackPanel>
+
+                            </Border>
+                            <Border Classes="ModsControlWrapper">
+                                <StackPanel Spacing="15">
+                                    <Grid>
+                                        <TextBlock Classes="ModsControlHeadline" Text="Загрузчик"/>
+                                    </Grid>
+
+                                    <TextBox Classes="Input-Box" Watermark="Поиск" />
+
+                                    <StackPanel>
+                                        <CheckBox Classes="CheckBox" Content="Fabric"/>
+                                        <CheckBox Classes="CheckBox" Content="Forge"/>
+                                        <CheckBox Classes="CheckBox" Content="LiteLoader"/>
+                                        <CheckBox Classes="CheckBox" Content="Risugami's ModLoader"/>
+                                        <CheckBox Classes="CheckBox" Content="NeoForge"/>
+                                        <CheckBox Classes="CheckBox" Content="Quilt"/>
+                                        <CheckBox Classes="CheckBox" Content="Quilt"/>
+                                        <CheckBox Classes="CheckBox" Content="Rift"/>
+                                    </StackPanel>
+                                </StackPanel>
+
+                            </Border>
+                            <Border Classes="ModsControlWrapper">
+                                <StackPanel Spacing="15">
+                                    <Grid>
+                                        <TextBlock Classes="ModsControlHeadline" Text="Тип мода"/>
+                                    </Grid>
+
+                                    <ComboBox HorizontalAlignment="Stretch"
+                                              Classes="ComboBox">
+                                        <TextBlock Text="Клиентский"/>
+                                        <TextBlock Text="Серверный"/>
+                                    </ComboBox>
+                                </StackPanel>
+
+                            </Border>
+                        </StackPanel>
+                    </ScrollViewer>
 
 
-            <!-- <StackPanel Grid.Row="1" Spacing="10"> -->
-            <!-- -->
-            <!--     <CheckBox Content="Мод 1" Classes="CheckBox" /> -->
-            <!--     <CheckBox Content="Мод 2" Classes="CheckBox" /> -->
-            <!--     <CheckBox Content="Мод 3" Classes="CheckBox" /> -->
-            <!--     <CheckBox Content="Мод 4" Classes="CheckBox" /> -->
-            <!--     <CheckBox Content="Мод 5" Classes="CheckBox" /> -->
-            <!--     <CheckBox Content="Мод 6" Classes="CheckBox" /> -->
-            <!-- -->
-            <!-- </StackPanel> -->
-
-            <TextBlock Grid.Row="1"
-                       Grid.Column="0"
-                       Grid.ColumnSpan="2"
-                       HorizontalAlignment="Center"
-                       VerticalAlignment="Center"
-                       Foreground="{DynamicResource ContentColor}"
-                       Text="В разработке..." />
-
+                </Grid>
+            </Border>
 
         </Grid>
+
+
     </Border>
+
+    <!-- <Border Padding="50, 30" -->
+    <!--         Background="{DynamicResource SecondaryColor}"> -->
+    <!--     <Grid RowDefinitions="80, *" ColumnDefinitions="*, *"> -->
+    <!--         <Grid ColumnDefinitions="*, *" -->
+    <!--               Grid.ColumnSpan="2"> -->
+    <!-- -->
+    <!--             <components:ButtonControl Classes="Additional" -->
+    <!--                                       IconPath="/Assets/left-arrow.svg" -->
+    <!--                                       Text="НАЗАД" -->
+    <!--                                       CornerRadius="50" -->
+    <!--                                       Command="{Binding GoToMainPageCommand}" /> -->
+    <!-- -->
+    <!-- -->
+    <!--             <TextBlock HorizontalAlignment="Right" -->
+    <!--                        Grid.Column="1" -->
+    <!--                        Classes="Headline"> -->
+    <!--                 <Run Text="Список модов" /> -->
+    <!--                 <Run Text="/" Foreground="{DynamicResource PrimaryColor}" /> -->
+    <!--                 <Run Text="{Binding SelectClient.Name}" -->
+    <!--                      Foreground="{DynamicResource SecondaryColor}" /> -->
+    <!--             </TextBlock> -->
+    <!-- -->
+    <!--         </Grid> -->
+    <!-- -->
+    <!-- -->
+    <!--         ~1~ <StackPanel Grid.Row="1" Spacing="10"> @1@ -->
+    <!--         ~1~ @1@ -->
+    <!--         ~1~     <CheckBox Content="Мод 1" Classes="CheckBox" /> @1@ -->
+    <!--         ~1~     <CheckBox Content="Мод 2" Classes="CheckBox" /> @1@ -->
+    <!--         ~1~     <CheckBox Content="Мод 3" Classes="CheckBox" /> @1@ -->
+    <!--         ~1~     <CheckBox Content="Мод 4" Classes="CheckBox" /> @1@ -->
+    <!--         ~1~     <CheckBox Content="Мод 5" Classes="CheckBox" /> @1@ -->
+    <!--         ~1~     <CheckBox Content="Мод 6" Classes="CheckBox" /> @1@ -->
+    <!--         ~1~ @1@ -->
+    <!--         ~1~ </StackPanel> @1@ -->
+    <!-- -->
+    <!--         <TextBlock Grid.Row="1" -->
+    <!--                    Grid.Column="0" -->
+    <!--                    Grid.ColumnSpan="2" -->
+    <!--                    HorizontalAlignment="Center" -->
+    <!--                    VerticalAlignment="Center" -->
+    <!--                    Foreground="{DynamicResource ContentColor}" -->
+    <!--                    Text="В разработке..." /> -->
+    <!-- -->
+    <!-- -->
+    <!--     </Grid> -->
+    <!-- </Border> -->
 </UserControl>

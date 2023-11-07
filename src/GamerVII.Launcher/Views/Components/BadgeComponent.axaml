@@ -1,0 +1,34 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="using:GamerVII.Launcher.Views.Components">
+    <Design.PreviewWith>
+        <controls:BadgeComponent />
+    </Design.PreviewWith>
+
+    <Style Selector="controls|BadgeComponent">
+
+        <Setter Property="Background" Value="{DynamicResource AdditionalColor}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource AdditionalColorBorder}"/>
+
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Border CornerRadius="50"
+                        Background="{TemplateBinding Background}"
+                        BorderThickness="1"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Center"
+                        Padding="10, 5"
+                        BorderBrush="{TemplateBinding BorderBrush}">
+
+                    <TextBlock Text="{TemplateBinding Text}"
+                               VerticalAlignment="Center"
+                               FontSize="12"
+                               HorizontalAlignment="Center"
+                               Foreground="{DynamicResource ContentColor}" />
+
+                </Border>
+            </ControlTemplate>
+        </Setter>
+    </Style>
+</Styles>
+

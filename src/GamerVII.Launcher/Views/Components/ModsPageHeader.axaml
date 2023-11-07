@@ -1,0 +1,32 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="190"
+             x:Class="GamerVII.Launcher.Views.Components.ModsPageHeader">
+    <Border CornerRadius="0, 0, 30, 30" ClipToBounds="True">
+        <Grid>
+            <Image Source="/Assets/mods-list-header.png"
+                   Stretch="UniformToFill" />
+
+            <StackPanel VerticalAlignment="Center"
+                        HorizontalAlignment="Center"
+                        Spacing="5">
+                <TextBlock FontSize="35"
+                           FontWeight="ExtraBold">
+                    <Run Text="ЭПИЧЕСКИЕ" Foreground="{DynamicResource PrimaryColor}" />
+                    <Run Text="МОДЫ"/>
+                    <Run Text="ДЛЯ" Foreground="{DynamicResource PrimaryColor}" />
+                    <Run Text="MINECRAFT" />
+                </TextBlock>
+                <TextBlock FontSize="35"
+                           FontWeight="ExtraBold">
+                    <Run Text="РАСШИРЬТЕ" />
+                    <Run Text="ВАШИ" Foreground="{DynamicResource PrimaryColor}" />
+                    <Run Text="ПРИКЛЮЧЕНИЯ" />
+                </TextBlock>
+            </StackPanel>
+
+        </Grid>
+    </Border>
+</UserControl>

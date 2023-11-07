@@ -116,17 +116,27 @@ public class GameLaunchService : IGameLaunchService
 
     public async Task<IEnumerable<IMinecraftVersion>> GetAvailableVersionsAsync(CancellationToken cancellationToken)
     {
-        _launcher ??= await InitMinecraftLauncherAsync(cancellationToken);
+        try
+        {
 
-        var versions = await _launcher.GetAllVersionsAsync();
+            _launcher ??= await InitMinecraftLauncherAsync(cancellationToken);
 
-        return versions.Select(c =>
-                new MinecraftVersion
-                {
-                    Version = c.Name,
-                    MVersion = c
-                })
-            .OrderByDescending(c => c.MVersion?.ReleaseTime);
+            var versions = await _launcher.GetAllVersionsAsync();
+
+            return versions.Select(c =>
+                    new MinecraftVersion
+                    {
+                        Version = c.Name,
+                        MVersion = c
+                    })
+                .OrderByDescending(c => c.MVersion?.ReleaseTime);
+        }
+        catch (Exception exception)
+        {
+            await _loggerService.Log(exception.Message, exception);
+        }
+
+        return Enumerable.Empty<IMinecraftVersion>();
     }
 
     private async Task LoadClientFilesAsync(IGameClient client, CancellationToken cancellationToken)
