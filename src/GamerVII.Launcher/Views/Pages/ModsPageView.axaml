@@ -3,8 +3,10 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="1920" d:DesignHeight="2080"
+             xmlns:asyncImageLoader="clr-namespace:AsyncImageLoader;assembly=AsyncImageLoader.Avalonia"
              xmlns:pages="clr-namespace:GamerVII.Launcher.ViewModels.Pages"
              xmlns:components="clr-namespace:GamerVII.Launcher.Views.Components"
+             xmlns:client="clr-namespace:GamerVII.Launcher.Models.Client"
              x:DataType="pages:ModsPageViewModel"
              x:Class="GamerVII.Launcher.Views.Pages.ModsPageView">
 
@@ -30,7 +32,7 @@
                             <Border Classes="ModsControlWrapper">
                                 <StackPanel Spacing="15">
                                     <Grid>
-                                        <TextBlock Classes="ModsControlHeadline" Text="Версия"/>
+                                        <TextBlock Classes="ModsControlHeadline" Text="Версия" />
                                     </Grid>
 
                                     <TextBox Classes="Input-Box" Watermark="Поиск" />
@@ -46,12 +48,12 @@
                                         </ListBox.ItemsPanel>
 
 
-                                        <components:BadgeComponent Width="50" Text="1.7.10"/>
-                                        <components:BadgeComponent Width="50" Text="1.7.10"/>
-                                        <components:BadgeComponent Width="50" Text="1.7.10"/>
-                                        <components:BadgeComponent Width="50" Text="1.7.10"/>
-                                        <components:BadgeComponent Width="50" Text="1.7.10"/>
-                                        <components:BadgeComponent Width="50" Text="1.7.10"/>
+                                        <components:BadgeComponent Width="50" Text="1.7.10" />
+                                        <components:BadgeComponent Width="50" Text="1.7.10" />
+                                        <components:BadgeComponent Width="50" Text="1.7.10" />
+                                        <components:BadgeComponent Width="50" Text="1.7.10" />
+                                        <components:BadgeComponent Width="50" Text="1.7.10" />
+                                        <components:BadgeComponent Width="50" Text="1.7.10" />
 
                                     </ListBox>
                                 </StackPanel>
@@ -61,18 +63,18 @@
                             <Border Classes="ModsControlWrapper">
                                 <StackPanel Spacing="15">
                                     <Grid>
-                                        <TextBlock Classes="ModsControlHeadline" Text="Категории"/>
+                                        <TextBlock Classes="ModsControlHeadline" Text="Категории" />
                                     </Grid>
 
                                     <TextBox Classes="Input-Box" Watermark="Поиск" />
 
                                     <StackPanel>
-                                        <CheckBox Classes="CheckBox" Content="Приключения"/>
-                                        <CheckBox Classes="CheckBox" Content="Приключения"/>
-                                        <CheckBox Classes="CheckBox" Content="Приключения"/>
-                                        <CheckBox Classes="CheckBox" Content="Приключения"/>
-                                        <CheckBox Classes="CheckBox" Content="Приключения"/>
-                                        <CheckBox Classes="CheckBox" Content="Приключения"/>
+                                        <CheckBox Classes="CheckBox" Content="Приключения" />
+                                        <CheckBox Classes="CheckBox" Content="Приключения" />
+                                        <CheckBox Classes="CheckBox" Content="Приключения" />
+                                        <CheckBox Classes="CheckBox" Content="Приключения" />
+                                        <CheckBox Classes="CheckBox" Content="Приключения" />
+                                        <CheckBox Classes="CheckBox" Content="Приключения" />
                                     </StackPanel>
                                 </StackPanel>
 
@@ -80,20 +82,20 @@
                             <Border Classes="ModsControlWrapper">
                                 <StackPanel Spacing="15">
                                     <Grid>
-                                        <TextBlock Classes="ModsControlHeadline" Text="Загрузчик"/>
+                                        <TextBlock Classes="ModsControlHeadline" Text="Загрузчик" />
                                     </Grid>
 
                                     <TextBox Classes="Input-Box" Watermark="Поиск" />
 
                                     <StackPanel>
-                                        <CheckBox Classes="CheckBox" Content="Fabric"/>
-                                        <CheckBox Classes="CheckBox" Content="Forge"/>
-                                        <CheckBox Classes="CheckBox" Content="LiteLoader"/>
-                                        <CheckBox Classes="CheckBox" Content="Risugami's ModLoader"/>
-                                        <CheckBox Classes="CheckBox" Content="NeoForge"/>
-                                        <CheckBox Classes="CheckBox" Content="Quilt"/>
-                                        <CheckBox Classes="CheckBox" Content="Quilt"/>
-                                        <CheckBox Classes="CheckBox" Content="Rift"/>
+                                        <CheckBox Classes="CheckBox" Content="Fabric" />
+                                        <CheckBox Classes="CheckBox" Content="Forge" />
+                                        <CheckBox Classes="CheckBox" Content="LiteLoader" />
+                                        <CheckBox Classes="CheckBox" Content="Risugami's ModLoader" />
+                                        <CheckBox Classes="CheckBox" Content="NeoForge" />
+                                        <CheckBox Classes="CheckBox" Content="Quilt" />
+                                        <CheckBox Classes="CheckBox" Content="Quilt" />
+                                        <CheckBox Classes="CheckBox" Content="Rift" />
                                     </StackPanel>
                                 </StackPanel>
 
@@ -101,13 +103,13 @@
                             <Border Classes="ModsControlWrapper">
                                 <StackPanel Spacing="15">
                                     <Grid>
-                                        <TextBlock Classes="ModsControlHeadline" Text="Тип мода"/>
+                                        <TextBlock Classes="ModsControlHeadline" Text="Тип мода" />
                                     </Grid>
 
                                     <ComboBox HorizontalAlignment="Stretch"
                                               Classes="ComboBox">
-                                        <TextBlock Text="Клиентский"/>
-                                        <TextBlock Text="Серверный"/>
+                                        <TextBlock Text="Клиентский" />
+                                        <TextBlock Text="Серверный" />
                                     </ComboBox>
                                 </StackPanel>
 
@@ -115,6 +117,127 @@
                         </StackPanel>
                     </ScrollViewer>
 
+                    <Grid Grid.Column="2" RowDefinitions="45, 20, *">
+
+                        <Grid ColumnDefinitions=".7*, 20, .3*">
+                            <Grid>
+                                <TextBox Classes="Input-Box"
+                                         Text="{Binding SearchText}"
+                                         Watermark="Поиск" />
+
+                                <ProgressBar Background="Transparent"
+                                             IsIndeterminate="{Binding IsBusy}"
+                                             VerticalAlignment="Bottom"
+                                             Height="1"
+                                             Margin="10, 0"
+                                             Foreground="{DynamicResource PrimaryColor}"/>
+                            </Grid>
+                            <TextBlock Grid.Column="2"
+                                       Text="Сортировать по актуальности"
+                                       VerticalAlignment="Center"
+                                       Classes="Content" />
+                        </Grid>
+
+                        <ListBox Grid.Row="2"
+                                 Background="Transparent"
+                                 ItemsSource="{Binding Mods}">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate x:DataType="client:IMod">
+                                    <Border Grid.Row="2"
+                                            Classes="ModsControlWrapper"
+                                            VerticalAlignment="Top">
+
+                                        <StackPanel Spacing="20">
+                                            <Grid ColumnDefinitions="0.3*, 0.7*">
+
+                                                <StackPanel Spacing="10"
+                                                            Orientation="Horizontal">
+                                                    <Border CornerRadius="10" ClipToBounds="True">
+                                                        <Image asyncImageLoader:ImageLoader.Source="{Binding IconUrl}"
+                                                               Width="40" />
+                                                    </Border>
+                                                    <TextBlock Text="{Binding Title}"
+                                                               VerticalAlignment="Center"
+                                                               FontWeight="SemiBold" />
+                                                </StackPanel>
+
+                                                <StackPanel Grid.Column="1"
+                                                            Spacing="20"
+                                                            Orientation="Horizontal"
+                                                            HorizontalAlignment="Right">
+
+                                                    <TextBlock Text="{Binding Author}"
+                                                               FontSize="16"
+                                                               VerticalAlignment="Center"
+                                                               FontWeight="Medium"
+                                                               Foreground="{DynamicResource ContentColor}" />
+
+                                                    <Border Classes="VerticalSeparator" Height="30" />
+
+                                                    <Border Classes="ModsControlWrapper"
+                                                            CornerRadius="8"
+                                                            Padding="10">
+                                                        <StackPanel Orientation="Horizontal"
+                                                                    Spacing="10">
+                                                            <Svg Path="/Assets/calendar.svg"
+                                                                 Width="24" />
+                                                            <TextBlock Text="3 дня назад"
+                                                                       FontSize="16"
+                                                                       VerticalAlignment="Center"
+                                                                       FontWeight="Medium"
+                                                                       Foreground="{DynamicResource ContentColor}" />
+                                                        </StackPanel>
+                                                    </Border>
+
+                                                    <Border Classes="VerticalSeparator" Height="30" />
+
+                                                    <Border Classes="ModsControlWrapper"
+                                                            CornerRadius="8"
+                                                            Padding="10">
+                                                        <StackPanel Orientation="Horizontal"
+                                                                    Spacing="10">
+                                                            <Svg Path="/Assets/graph.svg"
+                                                                 Width="24" />
+                                                            <TextBlock Text="{Binding Downloads}"
+                                                                       FontSize="16"
+                                                                       VerticalAlignment="Center"
+                                                                       FontWeight="Medium"
+                                                                       Foreground="{DynamicResource ContentColor}" />
+                                                        </StackPanel>
+                                                    </Border>
+
+                                                    <Border Classes="VerticalSeparator" Height="30" />
+
+                                                    <Border Classes="ModsControlWrapper"
+                                                            CornerRadius="8"
+                                                            Padding="10">
+                                                        <StackPanel Orientation="Horizontal"
+                                                                    Spacing="10">
+                                                            <Svg Path="/Assets/heart.svg"
+                                                                 Width="24" />
+                                                            <TextBlock Text="{Binding Follows}"
+                                                                       FontSize="16"
+                                                                       VerticalAlignment="Center"
+                                                                       FontWeight="Medium"
+                                                                       Foreground="{DynamicResource ContentColor}" />
+                                                        </StackPanel>
+                                                    </Border>
+
+                                                </StackPanel>
+
+                                            </Grid>
+
+                                            <TextBlock Foreground="{DynamicResource ContentColor}"
+                                                       Text="{Binding Description}" />
+                                        </StackPanel>
+
+                                    </Border>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+
+
+                    </Grid>
 
                 </Grid>
             </Border>

@@ -28,22 +28,22 @@
         <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Hidden" />
     </Style>
 
-    <Style Selector="ListBoxItem /template/ ContentPresenter">
-        <Setter Property="Background" Value="red" />
-    </Style>
-
-    <Style Selector="ListBoxItem:pointerover /template/ ContentPresenter">
-        <Setter Property="Background" Value="Transparent" />
-    </Style>
-
-    <Style Selector="ListBoxItem:selected /template/ ContentPresenter">
-        <Setter Property="Background" Value="Transparent" />
-    </Style>
-
-    <!-- ToDo: Доделать выбранный элемент красить в зеленый -->
-    <Style Selector="ListBoxItem:selected components|BadgeComponent">
-        <Setter Property="Background" Value="Red" />
-    </Style>
+    <!-- <Style Selector="ListBoxItem /template/ ContentPresenter"> -->
+    <!--     <Setter Property="Background" Value="red" /> -->
+    <!-- </Style> -->
+    <!-- -->
+    <!-- <Style Selector="ListBoxItem:pointerover /template/ ContentPresenter"> -->
+    <!--     <Setter Property="Background" Value="Transparent" /> -->
+    <!-- </Style> -->
+    <!-- -->
+    <!-- <Style Selector="ListBoxItem:selected /template/ ContentPresenter"> -->
+    <!--     <Setter Property="Background" Value="Transparent" /> -->
+    <!-- </Style> -->
+    <!-- -->
+    <!-- ~1~ ToDo: Доделать выбранный элемент красить в зеленый @1@ -->
+    <!-- <Style Selector="ListBoxItem:selected components|BadgeComponent"> -->
+    <!--     <Setter Property="Background" Value="Red" /> -->
+    <!-- </Style> -->
 
     <Style Selector="Border.ModsControlWrapper">
         <Setter Property="Background" Value="{DynamicResource AdditionalColor}" />
@@ -51,6 +51,16 @@
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="CornerRadius" Value="20" />
         <Setter Property="Padding" Value="25" />
+    </Style>
+
+    <Style Selector="Border.VerticalSeparator">
+        <Setter Property="Background" Value="{DynamicResource AdditionalColorBorder}" />
+        <Setter Property="Width" Value="1" />
+    </Style>
+
+    <Style Selector="ListBoxItem">
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="Margin" Value="0, 0, 0, 20" />
     </Style>
 
     <Style Selector="TextBlock.ModsControlHeadline">

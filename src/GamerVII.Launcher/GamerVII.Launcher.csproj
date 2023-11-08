@@ -19,6 +19,7 @@
 
 
   <ItemGroup>
+    <PackageReference Include="AsyncImageLoader.Avalonia" Version="3.2.1" />
     <PackageReference Include="Avalonia" Version="11.0.5" />
     <PackageReference Include="Avalonia.Desktop" Version="11.0.5" />
     <PackageReference Include="Avalonia.Svg.Skia" Version="11.0.0.3" />
@@ -90,6 +91,12 @@
     </Compile>
     <Compile Update="Services\System\SystemService.cs">
       <DependentUpon>ISystemService.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Services\Mods\ModrinthModsService.cs">
+      <DependentUpon>IModsService.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Models\Client\ClientMod.cs">
+      <DependentUpon>IMod.cs</DependentUpon>
     </Compile>
   </ItemGroup>
 

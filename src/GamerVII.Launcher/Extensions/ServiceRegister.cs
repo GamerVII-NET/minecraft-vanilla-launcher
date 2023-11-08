@@ -4,6 +4,7 @@ using GamerVII.Launcher.Services.Client;
 using GamerVII.Launcher.Services.GameLaunch;
 using GamerVII.Launcher.Services.LocalStorage;
 using GamerVII.Launcher.Services.Logger;
+using GamerVII.Launcher.Services.Mods;
 using GamerVII.Launcher.Services.System;
 using Splat;
 
@@ -27,5 +28,6 @@ public static class ServiceRegister
         Locator.CurrentMutable.RegisterConstant(new LocalGameClientService(), typeof(IGameClientService));
         Locator.CurrentMutable.RegisterConstant(new GameLaunchService(), typeof(IGameLaunchService));
         Locator.CurrentMutable.RegisterConstant(new EmptyAuthService(), typeof(IAuthService));
+        Locator.CurrentMutable.RegisterConstant(new ModrinthModsService(), typeof(IModsService));
     }
 }
