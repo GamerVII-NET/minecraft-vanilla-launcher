@@ -7,6 +7,7 @@
              xmlns:pages="clr-namespace:GamerVII.Launcher.ViewModels.Pages"
              xmlns:components="clr-namespace:GamerVII.Launcher.Views.Components"
              xmlns:client="clr-namespace:GamerVII.Launcher.Models.Client"
+             xmlns:converters="clr-namespace:GamerVII.Launcher.Views.Converters"
              x:DataType="pages:ModsPageViewModel"
              x:Class="GamerVII.Launcher.Views.Pages.ModsPageView">
 
@@ -29,16 +30,21 @@
 
                     <ScrollViewer Grid.Column="0" VerticalScrollBarVisibility="Auto">
                         <StackPanel Spacing="30">
-                            <Border Classes="ModsControlWrapper">
+                            <Border Classes="ModsControlWrapper"
+                                    IsVisible="{Binding SelectClient, Converter={converters:IsNullConverter}}">
                                 <StackPanel Spacing="15">
                                     <Grid>
                                         <TextBlock Classes="ModsControlHeadline" Text="Версия" />
                                     </Grid>
 
-                                    <TextBox Classes="Input-Box" Watermark="Поиск" />
+                                    <TextBox Classes="Input-Box"
+                                             Text="{Binding MinecraftVersionSearchText}"
+                                             Watermark="Поиск" />
 
                                     <ListBox SelectionMode="Multiple"
+                                             MaxHeight="200"
                                              HorizontalAlignment="Stretch"
+                                             ItemsSource="{Binding MinecraftVersions}"
                                              Classes="SelectBadge">
 
                                         <ListBox.ItemsPanel>
@@ -47,17 +53,15 @@
                                             </ItemsPanelTemplate>
                                         </ListBox.ItemsPanel>
 
+                                        <ListBox.ItemTemplate>
+                                            <DataTemplate x:DataType="client:IMinecraftVersion">
+                                                <components:BadgeComponent Width="60" Text="{Binding Version}" />
+                                            </DataTemplate>
+                                        </ListBox.ItemTemplate>
 
-                                        <components:BadgeComponent Width="50" Text="1.7.10" />
-                                        <components:BadgeComponent Width="50" Text="1.7.10" />
-                                        <components:BadgeComponent Width="50" Text="1.7.10" />
-                                        <components:BadgeComponent Width="50" Text="1.7.10" />
-                                        <components:BadgeComponent Width="50" Text="1.7.10" />
-                                        <components:BadgeComponent Width="50" Text="1.7.10" />
 
                                     </ListBox>
                                 </StackPanel>
-
                             </Border>
 
                             <Border Classes="ModsControlWrapper">
@@ -66,16 +70,19 @@
                                         <TextBlock Classes="ModsControlHeadline" Text="Категории" />
                                     </Grid>
 
-                                    <TextBox Classes="Input-Box" Watermark="Поиск" />
+                                    <TextBox Classes="Input-Box"
+                                             Text="{Binding CategorySearchText}"
+                                             Watermark="Поиск" />
 
-                                    <StackPanel>
-                                        <CheckBox Classes="CheckBox" Content="Приключения" />
-                                        <CheckBox Classes="CheckBox" Content="Приключения" />
-                                        <CheckBox Classes="CheckBox" Content="Приключения" />
-                                        <CheckBox Classes="CheckBox" Content="Приключения" />
-                                        <CheckBox Classes="CheckBox" Content="Приключения" />
-                                        <CheckBox Classes="CheckBox" Content="Приключения" />
-                                    </StackPanel>
+                                    <ScrollViewer MaxHeight="200">
+                                        <ItemsControl ItemsSource="{Binding ModCategories}">
+                                            <ItemsControl.DataTemplates>
+                                                <DataTemplate x:DataType="client:IModCategory">
+                                                    <CheckBox Classes="CheckBox" Content="{Binding Name}" />
+                                                </DataTemplate>
+                                            </ItemsControl.DataTemplates>
+                                        </ItemsControl>
+                                    </ScrollViewer>
                                 </StackPanel>
 
                             </Border>
@@ -100,20 +107,21 @@
                                 </StackPanel>
 
                             </Border>
-                            <Border Classes="ModsControlWrapper">
-                                <StackPanel Spacing="15">
-                                    <Grid>
-                                        <TextBlock Classes="ModsControlHeadline" Text="Тип мода" />
-                                    </Grid>
 
-                                    <ComboBox HorizontalAlignment="Stretch"
-                                              Classes="ComboBox">
-                                        <TextBlock Text="Клиентский" />
-                                        <TextBlock Text="Серверный" />
-                                    </ComboBox>
-                                </StackPanel>
-
-                            </Border>
+                            <!-- <Border Classes="ModsControlWrapper"EE> -->
+                            <!--     <StackPanel Spacing="15"> -->
+                            <!--         <Grid> -->
+                            <!--             <TextBlock Classes="ModsControlHeadline" Text="Тип мода" /> -->
+                            <!--         </Grid> -->
+                            <!-- -->
+                            <!--         <ComboBox HorizontalAlignment="Stretch" -->
+                            <!--                   Classes="ComboBox"> -->
+                            <!--             <TextBlock Text="Клиентский" /> -->
+                            <!--             <TextBlock Text="Серверный" /> -->
+                            <!--         </ComboBox> -->
+                            <!--     </StackPanel> -->
+                            <!-- -->
+                            <!-- </Border> -->
                         </StackPanel>
                     </ScrollViewer>
 
@@ -130,7 +138,7 @@
                                              VerticalAlignment="Bottom"
                                              Height="1"
                                              Margin="10, 0"
-                                             Foreground="{DynamicResource PrimaryColor}"/>
+                                             Foreground="{DynamicResource PrimaryColor}" />
                             </Grid>
                             <TextBlock Grid.Column="2"
                                        Text="Сортировать по актуальности"
@@ -229,6 +237,12 @@
 
                                             <TextBlock Foreground="{DynamicResource ContentColor}"
                                                        Text="{Binding Description}" />
+
+                                            <components:ButtonControl Classes="Primary"
+                                                                      Text="Добавить"
+                                                                      Command="{Binding $parent[ListBox].((pages:ModsPageViewModel)DataContext).AddModToClientCommand}"
+                                                                      CommandParameter="{Binding .}"
+                                                                      />
                                         </StackPanel>
 
                                     </Border>

@@ -6,6 +6,7 @@ using System.Reactive.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using CmlLib.Core.Installer.Forge.Installers;
 using GamerVII.Launcher.Models.Client;
 using GamerVII.Launcher.Models.Enums;
 using GamerVII.Launcher.Services.GameLaunch;
@@ -71,6 +72,36 @@ namespace GamerVII.Launcher.ViewModels.Pages
 
         #endregion
 
+        #region Game loader
+
+        /// <summary>
+        /// Gets or sets a game loader
+        /// </summary>
+        public ObservableCollection<IGameLoader> GameLoaders
+        {
+            get => _gameLoaders;
+            set => this.RaiseAndSetIfChanged(ref _gameLoaders, value);
+        }
+
+        #endregion
+
+        #region Selected loader
+
+        /// <summary>
+        /// Gets or sets a selected game loader
+        /// </summary>
+        public IGameLoader SelectedGameLoader
+        {
+            get => _selectedGameLoader;
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _selectedGameLoader, value);
+                NewGameClient.ModLoaderType = value.LoaderType;
+            }
+        }
+
+        #endregion
+
         #region SelectedVersion
 
         /// <summary>
@@ -123,6 +154,20 @@ namespace GamerVII.Launcher.ViewModels.Pages
 
         private IGameClient _newGameClient = new GameClient();
         private ObservableCollection<IMinecraftVersion> _minecraftVersions = new();
+        private IGameLoader _selectedGameLoader;
+        private ObservableCollection<IGameLoader> _gameLoaders = new()
+        {
+            new GameLoader
+            {
+                Name = "Vanilla",
+                LoaderType = ModLoaderType.Vanilla
+            },
+            new GameLoader
+            {
+                Name = "Forge",
+                LoaderType = ModLoaderType.Forge
+            }
+        };
         private IMinecraftVersion? _selectedVersion;
         private readonly IGameLaunchService _gameLaunchService;
         private string? _searchText;

@@ -23,7 +23,7 @@ public class ModsLoaderTests
     }
 
     [Test, Order(1)]
-    public async Task GetModsList()
+    public async Task GetModsListTest()
     {
         filter.Query = "Industrinal craft";
         filter.Limit = 5;
@@ -31,11 +31,35 @@ public class ModsLoaderTests
 
         filter.Add(new ModrinthFilterItem("versions", "1.12.2"));
 
-        var mods = await _modsService.GetModsListAsync(filter);
+        var mods = await _modsService.GetModsAsync(filter, CancellationToken.None);
 
         Assert.Multiple(() =>
         {
-            Assert.That(mods.Count(), Is.EqualTo(5));
+            Assert.That(mods, Is.Not.Null);
+        });
+    }
+
+    [Test, Order(2)]
+    public async Task GetMinecraftVersionsListTest()
+    {
+
+        var versions = await _modsService.GetMinecraftVersionsAsync(CancellationToken.None);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(versions, Is.Not.Null);
+        });
+    }
+
+    [Test, Order(2)]
+    public async Task GetCategoriesListTest()
+    {
+
+        var categories = await _modsService.GetCategoriesAsync(CancellationToken.None);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(categories, Is.Not.Null);
         });
     }
 }

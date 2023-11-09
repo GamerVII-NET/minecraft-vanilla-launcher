@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 
 namespace GamerVII.Launcher.Models.Mods.Modrinth;
 
-public class Project
+public class MProject
 {
     [JsonProperty("slug")] public string Slug { get; set; }
 
@@ -35,7 +35,7 @@ public class Project
 
     [JsonProperty("discord_url")] public string DiscordUrl { get; set; }
 
-    [JsonProperty("donation_urls")] public List<DonationUrl> DonationUrls { get; set; }
+    [JsonProperty("donation_urls")] public List<MDonationUrl> DonationUrls { get; set; }
 
     [JsonProperty("project_type")] public string ProjectType { get; set; }
 
@@ -67,7 +67,7 @@ public class Project
 
     [JsonProperty("followers")] public int Followers { get; set; }
 
-    [JsonProperty("license")] public License License { get; set; }
+    [JsonProperty("license")] public MLicense MLicense { get; set; }
 
     [JsonProperty("versions")] public List<string> Versions { get; set; }
 
@@ -75,5 +75,5 @@ public class Project
 
     [JsonProperty("loaders")] public List<string> Loaders { get; set; }
 
-    [JsonProperty("gallery")] public List<Gallery> Gallery { get; set; }
+    [JsonProperty("gallery")] public List<MGallery> Gallery { get; set; }
 }

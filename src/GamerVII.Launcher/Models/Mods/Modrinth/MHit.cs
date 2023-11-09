@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 
 namespace GamerVII.Launcher.Models.Mods.Modrinth;
 
-public class Hit
+public class MHit
 {
     [JsonProperty("slug")]
     public string Slug { get; set; }

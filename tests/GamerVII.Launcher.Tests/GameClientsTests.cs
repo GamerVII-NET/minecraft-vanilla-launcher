@@ -67,7 +67,7 @@ public class GameClientsTests
 
         await CreateMinecraftClient();
 
-        _addClientViewModel.SaveClientCommand.Execute(null);
+        _addClientViewModel.SaveClientCommand?.Execute(null);
 
         Assert.That(_mainViewModel.SidebarViewModel.ServersListViewModel.GameClients.Last(), Is.EqualTo(_addClientViewModel.NewGameClient));
     }

@@ -22,6 +22,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GamerVII.Launcher.Tests", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GamerVII.Notification.Avalonia", "src\GamerVII.Notification.Avalonia\GamerVII.Notification.Avalonia\GamerVII.Notification.Avalonia.csproj", "{B792AA78-60F3-4EEF-B0FD-129ACD2ACD89}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CmlLib.Core.Installer.Forge", "..\CmlLib.Core.Installer.Forge\CmlLib.Core.Installer.Forge\CmlLib.Core.Installer.Forge.csproj", "{6E820882-26F9-446F-8349-214B1C959754}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -40,6 +42,10 @@ Global
 		{B792AA78-60F3-4EEF-B0FD-129ACD2ACD89}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B792AA78-60F3-4EEF-B0FD-129ACD2ACD89}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B792AA78-60F3-4EEF-B0FD-129ACD2ACD89}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6E820882-26F9-446F-8349-214B1C959754}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E820882-26F9-446F-8349-214B1C959754}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E820882-26F9-446F-8349-214B1C959754}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E820882-26F9-446F-8349-214B1C959754}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -51,5 +57,6 @@ Global
 		{31859677-ACD0-48C0-A4EB-502CDBB7F07A} = {662268E9-BD01-43C7-924B-F4F285C8D391}
 		{787232DD-3F4F-4B12-8297-455C9A4C3A43} = {793FCF04-CB68-4093-9A0F-57A0CA4475AA}
 		{B792AA78-60F3-4EEF-B0FD-129ACD2ACD89} = {662268E9-BD01-43C7-924B-F4F285C8D391}
+		{6E820882-26F9-446F-8349-214B1C959754} = {662268E9-BD01-43C7-924B-F4F285C8D391}
 	EndGlobalSection
 EndGlobal

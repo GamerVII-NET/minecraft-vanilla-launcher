@@ -2,7 +2,7 @@
 
 namespace GamerVII.Launcher.Models.Mods.Modrinth;
 
-public class Gallery
+public class MGallery
 {
     [JsonProperty("url")] public string Url { get; set; }
 

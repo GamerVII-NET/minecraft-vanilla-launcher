@@ -3,10 +3,10 @@ using Newtonsoft.Json;
 
 namespace GamerVII.Launcher.Models.Mods.Modrinth;
 
-public class Search
+public class MSearch
 {
     [JsonProperty("hits")]
-    public List<Hit> Hits { get; set; }
+    public List<MHit> Hits { get; set; }
 
     [JsonProperty("offset")]
     public int Offset { get; set; }

@@ -2,7 +2,7 @@
 
 namespace GamerVII.Launcher.Models.Mods.Modrinth;
 
-public class License
+public class MLicense
 {
     [JsonProperty("id")] public string Id { get; set; }
 

@@ -8,6 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Avalonia.Threading;
+using CmlLib.Utils;
 using GamerVII.Launcher.Models.Client;
 using GamerVII.Launcher.Models.Users;
 using GamerVII.Launcher.Services.Auth;
@@ -201,7 +202,16 @@ namespace GamerVII.Launcher.ViewModels
             SidebarViewModel.LogoutCommand = ReactiveCommand.CreateFromTask(Logout);
 
             SidebarViewModel.ServersListViewModel.AddClientCommand =
-                ReactiveCommand.Create(() => OpenPage<AddClientPageViewModel>());
+                ReactiveCommand.Create(() =>
+                    OpenPage<AddClientPageViewModel>(c =>
+                    {
+                        if (c is not AddClientPageViewModel viewModel) return null;
+
+                        viewModel.NewGameClient = new GameClient();
+                        viewModel.SelectedVersion = null;
+
+                        return viewModel;
+                    }));
 
             LaunchGameCommand = ReactiveCommand.CreateFromTask(LaunchGame, canLaunch);
 
@@ -302,44 +312,57 @@ namespace GamerVII.Launcher.ViewModels
             // Event handler for the client loading process.
             _gameLaunchService.LoadClientEnded += async (client, isSuccess, message) =>
             {
-                if (!isSuccess)
+                try
                 {
-                    await CancelUiProcessing();
-
-                    if (!string.IsNullOrEmpty(message))
+                    if (!isSuccess)
                     {
-                        await _loggerService.Log(message);
-                        await _loggerService.Log(message);
+                        await CancelUiProcessing();
 
-                        Manager
-                            .CreateMessage(true, "#151515", "Ошибка", message)
-                            .Dismiss().WithDelay(TimeSpan.FromSeconds(5))
-                            .Queue();
+                        if (!string.IsNullOrEmpty(message))
+                        {
+                            await _loggerService.Log(message);
+                            await _loggerService.Log(message);
+
+                            Manager
+                                .CreateMessage(true, "#151515", "Ошибка", message)
+                                .Dismiss().WithDelay(TimeSpan.FromSeconds(5))
+                                .Queue();
+                        }
                     }
+
+                    // Create a new game client and launch the client process.
+                    var settings = GetPageViewModelByType<SettingsPageViewModel>() as SettingsPageViewModel
+                                   ?? throw new Exception("Settings not found");
+
+                    if (User == null) return;
+
+                    var process = await _gameLaunchService.LaunchClientAsync(client, User, new StartupOptions
+                    {
+                        ScreenWidth = settings.WindowWidth,
+                        ScreenHeight = settings.WindowHeight,
+                        FullScreen = settings.IsFullScreen,
+                        MaximumRamMb = settings.MemorySize,
+                        MinimumRamMb = settings.MemorySize,
+                    }, _token);
+
+                    var processUtil = new ProcessUtil(process);
+                    processUtil.OutputReceived += (s, e) => Console.WriteLine(e);
+                    processUtil.StartWithEvents();
+                    await processUtil.WaitForExitTaskAsync();
+                    await CancelUiProcessing();
+                }
+                catch (Exception ex)
+                {
+                    await _loggerService.Log(ex.Message, ex);
                 }
 
-                // Create a new game client and launch the client process.
-                var settings = GetPageViewModelByType<SettingsPageViewModel>() as SettingsPageViewModel
-                               ?? throw new Exception("Settings not found");
-
-                if (User == null) return;
-
-                var process = await _gameLaunchService.LaunchClientAsync(client, User, new StartupOptions
-                {
-                    ScreenWidth = settings.WindowWidth,
-                    ScreenHeight = settings.WindowHeight,
-                    FullScreen = settings.IsFullScreen,
-                    MaximumRamMb = settings.MemorySize,
-                    MinimumRamMb = settings.MemorySize,
-                }, _token);
-
-                // Event handler for the client process exit.
-                process.Exited += async (sender, e) =>
-                {
-                    await CancelUiProcessing();
-
-                    process.Dispose();
-                };
+                // // Event handler for the client process exit.
+                // process.Exited += async (sender, e) =>
+                // {
+                //     await CancelUiProcessing();
+                //
+                //     process.Dispose();
+                // };
             };
         }
 
@@ -396,7 +419,8 @@ namespace GamerVII.Launcher.ViewModels
             settingsViewModel.GoToMainPageCommand = ReactiveCommand.CreateFromTask(SaveSettings);
             addServerViewModel.GoToMainPageCommand = ReactiveCommand.Create(ResetPage);
             modsPageViewModel.GoToMainPageCommand = ReactiveCommand.Create(ResetPage);
-            addServerViewModel.SaveClientCommand = ReactiveCommand.Create(() => AddGameClient(addServerViewModel.NewGameClient));
+            addServerViewModel.SaveClientCommand =
+                ReactiveCommand.Create(() => AddGameClient(addServerViewModel.NewGameClient));
 
             // Subscribe to the Authorized event from the authentication view model.
             authViewModel.Authorized += OnAuthorized;
@@ -448,7 +472,9 @@ namespace GamerVII.Launcher.ViewModels
 
                 if (SidebarViewModel.ServersListViewModel.SelectedClient != null)
                 {
-                    var client = await _gameLaunchService.LoadClientAsync(SidebarViewModel.ServersListViewModel.SelectedClient, _token);
+                    var client =
+                        await _gameLaunchService.LoadClientAsync(SidebarViewModel.ServersListViewModel.SelectedClient,
+                            _token);
                 }
             }
             catch (Exception e)
@@ -508,6 +534,5 @@ namespace GamerVII.Launcher.ViewModels
         }
 
         #endregion
-
     }
 }

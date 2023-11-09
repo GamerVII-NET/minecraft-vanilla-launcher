@@ -2,7 +2,7 @@
 
 namespace GamerVII.Launcher.Models.Mods.Modrinth;
 
-public class DonationUrl
+public class MDonationUrl
 {
     [JsonProperty("id")] public string Id { get; set; }
 

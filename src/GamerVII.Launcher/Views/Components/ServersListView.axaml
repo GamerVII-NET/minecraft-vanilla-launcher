@@ -26,6 +26,7 @@
                         <Setter Property="Height" Value="50" />
                         <Setter Property="Cursor" Value="Hand" />
                         <Setter Property="Margin" Value="0, 0, 0, 5" />
+                        <Setter Property="Padding" Value="15, 0" />
                         <Setter Property="Foreground" Value="{StaticResource ContentColor}" />
                     </Style>
                     <Style Selector="ListBoxItem:selected /template/ ContentPresenter">

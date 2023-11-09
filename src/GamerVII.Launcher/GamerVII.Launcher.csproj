@@ -29,7 +29,6 @@
     <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.0.5" />
     <PackageReference Include="Avalonia.ReactiveUI" Version="11.0.5" />
     <PackageReference Include="CmlLib.Core" Version="3.3.8" />
-    <PackageReference Include="CmlLib.Core.Installer.Forge" Version="0.0.2" />
     <PackageReference Include="Mono.Posix" Version="7.1.0-final.1.21458.1" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="sqlite-net-pcl" Version="1.8.116" />
@@ -98,10 +97,14 @@
     <Compile Update="Models\Client\ClientMod.cs">
       <DependentUpon>IMod.cs</DependentUpon>
     </Compile>
+    <Compile Update="Models\Client\GameLoader.cs">
+      <DependentUpon>IGameLoader.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
 
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\CmlLib.Core.Installer.Forge\CmlLib.Core.Installer.Forge\CmlLib.Core.Installer.Forge.csproj" />
     <ProjectReference Include="..\GamerVII.Notification.Avalonia\GamerVII.Notification.Avalonia\GamerVII.Notification.Avalonia.csproj" />
   </ItemGroup>
 </Project>

@@ -3,4 +3,5 @@
 public interface IMinecraftVersion
 {
     public string Version { get; set; }
+    public string VersionType { get; set; }
 }
