@@ -1,3 +1,6 @@
 [submodule "src/GamerVII.Notification.Avalonia"]
 	path = src/GamerVII.Notification.Avalonia
 	url = https://github.com/GamerVII-NET/GamerVII.Notification.Avalonia.git
+[submodule "src/CmlLib.Core.Installer.Forge"]
+	path = src/CmlLib.Core.Installer.Forge
+	url = https://github.com/GamerVII-NET/CmlLib.Core.Installer.Forge.git
