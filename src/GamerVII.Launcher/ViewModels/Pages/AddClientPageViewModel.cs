@@ -6,7 +6,6 @@ using System.Reactive.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using CmlLib.Core.Installer.Forge.Installers;
 using GamerVII.Launcher.Models.Client;
 using GamerVII.Launcher.Models.Enums;
 using GamerVII.Launcher.Services.GameLaunch;
