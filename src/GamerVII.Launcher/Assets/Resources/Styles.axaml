@@ -1,5 +1,6 @@
 ﻿<Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:svgSkia="clr-namespace:Avalonia.Svg.Skia;assembly=Avalonia.Svg.Skia"
         xmlns:components="clr-namespace:GamerVII.Launcher.Views.Components">
 
     <Style Selector="ComboBox.ComboBox">
@@ -58,6 +59,11 @@
         <Setter Property="Width" Value="1" />
     </Style>
 
+    <Style Selector="Border.HorizontalSeperator">
+        <Setter Property="Background" Value="{DynamicResource AdditionalColorBorder}" />
+        <Setter Property="Height" Value="1" />
+    </Style>
+
     <Style Selector="ListBoxItem">
         <Setter Property="Padding" Value="0" />
         <Setter Property="Margin" Value="0, 0, 0, 20" />
@@ -99,7 +105,7 @@
         <Setter Property="Background" Value="Transparent" />
     </Style>
 
-    <Style Selector="Button.ModalClose:pointerover /template/ ContentPresenter /template/ Svg">
+    <Style Selector="Button.ModalClose:pointerover /template/ ContentPresenter /template/ svgSkia|Svg">
         <Setter Property="Opacity" Value=".5" />
     </Style>
 
@@ -207,6 +213,12 @@
         <Setter Property="Padding" Value="15, 10" />
         <Setter Property="HorizontalAlignment" Value="Left" />
         <Setter Property="BorderThickness" Value="1" />
+    </Style>
+
+    <Style Selector="Border.TipPrimary">
+        <Setter Property="Background" Value="{DynamicResource PrimaryTransparentColor}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource PrimaryColor}" />
+        <Setter Property="TextBlock.Foreground" Value="#FFFFFF" />
     </Style>
 
     <Style Selector="Border.Sidebar">

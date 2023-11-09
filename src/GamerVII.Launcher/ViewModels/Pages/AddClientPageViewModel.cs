@@ -89,13 +89,17 @@ namespace GamerVII.Launcher.ViewModels.Pages
         /// <summary>
         /// Gets or sets a selected game loader
         /// </summary>
-        public IGameLoader SelectedGameLoader
+        public IGameLoader? SelectedGameLoader
         {
             get => _selectedGameLoader;
             set
             {
                 this.RaiseAndSetIfChanged(ref _selectedGameLoader, value);
+
+                if (value == null) return;
+
                 NewGameClient.ModLoaderType = value.LoaderType;
+                NewGameClient.ModLoaderName = value.Name;
             }
         }
 
@@ -153,7 +157,7 @@ namespace GamerVII.Launcher.ViewModels.Pages
 
         private IGameClient _newGameClient = new GameClient();
         private ObservableCollection<IMinecraftVersion> _minecraftVersions = new();
-        private IGameLoader _selectedGameLoader;
+        private IGameLoader? _selectedGameLoader;
         private ObservableCollection<IGameLoader> _gameLoaders = new()
         {
             new GameLoader

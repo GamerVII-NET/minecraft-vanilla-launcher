@@ -1,5 +1,6 @@
 ﻿<Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:svgSkia="clr-namespace:Avalonia.Svg.Skia;assembly=Avalonia.Svg.Skia"
         xmlns:controls="using:GamerVII.Launcher.Views.Components">
     <Design.PreviewWith>
         <Border Background="{DynamicResource SecondaryColorHover}"
@@ -41,7 +42,7 @@
                     </Button.Styles>
                     <StackPanel Orientation="Horizontal"
                                 Spacing="10">
-                        <Svg Path="{TemplateBinding IconPath}" Height="28" />
+                        <svgSkia:Svg Path="{TemplateBinding IconPath}" Height="28" />
                         <TextBlock Text="{TemplateBinding Text}"
                                    FontWeight="{TemplateBinding FontWeight}"
                                    Foreground="{TemplateBinding Foreground}"
@@ -86,8 +87,8 @@
                     <StackPanel Orientation="Horizontal"
                                 Spacing="10">
 
-                        <Svg Path="{TemplateBinding IconPath}"
-                             Height="28" />
+                        <svgSkia:Svg Path="{TemplateBinding IconPath}"
+                                     Height="28" />
 
                         <TextBlock Text="{TemplateBinding Text}"
                                    FontWeight="{TemplateBinding FontWeight}"
@@ -129,8 +130,8 @@
                     <StackPanel Orientation="Horizontal"
                                 Spacing="10">
 
-                        <Svg Path="{TemplateBinding IconPath}"
-                             Height="28" />
+                        <svgSkia:Svg Path="{TemplateBinding IconPath}"
+                                     Height="28" />
 
                         <TextBlock Text="{TemplateBinding Text}"
                                    FontWeight="{TemplateBinding FontWeight}"
@@ -170,7 +171,7 @@
                                     Value="{DynamicResource AdditionalBorderColorHover}" />
                         </Style>
                     </Button.Styles>
-                    <Svg Path="{TemplateBinding IconPath}" Height="28" />
+                    <svgSkia:Svg Path="{TemplateBinding IconPath}" Height="28" />
                 </Button>
             </ControlTemplate>
         </Setter>

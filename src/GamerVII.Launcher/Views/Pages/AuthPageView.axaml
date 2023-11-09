@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:components="clr-namespace:GamerVII.Launcher.Views.Components"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             xmlns:svgSkia="clr-namespace:Avalonia.Svg.Skia;assembly=Avalonia.Svg.Skia"
              xmlns:pages="clr-namespace:GamerVII.Launcher.ViewModels.Pages"
              x:DataType="pages:AuthPageViewModel"
              x:Class="GamerVII.Launcher.Views.Pages.AuthPageView">
@@ -19,7 +20,7 @@
             <StackPanel Spacing="20">
 
                 <StackPanel>
-                    <Svg Path="/Assets/logo.svg" Width="40" />
+                    <svgSkia:Svg Path="/Assets/logo.svg" Width="40" />
                     <TextBlock
                         Classes="AuthLogoText">
                         <Run Text="GamerVII" />

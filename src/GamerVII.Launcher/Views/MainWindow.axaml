@@ -116,12 +116,26 @@
                             VerticalAlignment="Center">
 
                             <!-- ServerStatus -->
-                            <Border Classes="Tip">
-                                <TextBlock Classes="Content"
-                                           VerticalAlignment="Center"
-                                           HorizontalAlignment="Center"
-                                           Text="{Binding SidebarViewModel.ServersListViewModel.SelectedClient.Version}" />
-                            </Border>
+                            <StackPanel Orientation="Horizontal"
+                                        Spacing="10">
+
+                                <Border Classes="Tip TipPrimary">
+                                    <TextBlock Classes="Content"
+                                               VerticalAlignment="Center"
+                                               HorizontalAlignment="Center"
+                                               FontWeight="SemiBold"
+                                               Foreground="{DynamicResource PrimaryColor}"
+                                               Text="{Binding SidebarViewModel.ServersListViewModel.SelectedClient.ModLoaderName}" />
+                                </Border>
+
+                                <Border Classes="Tip">
+                                    <TextBlock Classes="Content"
+                                               VerticalAlignment="Center"
+                                               HorizontalAlignment="Center"
+                                               FontWeight="SemiBold"
+                                               Text="{Binding SidebarViewModel.ServersListViewModel.SelectedClient.Version}" />
+                                </Border>
+                            </StackPanel>
 
                             <TextBlock Classes="ServerName"
                                        TextWrapping="Wrap"

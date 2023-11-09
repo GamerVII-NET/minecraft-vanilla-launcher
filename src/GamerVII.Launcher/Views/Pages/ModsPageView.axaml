@@ -7,7 +7,9 @@
              xmlns:pages="clr-namespace:GamerVII.Launcher.ViewModels.Pages"
              xmlns:components="clr-namespace:GamerVII.Launcher.Views.Components"
              xmlns:client="clr-namespace:GamerVII.Launcher.Models.Client"
+             xmlns:svgSkia="clr-namespace:Avalonia.Svg.Skia;assembly=Avalonia.Svg.Skia"
              xmlns:converters="clr-namespace:GamerVII.Launcher.Views.Converters"
+             xmlns:mdxaml="https://github.com/whistyun/Markdown.Avalonia.Tight"
              x:DataType="pages:ModsPageViewModel"
              x:Class="GamerVII.Launcher.Views.Pages.ModsPageView">
 
@@ -147,13 +149,34 @@
                         </Grid>
 
                         <ListBox Grid.Row="2"
+                                 x:Name="ViewModsListBox"
                                  Background="Transparent"
+                                 SelectedItem="{Binding SelectedMod}"
                                  ItemsSource="{Binding Mods}">
+
+                            <ListBox.Styles>
+                                <Style Selector="ListBoxItem">
+                                    <Setter Property="Background" Value="{DynamicResource AdditionalColor}" />
+                                    <Setter Property="BorderBrush" Value="{DynamicResource AdditionalBorderColor}" />
+                                    <Setter Property="BorderThickness" Value="1" />
+                                    <Setter Property="CornerRadius" Value="15" />
+                                    <Setter Property="Padding" Value="20" />
+                                </Style>
+
+                                <Style Selector="ListBoxItem:selected /template/ ContentPresenter">
+                                    <Setter Property="Background" Value="{DynamicResource AdditionalColor}" />
+                                    <Setter Property="BorderThickness" Value="1" />
+                                    <Setter Property="BorderBrush" Value="{DynamicResource PrimaryColor}" />
+                                </Style>
+
+                                <Style Selector="ListBoxItem:pointerover /template/ ContentPresenter">
+                                    <Setter Property="Background" Value="Transparent" />
+                                </Style>
+                            </ListBox.Styles>
+
                             <ListBox.ItemTemplate>
                                 <DataTemplate x:DataType="client:IMod">
-                                    <Border Grid.Row="2"
-                                            Classes="ModsControlWrapper"
-                                            VerticalAlignment="Top">
+                                    <Border VerticalAlignment="Top">
 
                                         <StackPanel Spacing="20">
                                             <Grid ColumnDefinitions="0.3*, 0.7*">
@@ -174,6 +197,21 @@
                                                             Orientation="Horizontal"
                                                             HorizontalAlignment="Right">
 
+
+
+                                                    <components:ButtonControl Classes="Additional"
+                                                                              CornerRadius="50"
+                                                                              IconPath="/Assets/plus-white.svg"
+                                                                              Padding="12, 8"
+                                                                              Foreground="{DynamicResource ContentColor}"
+                                                                              Text="Добавить"
+                                                                              IsVisible="{Binding $parent[ListBoxItem].IsPointerOver}"
+                                                                              Command="{Binding $parent[ListBox].((pages:ModsPageViewModel)DataContext).AddModToClientCommand}"
+                                                                              CommandParameter="{Binding .}"
+                                                    />
+
+                                                    <Border Classes="VerticalSeparator" Height="30" />
+
                                                     <TextBlock Text="{Binding Author}"
                                                                FontSize="16"
                                                                VerticalAlignment="Center"
@@ -187,8 +225,8 @@
                                                             Padding="10">
                                                         <StackPanel Orientation="Horizontal"
                                                                     Spacing="10">
-                                                            <Svg Path="/Assets/calendar.svg"
-                                                                 Width="24" />
+                                                            <svgSkia:Svg Path="/Assets/calendar.svg"
+                                                                     Width="24" />
                                                             <TextBlock Text="3 дня назад"
                                                                        FontSize="16"
                                                                        VerticalAlignment="Center"
@@ -204,8 +242,8 @@
                                                             Padding="10">
                                                         <StackPanel Orientation="Horizontal"
                                                                     Spacing="10">
-                                                            <Svg Path="/Assets/graph.svg"
-                                                                 Width="24" />
+                                                            <svgSkia:Svg Path="/Assets/graph.svg"
+                                                                        Width="24" />
                                                             <TextBlock Text="{Binding Downloads}"
                                                                        FontSize="16"
                                                                        VerticalAlignment="Center"
@@ -221,8 +259,8 @@
                                                             Padding="10">
                                                         <StackPanel Orientation="Horizontal"
                                                                     Spacing="10">
-                                                            <Svg Path="/Assets/heart.svg"
-                                                                 Width="24" />
+                                                            <svgSkia:Svg Path="/Assets/heart.svg"
+                                                                         Width="24" />
                                                             <TextBlock Text="{Binding Follows}"
                                                                        FontSize="16"
                                                                        VerticalAlignment="Center"
@@ -232,17 +270,46 @@
                                                     </Border>
 
                                                 </StackPanel>
-
                                             </Grid>
 
                                             <TextBlock Foreground="{DynamicResource ContentColor}"
                                                        Text="{Binding Description}" />
 
-                                            <components:ButtonControl Classes="Primary"
-                                                                      Text="Добавить"
-                                                                      Command="{Binding $parent[ListBox].((pages:ModsPageViewModel)DataContext).AddModToClientCommand}"
-                                                                      CommandParameter="{Binding .}"
-                                                                      />
+                                            <StackPanel IsVisible="{Binding $parent[ListBoxItem].IsSelected}">
+
+                                                <Border Classes="HorizontalSeperator"/>
+
+                                                <Carousel x:Name="ViewSlider"
+                                                          ItemsSource="{Binding Gallery}">
+                                                    <Carousel.PageTransition>
+                                                        <CompositePageTransition>
+                                                            <PageSlide Duration="0:00:01.500" Orientation="Horizontal" />
+                                                        </CompositePageTransition>
+                                                    </Carousel.PageTransition>
+                                                    <Carousel.ItemTemplate>
+                                                        <DataTemplate>
+                                                            <Image asyncImageLoader:ImageLoader.Source="{Binding .}" Width="350" />
+                                                        </DataTemplate>
+                                                    </Carousel.ItemTemplate>
+                                                </Carousel>
+
+                                                <CheckBox Classes="CheckBox"
+                                                          FontWeight="SemiBold"
+                                                          Cursor="Hand"
+                                                          Margin="-30,10,0,0"
+                                                          Foreground="{DynamicResource PrimaryColor}"
+                                                          x:Name="ViewFullCheckBox"
+                                                          Content="Показать полностью">
+                                                    <CheckBox.Styles>
+                                                        <Style Selector="CheckBox /template/ Grid#RootGrid Grid">
+                                                            <Setter Property="IsVisible" Value="False"/>
+                                                        </Style>
+                                                    </CheckBox.Styles>
+                                                </CheckBox>
+
+                                                <mdxaml:MarkdownScrollViewer IsVisible="{Binding ElementName=ViewFullCheckBox, Path=IsChecked}" Markdown="{Binding $parent[ListBox].((pages:ModsPageViewModel)DataContext).SelectedModInfo.FullDescription}" />
+
+                                            </StackPanel>
                                         </StackPanel>
 
                                     </Border>

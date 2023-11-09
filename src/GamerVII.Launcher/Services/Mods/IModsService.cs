@@ -14,4 +14,5 @@ public interface IModsService
     Task<IEnumerable<IModVersion>> GetModVersions(string modSlug, CancellationToken cancellationToken);
     Task<IModVersion?> GetLatestVersionAsync(string modSlug, string clientVersion, CancellationToken cancellationToken);
     Task<IModVersion?> GetVersionAsync(string projectId, string versionId, CancellationToken cancellationToken);
+    Task<IModInfo?> GetModInfoAsync(string modSlug, CancellationToken cancellationToken);
 }

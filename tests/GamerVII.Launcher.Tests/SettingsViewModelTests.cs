@@ -54,16 +54,16 @@ public class SettingsTests
     [Test]
     public void SaveSettingsTest()
     {
-        _settingsViewModel.WindowWidth = 100;
-        _settingsViewModel.WindowHeight = 100;
+        _settingsViewModel.WindowWidth = "100";
+        _settingsViewModel.WindowHeight = "100";
         _settingsViewModel.MemorySize = 256;
 
         _settingsViewModel.GoToMainPageCommand?.Execute(null);
 
         Assert.Multiple(() =>
         {
-            Assert.That(_settingsViewModel.WindowWidth, Is.EqualTo(100));
-            Assert.That(_settingsViewModel.WindowHeight, Is.EqualTo(100));
+            Assert.That(_settingsViewModel.WindowWidth, Is.EqualTo("100"));
+            Assert.That(_settingsViewModel.WindowHeight, Is.EqualTo("100"));
             Assert.That(_settingsViewModel.MemorySize, Is.EqualTo(256));
         });
     }

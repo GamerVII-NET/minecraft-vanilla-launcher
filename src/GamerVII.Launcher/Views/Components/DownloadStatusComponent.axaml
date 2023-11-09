@@ -1,5 +1,6 @@
 ﻿<Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:svgSkia="clr-namespace:Avalonia.Svg.Skia;assembly=Avalonia.Svg.Skia"
         xmlns:controls="using:GamerVII.Launcher.Views.Components">
     <Design.PreviewWith>
         <Border Padding="20">
@@ -7,7 +8,7 @@
         </Border>
     </Design.PreviewWith>
 
-    <Style Selector="Svg.LoadingInfinity">
+    <Style Selector="svgSkia|Svg.LoadingInfinity">
         <Style.Animations>
             <Animation Duration="0:0:0:1"
                        IterationCount="INFINITE">
@@ -31,9 +32,9 @@
                     <StackPanel Orientation="Horizontal"
                                 Spacing="20">
 
-                        <Svg Path="/Assets/download.svg"
-                             Width="30"
-                             VerticalAlignment="Center" />
+                        <svgSkia:Svg Path="/Assets/download.svg"
+                                     Width="30"
+                                     VerticalAlignment="Center" />
 
                         <StackPanel Spacing="5" VerticalAlignment="Center">
 
@@ -49,10 +50,10 @@
 
                         <Grid>
 
-                            <Svg Path="/Assets/progress-bar-circle.svg"
-                                 Width="50"
-                                 Classes="LoadingInfinity"
-                                 VerticalAlignment="Center" />
+                            <svgSkia:Svg Path="/Assets/progress-bar-circle.svg"
+                                         Width="50"
+                                         Classes="LoadingInfinity"
+                                         VerticalAlignment="Center" />
 
                             <TextBlock Text="{TemplateBinding Percentage}"
                                        VerticalAlignment="Center"

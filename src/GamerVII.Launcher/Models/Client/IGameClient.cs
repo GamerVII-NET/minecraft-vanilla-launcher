@@ -10,4 +10,5 @@ public interface IGameClient
     string Description { get; set; }
     object? Image { get; set; }
     ModLoaderType ModLoaderType { get; set; }
+    string ModLoaderName { get; set; }
 }

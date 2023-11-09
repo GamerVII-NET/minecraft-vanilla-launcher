@@ -125,4 +125,27 @@ public class ModrinthModsService : IModsService
 
         return versions.OfType<MVersion>().MaxBy(c => c.DatePublished);
     }
+
+    public async Task<IModInfo?> GetModInfoAsync(string modSlug, CancellationToken cancellationToken)
+    {
+        var request = await _httpClient.GetAsync($"/v2/project/{modSlug}", cancellationToken);
+
+        if (!request.IsSuccessStatusCode)
+            return null;
+
+        var data = await request.Content.ReadAsStringAsync(cancellationToken);
+
+        var modInfo = JsonConvert.DeserializeObject<MProjectInfo>(data);
+
+        if (modInfo != null)
+            return new ClientModInfo
+            {
+                Slug = modSlug,
+                Name = modInfo.Title,
+                ShortDescription = modInfo.Description,
+                FullDescription = modInfo.Body
+            };
+
+        return null;
+    }
 }

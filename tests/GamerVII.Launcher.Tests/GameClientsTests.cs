@@ -1,12 +1,10 @@
 using GamerVII.Launcher.Extensions;
 using GamerVII.Launcher.Models.Client;
 using GamerVII.Launcher.Models.Enums;
-using GamerVII.Launcher.Services.Client;
 using GamerVII.Launcher.Services.GameLaunch;
 using GamerVII.Launcher.Tests.Models;
 using GamerVII.Launcher.ViewModels;
 using GamerVII.Launcher.ViewModels.Pages;
-using ReactiveUI;
 using Splat;
 
 namespace GamerVII.Launcher.Tests;
@@ -85,6 +83,7 @@ public class GameClientsTests
             Description = "Description for server",
             InstallationVersion = randomMinecraftVersion.Version,
             ModLoaderType = ModLoaderType.Vanilla,
+            ModLoaderName = "Vanilla",
             Image = null
         };
     }

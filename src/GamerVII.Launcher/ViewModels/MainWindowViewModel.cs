@@ -209,6 +209,7 @@ namespace GamerVII.Launcher.ViewModels
 
                         viewModel.NewGameClient = new GameClient();
                         viewModel.SelectedVersion = null;
+                        viewModel.SelectedGameLoader = null;
 
                         return viewModel;
                     }));
@@ -225,7 +226,12 @@ namespace GamerVII.Launcher.ViewModels
 
             ModsListCommand = ReactiveCommand.Create(() =>
                     OpenPage<ModsPageViewModel>(c =>
-                        ((ModsPageViewModel)c).SelectClient = SidebarViewModel.ServersListViewModel.SelectedClient!)
+                    {
+                        var viewModel = ((ModsPageViewModel)c);
+                        viewModel.SelectClient = SidebarViewModel.ServersListViewModel.SelectedClient!;
+                        viewModel.LoadData();
+                        return viewModel;
+                    })
                 , canViewMods);
 
             OpenLinkCommand = ReactiveCommand.Create((string url) => OpenLink(url));
@@ -250,8 +256,8 @@ namespace GamerVII.Launcher.ViewModels
             {
                 await _storageService.SetAsync("Settings", new LocalSettings
                 {
-                    WindowWidth = settings.WindowWidth,
-                    WindowHeight = settings.WindowHeight,
+                    WindowWidth = int.Parse(settings.WindowWidth),
+                    WindowHeight = int.Parse(settings.WindowHeight),
                     IsFullScreen = settings.IsFullScreen,
                     MemorySize = settings.MemorySize,
                     ConnectionLimit = settings.ConnectionLimit
@@ -338,8 +344,8 @@ namespace GamerVII.Launcher.ViewModels
 
                     var process = await _gameLaunchService.LaunchClientAsync(client, User, new StartupOptions
                     {
-                        ScreenWidth = settings.WindowWidth,
-                        ScreenHeight = settings.WindowHeight,
+                        ScreenWidth = int.Parse(settings.WindowWidth),
+                        ScreenHeight = int.Parse(settings.WindowHeight),
                         FullScreen = settings.IsFullScreen,
                         MaximumRamMb = settings.MemorySize,
                         MinimumRamMb = settings.MemorySize,
@@ -407,8 +413,8 @@ namespace GamerVII.Launcher.ViewModels
             // Load user settings and update view model properties.
             if (await _storageService.GetAsync<LocalSettings>("Settings") is { } settings)
             {
-                settingsViewModel.WindowWidth = settings.WindowWidth == 0 ? 900 : settings.WindowWidth;
-                settingsViewModel.WindowHeight = settings.WindowHeight == 0 ? 600 : settings.WindowHeight;
+                settingsViewModel.WindowWidth = settings.WindowWidth == 0 ? "900" : settings.WindowWidth.ToString();
+                settingsViewModel.WindowHeight = settings.WindowHeight == 0 ? "600" : settings.WindowHeight.ToString();
                 settingsViewModel.MemorySize = settings.MemorySize == 0 ? 1024 : settings.MemorySize;
                 settingsViewModel.IsFullScreen = settings.IsFullScreen;
                 settingsViewModel.ConnectionLimit = settings.ConnectionLimit;
@@ -512,6 +518,15 @@ namespace GamerVII.Launcher.ViewModels
             {
                 Manager
                     .CreateMessage(true, "#D03E3E", "Ошибка", "Не выбрана версия Minecraft!")
+                    .Dismiss().WithDelay(TimeSpan.FromSeconds(2))
+                    .Queue();
+                return;
+            }
+
+            if (string.IsNullOrEmpty(gameClient.ModLoaderName))
+            {
+                Manager
+                    .CreateMessage(true, "#D03E3E", "Ошибка", "Выберите загрузчик Minecraft!")
                     .Dismiss().WithDelay(TimeSpan.FromSeconds(2))
                     .Queue();
                 return;

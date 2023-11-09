@@ -10,6 +10,7 @@ using System.Reactive.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using DynamicData;
 using GamerVII.Launcher.Models.Client;
 using GamerVII.Launcher.Models.Mods;
 using GamerVII.Launcher.Models.Mods.Modrinth;
@@ -52,6 +53,36 @@ namespace GamerVII.Launcher.ViewModels.Pages
         }
 
         /// <summary>
+        /// Gets or sets Selected mod
+        /// </summary>
+        public IMod? SelectedMod
+        {
+            get => _selectedMod;
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _selectedMod, value);
+                LoadAdditionalModInfo();
+            }
+        }
+
+        private async Task LoadAdditionalModInfo()
+        {
+            if (SelectedMod != null)
+            {
+                SelectedModInfo = await _modsService.GetModInfoAsync(SelectedMod.Slug, CancellationToken.None);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets Selected mod
+        /// </summary>
+        public IModInfo? SelectedModInfo
+        {
+            get => _selectedModInfo;
+            set => this.RaiseAndSetIfChanged(ref _selectedModInfo, value);
+        }
+
+        /// <summary>
         /// Gets or sets the minecraft versions list
         /// </summary>
         public ObservableCollection<IMinecraftVersion> MinecraftVersions
@@ -75,7 +106,11 @@ namespace GamerVII.Launcher.ViewModels.Pages
         public string SearchText
         {
             get => _searchText;
-            set => this.RaiseAndSetIfChanged(ref _searchText, value);
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _searchText, value);
+                _filter.Offset = 0;
+            }
         }
 
         /// <summary>
@@ -111,6 +146,8 @@ namespace GamerVII.Launcher.ViewModels.Pages
 
         private IGameClient? _selectedClient;
         private ObservableCollection<IMod> _mods = new();
+        private IMod? _selectedMod;
+        private IModInfo? _selectedModInfo;
         private ObservableCollection<IMinecraftVersion> _minecraftVersions = new();
         private ObservableCollection<IModCategory> _modCategories = new();
         private readonly IModsService _modsService;
@@ -160,6 +197,7 @@ namespace GamerVII.Launcher.ViewModels.Pages
                 .Subscribe(DoLoadCategories!);
 
             AddModToClientCommand = ReactiveCommand.CreateFromTask<IMod>(AddModToClient);
+            LoadNextElementsCommand = ReactiveCommand.CreateFromTask(LoadNextMods);
 
             RxApp.MainThreadScheduler.Schedule(LoadData);
         }
@@ -178,17 +216,25 @@ namespace GamerVII.Launcher.ViewModels.Pages
         /// </summary>
         public ICommand? AddModToClientCommand { get; set; }
 
+        /// <summary>
+        /// Command to load next mods
+        /// </summary>
+        public ICommand LoadNextElementsCommand { get; set; }
+
         #endregion
 
         #region Private methods
 
-        private async void LoadData()
+        internal async void LoadData()
         {
+            Mods = new ObservableCollection<IMod>();
+
             filterTokenSource = new CancellationTokenSource();
             filterToken = filterTokenSource.Token;
 
             await LoadMinecraftVersions(string.Empty);
             await LoadCategories(string.Empty);
+
         }
 
         private async Task LoadMinecraftVersions(string version)
@@ -245,9 +291,9 @@ namespace GamerVII.Launcher.ViewModels.Pages
         {
             IsBusy = true;
 
-            if (!string.IsNullOrWhiteSpace(SearchText))
+            if (!string.IsNullOrWhiteSpace(searchText))
             {
-                _filter.Query = SearchText;
+                _filter.Query = searchText;
             }
 
             if (!string.IsNullOrWhiteSpace(_selectedClient?.Version))
@@ -282,6 +328,8 @@ namespace GamerVII.Launcher.ViewModels.Pages
                     var version =
                         await _modsService.GetVersionAsync(dependency.ProjectId, dependency.VersionId, CancellationToken.None) as MVersion;
 
+                    if (version == null) continue;
+
                     foreach (var file in version.Files)
                     {
                         await DownloadFileAsync(file.Url, modsDirectory, file.Filename, CancellationToken.None);
@@ -313,6 +361,25 @@ namespace GamerVII.Launcher.ViewModels.Pages
 
             await using var fileStream = new FileStream(fullPath, FileMode.Create, FileAccess.Write, FileShare.None);
             await stream.CopyToAsync(fileStream, 81920, cancellationToken);
+        }
+
+        private async Task LoadNextMods(CancellationToken arg)
+        {
+            _filter.Offset += _filter.Limit;
+
+            if (!string.IsNullOrWhiteSpace(SearchText))
+            {
+                _filter.Query = SearchText;
+            }
+
+            if (!string.IsNullOrWhiteSpace(_selectedClient?.Version))
+            {
+                _filter.AddIfNotExists(new ModrinthFilterItem("versions", _selectedClient.Version));
+            }
+
+            var mods = await _modsService.GetModsAsync(_filter, token);
+
+            Mods.AddRange(mods);
         }
 
         #endregion

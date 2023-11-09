@@ -49,19 +49,31 @@ namespace GamerVII.Launcher.ViewModels.Pages
         /// <summary>
         /// Gets or sets the window width of the client.
         /// </summary>
-        public int WindowWidth
+        public string WindowWidth
         {
-            get => _windowWidth;
-            set => this.RaiseAndSetIfChanged(ref _windowWidth, value);
+            get => _windowWidth.ToString();
+            set
+            {
+                if (int.TryParse(value, out int realValue))
+                {
+                    this.RaiseAndSetIfChanged(ref _windowWidth, realValue);
+                }
+            }
         }
 
         /// <summary>
         /// Gets or sets the window height of the client.
         /// </summary>
-        public int WindowHeight
+        public string WindowHeight
         {
-            get => _windowHeight;
-            set => this.RaiseAndSetIfChanged(ref _windowHeight, value);
+            get => _windowHeight.ToString();
+            set
+            {
+                if (int.TryParse(value, out int realValue))
+                {
+                    this.RaiseAndSetIfChanged(ref _windowHeight, realValue);
+                }
+            }
         }
 
         /// <summary>
@@ -145,12 +157,12 @@ namespace GamerVII.Launcher.ViewModels.Pages
         public SettingsPageViewModel(ISystemService? systemService = null, IGameLaunchService? gameLaunchService = null)
         {
             _gameLaunchService = gameLaunchService
-                                ?? Locator.Current.GetService<IGameLaunchService>()
-                                ?? throw new Exception($"{nameof(IGameLaunchService)} not registered");
+                                 ?? Locator.Current.GetService<IGameLaunchService>()
+                                 ?? throw new Exception($"{nameof(IGameLaunchService)} not registered");
 
             _systemService = systemService
-                            ?? Locator.Current.GetService<ISystemService>()
-                            ?? throw new Exception($"{nameof(ISystemService)} not registered");
+                             ?? Locator.Current.GetService<ISystemService>()
+                             ?? throw new Exception($"{nameof(ISystemService)} not registered");
 
             MaxMemorySize = Convert.ToInt32(_systemService.GetMaxAvailableRam());
 
