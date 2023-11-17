@@ -351,6 +351,9 @@ namespace GamerVII.Launcher.ViewModels
                         MinimumRamMb = settings.MemorySize,
                     }, _token);
 
+                    process.StartInfo.Arguments +=
+                        " -Dorg.lwjgl.opengl.Display.allowDeviceSelection=true -Dsun.java2d.opengl=true";
+
                     var processUtil = new ProcessUtil(process);
                     processUtil.OutputReceived += (s, e) => Console.WriteLine(e);
                     processUtil.StartWithEvents();

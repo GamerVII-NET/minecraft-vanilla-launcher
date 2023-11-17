@@ -16,4 +16,14 @@ public class ClientMod : IMod
     public string LatestVersion { get; set; }
     public string Author { get; set; }
     public List<string> Gallery { get; set; }
+
+    public override bool Equals(object? obj)
+    {
+        if (obj is IMod mod)
+        {
+            return this.Slug == mod.Slug;
+        }
+
+        return false;
+    }
 }

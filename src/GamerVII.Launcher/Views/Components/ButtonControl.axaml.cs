@@ -20,6 +20,15 @@ public class ButtonControl : TemplatedControl
     public static readonly StyledProperty<object> CommandParameterProperty = AvaloniaProperty.Register<ButtonControl, object>(
         nameof(CommandParameter));
 
+    public static readonly StyledProperty<double> IconWidthProperty = AvaloniaProperty.Register<ButtonControl, double>(
+        "IconWidth", 28);
+
+    public double IconWidth
+    {
+        get => GetValue(IconWidthProperty);
+        set => SetValue(IconWidthProperty, value);
+    }
+
     public object CommandParameter
     {
         get => GetValue(CommandParameterProperty);

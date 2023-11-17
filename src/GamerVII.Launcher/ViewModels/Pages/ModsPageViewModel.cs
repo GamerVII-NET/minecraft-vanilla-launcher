@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
@@ -12,11 +10,11 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using DynamicData;
 using GamerVII.Launcher.Models.Client;
-using GamerVII.Launcher.Models.Mods;
-using GamerVII.Launcher.Models.Mods.Modrinth;
+using GamerVII.Launcher.Models.Enums;
 using GamerVII.Launcher.Services.Mods;
 using GamerVII.Launcher.Services.System;
 using GamerVII.Launcher.ViewModels.Base;
+using Modrinth.Api.Core.Filter;
 using ReactiveUI;
 using Splat;
 
@@ -39,7 +37,7 @@ namespace GamerVII.Launcher.ViewModels.Pages
             {
                 this.RaiseAndSetIfChanged(ref _selectedClient, value);
 
-                _filter = new ModrinthFilter<IFilterItem>();
+                _filter = new ProjectFilter();
             }
         }
 
@@ -50,6 +48,24 @@ namespace GamerVII.Launcher.ViewModels.Pages
         {
             get => _mods;
             set => this.RaiseAndSetIfChanged(ref _mods, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the installed mods list
+        /// </summary>
+        public ObservableCollection<IMod> InstalledMods
+        {
+            get => _installedMods;
+            set => this.RaiseAndSetIfChanged(ref _installedMods, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the to install mods list
+        /// </summary>
+        public ObservableCollection<IMod> ModsToInstall
+        {
+            get => _modsToInstall;
+            set => this.RaiseAndSetIfChanged(ref _modsToInstall, value);
         }
 
         /// <summary>
@@ -114,6 +130,19 @@ namespace GamerVII.Launcher.ViewModels.Pages
         }
 
         /// <summary>
+        /// Gets or sets Filter
+        /// </summary>
+        public ProjectFilter SearchFilter
+        {
+            get => _filter;
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _filter, value);
+                _filter.Offset = 0;
+            }
+        }
+
+        /// <summary>
         /// Gets or sets the minecraft version search text
         /// </summary>
         public string MinecraftVersionSearchText
@@ -140,23 +169,35 @@ namespace GamerVII.Launcher.ViewModels.Pages
             set => this.RaiseAndSetIfChanged(ref _isBusy, value);
         }
 
+        /// <summary>
+        /// A flag that indicates whether the system is currently busy with a task.
+        /// </summary>
+        public bool IsDownloadingMods
+        {
+            get => _isDownloadingMods;
+            set => this.RaiseAndSetIfChanged(ref _isDownloadingMods, value);
+        }
+
         #endregion
 
         #region Private properties
 
         private IGameClient? _selectedClient;
         private ObservableCollection<IMod> _mods = new();
+        private ObservableCollection<IMod> _installedMods = new();
+        private ObservableCollection<IMod> _modsToInstall = new();
         private IMod? _selectedMod;
         private IModInfo? _selectedModInfo;
         private ObservableCollection<IMinecraftVersion> _minecraftVersions = new();
         private ObservableCollection<IModCategory> _modCategories = new();
         private readonly IModsService _modsService;
         private readonly ISystemService _systemService;
-        private IFilter<IFilterItem> _filter = new ModrinthFilter<IFilterItem>();
+        private ProjectFilter _filter = new();
         private string _searchText;
         private string _minecraftVersionSearchText;
         private string _categorySearchText;
         private bool _isBusy;
+        private bool _isDownloadingMods;
 
         private CancellationTokenSource modsListTokenSource = new();
         private CancellationToken token;
@@ -196,8 +237,17 @@ namespace GamerVII.Launcher.ViewModels.Pages
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Subscribe(DoLoadCategories!);
 
+            var canRemove = this.WhenAnyValue(
+                x => x.IsDownloadingMods,
+                (isProcessing) => isProcessing == false
+            );
+
             AddModToClientCommand = ReactiveCommand.CreateFromTask<IMod>(AddModToClient);
+            RemoveModFromClientCommand = ReactiveCommand.CreateFromTask<IMod>(RemoveModFromClient, canRemove);
+            SaveModsListCommand = ReactiveCommand.CreateFromTask(SaveModsList);
+            ToggleCategoryCommand = ReactiveCommand.CreateFromTask<IModCategory>(ToggleCategory);
             LoadNextElementsCommand = ReactiveCommand.CreateFromTask(LoadNextMods);
+            RefreshFilterCommand = ReactiveCommand.CreateFromTask(Refreshfilter);
 
             RxApp.MainThreadScheduler.Schedule(LoadData);
         }
@@ -217,9 +267,29 @@ namespace GamerVII.Launcher.ViewModels.Pages
         public ICommand? AddModToClientCommand { get; set; }
 
         /// <summary>
+        /// Command to remove mod from client
+        /// </summary>
+        public ICommand? RemoveModFromClientCommand { get; set; }
+
+        /// <summary>
         /// Command to load next mods
         /// </summary>
         public ICommand LoadNextElementsCommand { get; set; }
+
+        /// <summary>
+        /// Command to refresh filter
+        /// </summary>
+        public ICommand RefreshFilterCommand { get; set; }
+
+        /// <summary>
+        /// Command to toggle enabled category filter
+        /// </summary>
+        public ICommand ToggleCategoryCommand { get; set; }
+
+        /// <summary>
+        /// Command to save mods list
+        /// </summary>
+        public ICommand SaveModsListCommand { get; set; }
 
         #endregion
 
@@ -227,8 +297,6 @@ namespace GamerVII.Launcher.ViewModels.Pages
 
         internal async void LoadData()
         {
-            Mods = new ObservableCollection<IMod>();
-
             filterTokenSource = new CancellationTokenSource();
             filterToken = filterTokenSource.Token;
 
@@ -291,14 +359,16 @@ namespace GamerVII.Launcher.ViewModels.Pages
         {
             IsBusy = true;
 
-            if (!string.IsNullOrWhiteSpace(searchText))
-            {
-                _filter.Query = searchText;
-            }
+            _filter.Query = searchText;
 
             if (!string.IsNullOrWhiteSpace(_selectedClient?.Version))
             {
-                _filter.AddIfNotExists(new ModrinthFilterItem("versions", _selectedClient.Version));
+                _filter.AddFacet(ProjectFilterTypes.Version, _selectedClient.Version);
+            }
+
+            if (!string.IsNullOrWhiteSpace(_selectedClient?.ModLoaderName) && _selectedClient.ModLoaderType != ModLoaderType.Vanilla)
+            {
+                _filter.AddFacet(ProjectFilterTypes.Category, _selectedClient.ModLoaderName);
             }
 
             await LoadMods();
@@ -308,39 +378,66 @@ namespace GamerVII.Launcher.ViewModels.Pages
 
         private async Task AddModToClient(IMod mod, CancellationToken cancellationToken)
         {
-            IsBusy = true;
-
-            var localPath = await _systemService.GetGamePath();
-
-            var modsDirectory = Path.Combine(localPath, "mods");
-
-            if (_selectedClient != null &&
-                await _modsService.GetLatestVersionAsync(mod.Slug, _selectedClient.Version, cancellationToken) is
-                    MVersion latestVersion)
+            if (!ModsToInstall.Contains(mod))
             {
-                foreach (var file in latestVersion.Files)
-                {
-                    await DownloadFileAsync(file.Url, modsDirectory, file.Filename, cancellationToken);
-                }
+                ModsToInstall.Add(mod);
 
-                foreach (var dependency in latestVersion.Dependencies)
-                {
-                    var version =
-                        await _modsService.GetVersionAsync(dependency.ProjectId, dependency.VersionId, CancellationToken.None) as MVersion;
+                this.RaisePropertyChanged(nameof(ModsToInstall));
+            }
+        }
 
-                    if (version == null) continue;
+        private async Task RemoveModFromClient(IMod mod, CancellationToken cancellationToken)
+        {
+            IsDownloadingMods = true;
 
-                    foreach (var file in version.Files)
-                    {
-                        await DownloadFileAsync(file.Url, modsDirectory, file.Filename, CancellationToken.None);
-                    }
+            if (ModsToInstall.Contains(mod))
+            {
+                ModsToInstall.Remove(mod);
 
-
-                    // await DownloadFileAsync(file.Url, modsDirectory, file.Filename, cancellationToken);
-                }
+                this.RaisePropertyChanged(nameof(ModsToInstall));
             }
 
-            IsBusy = false;
+            if (InstalledMods.Contains(mod))
+            {
+                InstalledMods.Remove(mod);
+
+                var gameDirectory = await _systemService.GetGamePath();
+                var minecraftVersion = await _modsService.GetLatestVersionAsync(mod.Slug, cancellationToken);
+
+
+                minecraftVersion?.Files
+                    .Select(c => new FileInfo(Path.Combine(gameDirectory, "mods", c)))
+                    .ToList()
+                    .ForEach(c =>
+                    {
+                        if (c.Exists) c.Delete();
+                    });
+
+                this.RaisePropertyChanged(nameof(InstalledMods));
+            }
+            IsDownloadingMods = false;
+        }
+        private async Task ToggleCategory(IModCategory mod, CancellationToken cancellationToken)
+        {
+            _filter.ToggleFacet(ProjectFilterTypes.Category, mod.Name);
+
+            await LoadMods();
+        }
+
+        private async Task SaveModsList(CancellationToken token)
+        {
+            IsDownloadingMods = true;
+            var modsToInstall = ModsToInstall.ToList();
+
+            foreach (var mod in modsToInstall)
+            {
+                var modsFolder = Path.Combine(await _systemService.GetGamePath(), "mods");
+                await _modsService.LoadModAsync(modsFolder, mod.Slug, token);
+                ModsToInstall.Remove(mod);
+                InstalledMods.Add(mod);
+            }
+
+            IsDownloadingMods = false;
         }
 
         private async Task DownloadFileAsync(string fileUrl, string targetFolderPath, string fileName,
@@ -374,12 +471,25 @@ namespace GamerVII.Launcher.ViewModels.Pages
 
             if (!string.IsNullOrWhiteSpace(_selectedClient?.Version))
             {
-                _filter.AddIfNotExists(new ModrinthFilterItem("versions", _selectedClient.Version));
+                _filter.AddFacet(ProjectFilterTypes.Version, _selectedClient.Version);
+            }
+
+            if (!string.IsNullOrWhiteSpace(_selectedClient?.ModLoaderName) && _selectedClient.ModLoaderType != ModLoaderType.Vanilla)
+            {
+                _filter.AddFacet(ProjectFilterTypes.Category, _selectedClient.ModLoaderName.ToLower());
             }
 
             var mods = await _modsService.GetModsAsync(_filter, token);
 
             Mods.AddRange(mods);
+        }
+
+
+        private async Task Refreshfilter()
+        {
+            SearchFilter = new ProjectFilter();
+            SearchText = string.Empty;
+            DoSearch(SearchText);
         }
 
         #endregion

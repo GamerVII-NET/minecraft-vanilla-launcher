@@ -13,6 +13,24 @@
              x:DataType="pages:ModsPageViewModel"
              x:Class="GamerVII.Launcher.Views.Pages.ModsPageView">
 
+    <UserControl.Styles>
+        <Style Selector="Border.ModIsInstalled">
+            <Setter Property="Cursor" Value="No"></Setter>
+            <Setter Property="Opacity" Value="0.2"></Setter>
+
+            <Style.Animations>
+                <Animation Duration="0:0:0.2" Easing="BounceEaseIn">
+                    <KeyFrame Cue="0%">
+                        <Setter Property="Opacity" Value="1"></Setter>
+                    </KeyFrame>
+                    <KeyFrame Cue="100%">
+                        <Setter Property="Opacity" Value="0.2"></Setter>
+                    </KeyFrame>
+                </Animation>
+            </Style.Animations>
+        </Style>
+    </UserControl.Styles>
+
     <Border Background="{DynamicResource SecondaryColor}">
         <Grid RowDefinitions="300, *">
             <components:ModsPageHeader />
@@ -28,7 +46,7 @@
             <Border Grid.Row="1"
                     Padding="30">
 
-                <Grid ColumnDefinitions="300, 20, *">
+                <Grid ColumnDefinitions="300, 20, *, 20, 0.3*">
 
                     <ScrollViewer Grid.Column="0" VerticalScrollBarVisibility="Auto">
                         <StackPanel Spacing="30">
@@ -80,7 +98,10 @@
                                         <ItemsControl ItemsSource="{Binding ModCategories}">
                                             <ItemsControl.DataTemplates>
                                                 <DataTemplate x:DataType="client:IModCategory">
-                                                    <CheckBox Classes="CheckBox" Content="{Binding Name}" />
+                                                    <CheckBox Classes="CheckBox"
+                                                              Command="{Binding $parent[ItemsControl].((pages:ModsPageViewModel)DataContext).ToggleCategoryCommand}"
+                                                              CommandParameter="{Binding .}"
+                                                              Content="{Binding Name}" />
                                                 </DataTemplate>
                                             </ItemsControl.DataTemplates>
                                         </ItemsControl>
@@ -88,24 +109,34 @@
                                 </StackPanel>
 
                             </Border>
+
                             <Border Classes="ModsControlWrapper">
                                 <StackPanel Spacing="15">
                                     <Grid>
                                         <TextBlock Classes="ModsControlHeadline" Text="Загрузчик" />
                                     </Grid>
 
-                                    <TextBox Classes="Input-Box" Watermark="Поиск" />
+                                    <Border Classes="Tip TipPrimary">
+                                        <TextBlock Text="{Binding SelectClient.ModLoaderName}"
+                                                   Classes="Content"
+                                                   FontWeight="Medium"
+                                                   VerticalAlignment="Center"
+                                                   HorizontalAlignment="Center"
+                                                   Foreground="{DynamicResource PrimaryColor}"/>
+                                    </Border>
 
-                                    <StackPanel>
-                                        <CheckBox Classes="CheckBox" Content="Fabric" />
-                                        <CheckBox Classes="CheckBox" Content="Forge" />
-                                        <CheckBox Classes="CheckBox" Content="LiteLoader" />
-                                        <CheckBox Classes="CheckBox" Content="Risugami's ModLoader" />
-                                        <CheckBox Classes="CheckBox" Content="NeoForge" />
-                                        <CheckBox Classes="CheckBox" Content="Quilt" />
-                                        <CheckBox Classes="CheckBox" Content="Quilt" />
-                                        <CheckBox Classes="CheckBox" Content="Rift" />
-                                    </StackPanel>
+                                    <!-- <TextBox Classes="Input-Box" Watermark="Поиск" /> -->
+
+                                    <!-- <StackPanel> -->
+                                    <!--     <CheckBox Classes="CheckBox" Content="Fabric" /> -->
+                                    <!--     <CheckBox Classes="CheckBox" Content="Forge" /> -->
+                                    <!--     <CheckBox Classes="CheckBox" Content="LiteLoader" /> -->
+                                    <!--     <CheckBox Classes="CheckBox" Content="Risugami's ModLoader" /> -->
+                                    <!--     <CheckBox Classes="CheckBox" Content="NeoForge" /> -->
+                                    <!--     <CheckBox Classes="CheckBox" Content="Quilt" /> -->
+                                    <!--     <CheckBox Classes="CheckBox" Content="Quilt" /> -->
+                                    <!--     <CheckBox Classes="CheckBox" Content="Rift" /> -->
+                                    <!-- </StackPanel> -->
                                 </StackPanel>
 
                             </Border>
@@ -177,7 +208,13 @@
                             <ListBox.ItemTemplate>
                                 <DataTemplate x:DataType="client:IMod">
                                     <Border VerticalAlignment="Top">
-
+                                        <Classes.ModIsInstalled>
+                                            <MultiBinding Converter="{converters:ModHasInListsConverter}">
+                                                <Binding Path="."/>
+                                                <Binding Path="$parent[ListBox].((pages:ModsPageViewModel)DataContext).ModsToInstall"/>
+                                                <Binding Path="$parent[ListBox].((pages:ModsPageViewModel)DataContext).InstalledMods"/>
+                                            </MultiBinding>
+                                        </Classes.ModIsInstalled>
                                         <StackPanel Spacing="20">
                                             <Grid ColumnDefinitions="0.3*, 0.7*">
 
@@ -185,6 +222,7 @@
                                                             Orientation="Horizontal">
                                                     <Border CornerRadius="10" ClipToBounds="True">
                                                         <Image asyncImageLoader:ImageLoader.Source="{Binding IconUrl}"
+                                                               Height="40"
                                                                Width="40" />
                                                     </Border>
                                                     <TextBlock Text="{Binding Title}"
@@ -193,24 +231,26 @@
                                                 </StackPanel>
 
                                                 <StackPanel Grid.Column="1"
-                                                            Spacing="20"
+                                                            Spacing="10"
                                                             Orientation="Horizontal"
                                                             HorizontalAlignment="Right">
 
 
-
-                                                    <components:ButtonControl Classes="Additional"
+                                                    <components:ButtonControl Classes="Primary"
                                                                               CornerRadius="50"
                                                                               IconPath="/Assets/plus-white.svg"
-                                                                              Padding="12, 8"
+                                                                              Padding="10,8"
                                                                               Foreground="{DynamicResource ContentColor}"
                                                                               Text="Добавить"
+                                                                              FontSize="12"
+                                                                              IconWidth="20"
                                                                               IsVisible="{Binding $parent[ListBoxItem].IsPointerOver}"
                                                                               Command="{Binding $parent[ListBox].((pages:ModsPageViewModel)DataContext).AddModToClientCommand}"
-                                                                              CommandParameter="{Binding .}"
-                                                    />
+                                                                              CommandParameter="{Binding .}"/>
 
-                                                    <Border Classes="VerticalSeparator" Height="30" />
+                                                    <Border Classes="VerticalSeparator"
+                                                            Height="30"
+                                                            IsVisible="{Binding $parent[ListBoxItem].IsPointerOver}" />
 
                                                     <TextBlock Text="{Binding Author}"
                                                                FontSize="16"
@@ -222,28 +262,12 @@
 
                                                     <Border Classes="ModsControlWrapper"
                                                             CornerRadius="8"
-                                                            Padding="10">
+                                                            Height="35"
+                                                            Padding="10, 0">
                                                         <StackPanel Orientation="Horizontal"
-                                                                    Spacing="10">
-                                                            <svgSkia:Svg Path="/Assets/calendar.svg"
-                                                                     Width="24" />
-                                                            <TextBlock Text="3 дня назад"
-                                                                       FontSize="16"
-                                                                       VerticalAlignment="Center"
-                                                                       FontWeight="Medium"
-                                                                       Foreground="{DynamicResource ContentColor}" />
-                                                        </StackPanel>
-                                                    </Border>
-
-                                                    <Border Classes="VerticalSeparator" Height="30" />
-
-                                                    <Border Classes="ModsControlWrapper"
-                                                            CornerRadius="8"
-                                                            Padding="10">
-                                                        <StackPanel Orientation="Horizontal"
-                                                                    Spacing="10">
+                                                                    Spacing="5">
                                                             <svgSkia:Svg Path="/Assets/graph.svg"
-                                                                        Width="24" />
+                                                                         Width="18" />
                                                             <TextBlock Text="{Binding Downloads}"
                                                                        FontSize="16"
                                                                        VerticalAlignment="Center"
@@ -256,11 +280,12 @@
 
                                                     <Border Classes="ModsControlWrapper"
                                                             CornerRadius="8"
-                                                            Padding="10">
+                                                            Height="35"
+                                                            Padding="10, 0">
                                                         <StackPanel Orientation="Horizontal"
-                                                                    Spacing="10">
+                                                                    Spacing="5">
                                                             <svgSkia:Svg Path="/Assets/heart.svg"
-                                                                         Width="24" />
+                                                                         Width="18" />
                                                             <TextBlock Text="{Binding Follows}"
                                                                        FontSize="16"
                                                                        VerticalAlignment="Center"
@@ -277,7 +302,7 @@
 
                                             <StackPanel IsVisible="{Binding $parent[ListBoxItem].IsSelected}">
 
-                                                <Border Classes="HorizontalSeperator"/>
+                                                <Border Classes="HorizontalSeperator" />
 
                                                 <Carousel x:Name="ViewSlider"
                                                           ItemsSource="{Binding Gallery}">
@@ -288,7 +313,8 @@
                                                     </Carousel.PageTransition>
                                                     <Carousel.ItemTemplate>
                                                         <DataTemplate>
-                                                            <Image asyncImageLoader:ImageLoader.Source="{Binding .}" Width="350" />
+                                                            <Image asyncImageLoader:ImageLoader.Source="{Binding .}"
+                                                                   Width="350" />
                                                         </DataTemplate>
                                                     </Carousel.ItemTemplate>
                                                 </Carousel>
@@ -302,13 +328,28 @@
                                                           Content="Показать полностью">
                                                     <CheckBox.Styles>
                                                         <Style Selector="CheckBox /template/ Grid#RootGrid Grid">
-                                                            <Setter Property="IsVisible" Value="False"/>
+                                                            <Setter Property="IsVisible" Value="False" />
                                                         </Style>
                                                     </CheckBox.Styles>
                                                 </CheckBox>
 
-                                                <mdxaml:MarkdownScrollViewer IsVisible="{Binding ElementName=ViewFullCheckBox, Path=IsChecked}" Markdown="{Binding $parent[ListBox].((pages:ModsPageViewModel)DataContext).SelectedModInfo.FullDescription}" />
+                                                <mdxaml:MarkdownScrollViewer
+                                                    IsVisible="{Binding ElementName=ViewFullCheckBox, Path=IsChecked}"
+                                                    Markdown="{Binding $parent[ListBox].((pages:ModsPageViewModel)DataContext).SelectedModInfo.FullDescription}" />
 
+                                            </StackPanel>
+
+                                            <StackPanel Orientation="Horizontal"
+                                                        Opacity="0.5"
+                                                        Spacing="10">
+                                                <svgSkia:Svg Path="/Assets/calendar.svg"
+                                                             Width="18" />
+                                                <TextBlock
+                                                    Text="{Binding DateModified, StringFormat=dd.MM.yyy в HH:mm}"
+                                                    FontSize="16"
+                                                    VerticalAlignment="Center"
+                                                    FontWeight="Medium"
+                                                    Foreground="{DynamicResource ContentColor}" />
                                             </StackPanel>
                                         </StackPanel>
 
@@ -317,8 +358,101 @@
                             </ListBox.ItemTemplate>
                         </ListBox>
 
+                        <StackPanel Grid.Row="2"
+                                    IsVisible="{Binding Mods, Converter={converters:ListIsEmptyConverter}}"
+                                    HorizontalAlignment="Center">
+                            <TextBlock Text="Ничего не найдено"
+                                       TextAlignment="Center"
+                                       Margin="20"
+                                       Classes="Content" />
+                            <components:ButtonControl Classes="Additional"
+                                                      Command="{Binding RefreshFilterCommand}"
+                                                      CornerRadius="50"
+                                                      Text="Очистить фильтр"
+                                                      HorizontalAlignment="Center"
+                                                      IconPath="/Assets/close.svg" />
+                        </StackPanel>
+
 
                     </Grid>
+
+                    <StackPanel Grid.Column="4" Spacing="20" Margin="0, 60, 0, 0">
+
+                        <Border Classes="ModsControlWrapper">
+                            <StackPanel Spacing="15">
+                                <Grid>
+                                    <TextBlock Classes="ModsControlHeadline" Text="Установленные:" />
+                                </Grid>
+                                <StackPanel IsVisible="{Binding ModsToInstall, Converter={converters:ListNotEmptyConverter}}">
+                                    <ScrollViewer MaxHeight="200">
+                                        <ItemsControl ItemsSource="{Binding ModsToInstall}">
+                                            <ItemsControl.DataTemplates>
+                                                <DataTemplate x:DataType="client:IMod">
+
+                                                    <Grid>
+                                                        <StackPanel Spacing="10"
+                                                                    Margin="0,  5"
+                                                                    Orientation="Horizontal">
+                                                            <components:ButtonControl Classes="Icon"
+                                                                Padding="5, 0"
+                                                                Command="{Binding $parent[ItemsControl].((pages:ModsPageViewModel)DataContext).RemoveModFromClientCommand}"
+                                                                CommandParameter="{Binding .}"
+                                                                Width="30"
+                                                                Height="30"
+                                                                HorizontalAlignment="Right"
+                                                                IconPath="/Assets/close.svg"/>
+                                                            <Border Classes="Tip TipPrimary"
+                                                                    Padding="8,4">
+                                                                <TextBlock Foreground="{DynamicResource PrimaryColor}"
+                                                                           FontWeight="SemiBold"
+                                                                           VerticalAlignment="Center"
+                                                                           HorizontalAlignment="Center"
+                                                                           Text="New"/>
+                                                            </Border>
+                                                            <TextBlock Text="{Binding Title}"
+                                                                       VerticalAlignment="Center"
+                                                                       Classes="Content"/>
+                                                        </StackPanel>
+                                                    </Grid>
+                                                </DataTemplate>
+                                            </ItemsControl.DataTemplates>
+                                        </ItemsControl>
+                                    </ScrollViewer>
+                                    <Border Classes="HorizontalSeperator" Margin="0, 10"/>
+                                </StackPanel>
+                                <ScrollViewer MaxHeight="200">
+                                    <ItemsControl ItemsSource="{Binding InstalledMods}">
+                                        <ItemsControl.DataTemplates>
+                                            <DataTemplate x:DataType="client:IMod">
+                                                <StackPanel Spacing="10"
+                                                            Margin="0, 5"
+                                                            Orientation="Horizontal">
+                                                    <components:ButtonControl Classes="Icon"
+                                                                              Padding="5, 0"
+                                                                              Command="{Binding $parent[ItemsControl].((pages:ModsPageViewModel)DataContext).RemoveModFromClientCommand}"
+                                                                              CommandParameter="{Binding .}"
+                                                                              Width="30"
+                                                                              Height="30"
+                                                                              IconPath="/Assets/close.svg"/>
+                                                    <TextBlock Text="{Binding Title}"
+                                                               VerticalAlignment="Center"/>
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </ItemsControl.DataTemplates>
+                                    </ItemsControl>
+                                </ScrollViewer>
+
+                                <components:ButtonControl Text="Сохранить"
+                                                          Command="{Binding SaveModsListCommand}"
+                                                          HorizontalAlignment="Center"
+                                                          Classes="Primary"/>
+                            </StackPanel>
+                        </Border>
+
+                        <ProgressBar Foreground="{DynamicResource PrimaryColor}"
+                                     Background="{DynamicResource SecondaryColor}"
+                                     IsIndeterminate="{Binding IsDownloadingMods}"/>
+                    </StackPanel>
 
                 </Grid>
             </Border>
@@ -328,51 +462,4 @@
 
     </Border>
 
-    <!-- <Border Padding="50, 30" -->
-    <!--         Background="{DynamicResource SecondaryColor}"> -->
-    <!--     <Grid RowDefinitions="80, *" ColumnDefinitions="*, *"> -->
-    <!--         <Grid ColumnDefinitions="*, *" -->
-    <!--               Grid.ColumnSpan="2"> -->
-    <!-- -->
-    <!--             <components:ButtonControl Classes="Additional" -->
-    <!--                                       IconPath="/Assets/left-arrow.svg" -->
-    <!--                                       Text="НАЗАД" -->
-    <!--                                       CornerRadius="50" -->
-    <!--                                       Command="{Binding GoToMainPageCommand}" /> -->
-    <!-- -->
-    <!-- -->
-    <!--             <TextBlock HorizontalAlignment="Right" -->
-    <!--                        Grid.Column="1" -->
-    <!--                        Classes="Headline"> -->
-    <!--                 <Run Text="Список модов" /> -->
-    <!--                 <Run Text="/" Foreground="{DynamicResource PrimaryColor}" /> -->
-    <!--                 <Run Text="{Binding SelectClient.Name}" -->
-    <!--                      Foreground="{DynamicResource SecondaryColor}" /> -->
-    <!--             </TextBlock> -->
-    <!-- -->
-    <!--         </Grid> -->
-    <!-- -->
-    <!-- -->
-    <!--         ~1~ <StackPanel Grid.Row="1" Spacing="10"> @1@ -->
-    <!--         ~1~ @1@ -->
-    <!--         ~1~     <CheckBox Content="Мод 1" Classes="CheckBox" /> @1@ -->
-    <!--         ~1~     <CheckBox Content="Мод 2" Classes="CheckBox" /> @1@ -->
-    <!--         ~1~     <CheckBox Content="Мод 3" Classes="CheckBox" /> @1@ -->
-    <!--         ~1~     <CheckBox Content="Мод 4" Classes="CheckBox" /> @1@ -->
-    <!--         ~1~     <CheckBox Content="Мод 5" Classes="CheckBox" /> @1@ -->
-    <!--         ~1~     <CheckBox Content="Мод 6" Classes="CheckBox" /> @1@ -->
-    <!--         ~1~ @1@ -->
-    <!--         ~1~ </StackPanel> @1@ -->
-    <!-- -->
-    <!--         <TextBlock Grid.Row="1" -->
-    <!--                    Grid.Column="0" -->
-    <!--                    Grid.ColumnSpan="2" -->
-    <!--                    HorizontalAlignment="Center" -->
-    <!--                    VerticalAlignment="Center" -->
-    <!--                    Foreground="{DynamicResource ContentColor}" -->
-    <!--                    Text="В разработке..." /> -->
-    <!-- -->
-    <!-- -->
-    <!--     </Grid> -->
-    <!-- </Border> -->
 </UserControl>

@@ -10,7 +10,7 @@ namespace GamerVII.Launcher.Views.Pages;
 
 public partial class ModsPageView : UserControl
 {
-    private CompositeDisposable _disposables = new CompositeDisposable();
+    private CompositeDisposable _disposables = new();
 
     private CompositeDisposable _scrollViewerDisposables;
 
@@ -38,18 +38,19 @@ public partial class ModsPageView : UserControl
                 sv.GetObservable(ScrollViewer.OffsetProperty)
                     .Subscribe(offset =>
                     {
-                        if (offset.Y <= Double.Epsilon)
-                        {
-                            Console.WriteLine("At Top");
-                        }
+                        // if (offset.Y <= Double.Epsilon)
+                        // {
+                        //
+                        // }
 
                         var delta = Math.Abs(_verticalHeightMax - offset.Y);
-                        if (delta <= Double.Epsilon)
-                        {
-                            Console.WriteLine("At Bottom");
-                            var vm = DataContext as ModsPageViewModel;
-                            vm?.LoadNextElementsCommand.Execute(null);
-                        }
+                        if (!(delta <= Double.Epsilon)) return;
+
+                        Console.WriteLine("Load next mods...");
+                        var vm = DataContext as ModsPageViewModel;
+                        vm?.LoadNextElementsCommand.Execute(null);
+
+
                     }).DisposeWith(_disposables);
             }).DisposeWith(_disposables);
     }

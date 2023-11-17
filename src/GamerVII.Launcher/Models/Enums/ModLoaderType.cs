@@ -17,5 +17,9 @@ public enum ModLoaderType
     /// <summary>
     /// minecraft Lite loader
     /// </summary>
-    LiteLoader = 3
+    LiteLoader = 3,
+    /// <summary>
+    /// minecraft Quilt loader
+    /// </summary>
+    Quilt = 4
 }

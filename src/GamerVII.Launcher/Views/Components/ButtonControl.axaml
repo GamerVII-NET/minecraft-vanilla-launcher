@@ -42,7 +42,8 @@
                     </Button.Styles>
                     <StackPanel Orientation="Horizontal"
                                 Spacing="10">
-                        <svgSkia:Svg Path="{TemplateBinding IconPath}" Height="28" />
+                        <svgSkia:Svg Path="{TemplateBinding IconPath}"
+                                     Height="{TemplateBinding IconWidth}" />
                         <TextBlock Text="{TemplateBinding Text}"
                                    FontWeight="{TemplateBinding FontWeight}"
                                    Foreground="{TemplateBinding Foreground}"
@@ -88,7 +89,7 @@
                                 Spacing="10">
 
                         <svgSkia:Svg Path="{TemplateBinding IconPath}"
-                                     Height="28" />
+                                     Height="{TemplateBinding IconWidth}" />
 
                         <TextBlock Text="{TemplateBinding Text}"
                                    FontWeight="{TemplateBinding FontWeight}"
@@ -131,7 +132,7 @@
                                 Spacing="10">
 
                         <svgSkia:Svg Path="{TemplateBinding IconPath}"
-                                     Height="28" />
+                                     Height="{TemplateBinding IconWidth}" />
 
                         <TextBlock Text="{TemplateBinding Text}"
                                    FontWeight="{TemplateBinding FontWeight}"
@@ -171,7 +172,8 @@
                                     Value="{DynamicResource AdditionalBorderColorHover}" />
                         </Style>
                     </Button.Styles>
-                    <svgSkia:Svg Path="{TemplateBinding IconPath}" Height="28" />
+                    <svgSkia:Svg Path="{TemplateBinding IconPath}"
+                                 Height="{TemplateBinding IconWidth}" />
                 </Button>
             </ControlTemplate>
         </Setter>

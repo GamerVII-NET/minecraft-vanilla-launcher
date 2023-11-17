@@ -1,7 +1,6 @@
 ﻿using GamerVII.Launcher.Extensions;
-using GamerVII.Launcher.Models.Mods;
-using GamerVII.Launcher.Models.Mods.Modrinth;
 using GamerVII.Launcher.Services.Mods;
+using Modrinth.Api.Core.Filter;
 using Splat;
 
 namespace GamerVII.Launcher.Tests;
@@ -9,7 +8,7 @@ namespace GamerVII.Launcher.Tests;
 public class ModsLoaderTests
 {
     private IModsService _modsService;
-    private ModrinthFilter<IFilterItem> filter;
+    private ProjectModFilter filter;
 
     [SetUp]
     public void Setup()
@@ -18,7 +17,7 @@ public class ModsLoaderTests
 
         _modsService = Locator.Current.GetService<IModsService>() ?? throw new Exception($"{nameof(IModsService)} not registered");
 
-        filter = new ModrinthFilter<IFilterItem>();
+        filter = new ProjectModFilter();
 
     }
 
@@ -29,7 +28,7 @@ public class ModsLoaderTests
         filter.Limit = 5;
         filter.Offset = 0;
 
-        filter.Add(new ModrinthFilterItem("versions", "1.12.2"));
+        filter.AddFacet("versions", "1.12.2");
 
         var mods = await _modsService.GetModsAsync(filter, CancellationToken.None);
 

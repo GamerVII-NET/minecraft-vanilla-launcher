@@ -158,7 +158,6 @@
                     <StackPanel Grid.Column="2" Spacing="5">
                         <TextBlock Text="Загрузчик" Classes="Content" />
                         <ListBox ItemsSource="{Binding GameLoaders}"
-                                 SelectedIndex="0"
                                  Margin="0, 10, 0, 0"
                                  Background="Transparent"
                                  SelectedItem="{Binding SelectedGameLoader}">

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive.Concurrency;
@@ -79,7 +79,12 @@ namespace GamerVII.Launcher.ViewModels.Pages
         public ObservableCollection<IGameLoader> GameLoaders
         {
             get => _gameLoaders;
-            set => this.RaiseAndSetIfChanged(ref _gameLoaders, value);
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _gameLoaders, value);
+
+                SelectedGameLoader = value?.FirstOrDefault();
+            }
         }
 
         #endregion
@@ -125,9 +130,11 @@ namespace GamerVII.Launcher.ViewModels.Pages
                     Name = string.IsNullOrWhiteSpace(_newGameClient.Name) || FindVersion(_newGameClient.Name) != null
                         ? SelectedVersion.Version
                         : _newGameClient.Name,
-                    ModLoaderType = SelectedVersion.Version.Contains("Forge") //ToDo: Add a proper implementation for installing the loader type.
-                        ? ModLoaderType.Forge
-                        : ModLoaderType.Vanilla,
+                    ModLoaderType =
+                        SelectedVersion.Version
+                            .Contains("Forge") //ToDo: Add a proper implementation for installing the loader type.
+                            ? ModLoaderType.Forge
+                            : ModLoaderType.Vanilla,
                     Description = _newGameClient.Description
                 };
 
@@ -158,6 +165,7 @@ namespace GamerVII.Launcher.ViewModels.Pages
         private IGameClient _newGameClient = new GameClient();
         private ObservableCollection<IMinecraftVersion> _minecraftVersions = new();
         private IGameLoader? _selectedGameLoader;
+
         private ObservableCollection<IGameLoader> _gameLoaders = new()
         {
             new GameLoader
@@ -169,8 +177,14 @@ namespace GamerVII.Launcher.ViewModels.Pages
             {
                 Name = "Forge",
                 LoaderType = ModLoaderType.Forge
+            },
+            new GameLoader
+            {
+                Name = "Quilt",
+                LoaderType = ModLoaderType.Quilt
             }
         };
+
         private IMinecraftVersion? _selectedVersion;
         private readonly IGameLaunchService _gameLaunchService;
         private string? _searchText;
@@ -183,8 +197,8 @@ namespace GamerVII.Launcher.ViewModels.Pages
         public AddClientPageViewModel(IGameLaunchService? gameLaunchService = null)
         {
             _gameLaunchService = gameLaunchService
-                                ?? Locator.Current.GetService<IGameLaunchService>()
-                                ?? throw new Exception($"{nameof(IGameLaunchService)} not registered");
+                                 ?? Locator.Current.GetService<IGameLaunchService>()
+                                 ?? throw new Exception($"{nameof(IGameLaunchService)} not registered");
 
             this.WhenAnyValue(x => x.SearchText)
                 .Throttle(TimeSpan.FromMilliseconds(400))

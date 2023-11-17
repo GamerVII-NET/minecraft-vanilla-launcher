@@ -9,7 +9,9 @@ using System.Threading.Tasks;
 using CmlLib.Core;
 using CmlLib.Core.Auth;
 using CmlLib.Core.Installer.Forge;
+using CmlLib.Core.Installer.QuiltMC;
 using GamerVII.Launcher.Models.Client;
+using GamerVII.Launcher.Models.Enums;
 using GamerVII.Launcher.Models.Users;
 using GamerVII.Launcher.Services.Logger;
 using GamerVII.Launcher.Services.System;
@@ -146,6 +148,10 @@ public class GameLaunchService : IGameLaunchService
                     throw new NotImplementedException();
                 case Models.Enums.ModLoaderType.LiteLoader:
                     throw new NotImplementedException();
+                case ModLoaderType.Quilt:
+                    if (!File.Exists(_launcher.MinecraftPath.GetVersionJarPath(client.InstallationVersion)))
+                        await LoadQuiltAsync(client, cancellationToken);
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -156,6 +162,16 @@ public class GameLaunchService : IGameLaunchService
         {
             LoadClientEnded?.Invoke(client, false, ex.Message);
         }
+    }
+
+    private async Task LoadQuiltAsync(IGameClient client, CancellationToken cancellationToken)
+    {
+        _launcher ??= await InitMinecraftLauncherAsync(cancellationToken);
+
+        throw new Exception("Загрузка Quilt ещё недоступна");
+
+
+
     }
 
     private async Task LoadForgeAsync(IGameClient client, CancellationToken cancellationToken)

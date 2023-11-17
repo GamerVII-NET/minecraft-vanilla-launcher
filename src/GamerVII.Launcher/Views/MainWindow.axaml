@@ -56,10 +56,10 @@
 
                     <StackPanel Spacing="5">
                         <TextBlock Text="Привет,"
-                                   Foreground="{DynamicResource ContentColor}"/>
+                                   Foreground="{DynamicResource ContentColor}" />
                         <TextBlock Text="{Binding User.Login}"
                                    FontWeight="Bold"
-                                   FontSize="22"/>
+                                   FontSize="22" />
                     </StackPanel>
 
                     <Grid IsVisible="{Binding IsProcessing}"
@@ -68,10 +68,11 @@
                           Grid.Column="0">
 
                         <components:DownloadStatusComponent
+                            Classes.AnimatedLoader="{Binding IsProcessing}"
                             Title="Загрузка файлов"
                             Percentage="{Binding LoadingPercentage}"
                             Description="{Binding LoadingFile}"
-                            HorizontalAlignment="Center"/>
+                            HorizontalAlignment="Center" />
                     </Grid>
 
                     <!-- Online -->

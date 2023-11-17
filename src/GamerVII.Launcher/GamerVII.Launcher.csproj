@@ -101,11 +101,26 @@
     <Compile Update="Models\Client\GameLoader.cs">
       <DependentUpon>IGameLoader.cs</DependentUpon>
     </Compile>
+    <Compile Update="Models\Client\ModCategory.cs">
+      <DependentUpon>IModCategory.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Models\Client\ClientModInfo.cs">
+      <DependentUpon>IModInfo.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Models\Client\ModVersion.cs">
+      <DependentUpon>IModVersion.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
 
 
   <ItemGroup>
     <ProjectReference Include="..\CmlLib.Core.Installer.Forge\CmlLib.Core.Installer.Forge\CmlLib.Core.Installer.Forge.csproj" />
     <ProjectReference Include="..\GamerVII.Notification.Avalonia\GamerVII.Notification.Avalonia\GamerVII.Notification.Avalonia.csproj" />
+    <ProjectReference Include="..\Modrinth.Api\src\Modrinth.Api\Modrinth.Api.csproj" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <Folder Include="Models\Mods\" />
   </ItemGroup>
 </Project>

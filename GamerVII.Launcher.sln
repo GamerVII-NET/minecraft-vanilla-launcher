@@ -24,6 +24,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GamerVII.Notification.Avalo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CmlLib.Core.Installer.Forge", "src\CmlLib.Core.Installer.Forge\CmlLib.Core.Installer.Forge\CmlLib.Core.Installer.Forge.csproj", "{C1729538-FF80-4E87-B907-AB61C667E6CD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Modrinth.Api", "src\Modrinth.Api\src\Modrinth.Api\Modrinth.Api.csproj", "{50D16062-504F-4B4B-B0AC-4994AC7D32BA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -46,6 +48,10 @@ Global
 		{C1729538-FF80-4E87-B907-AB61C667E6CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C1729538-FF80-4E87-B907-AB61C667E6CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C1729538-FF80-4E87-B907-AB61C667E6CD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{50D16062-504F-4B4B-B0AC-4994AC7D32BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{50D16062-504F-4B4B-B0AC-4994AC7D32BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{50D16062-504F-4B4B-B0AC-4994AC7D32BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{50D16062-504F-4B4B-B0AC-4994AC7D32BA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -58,5 +64,6 @@ Global
 		{787232DD-3F4F-4B12-8297-455C9A4C3A43} = {793FCF04-CB68-4093-9A0F-57A0CA4475AA}
 		{B792AA78-60F3-4EEF-B0FD-129ACD2ACD89} = {662268E9-BD01-43C7-924B-F4F285C8D391}
 		{C1729538-FF80-4E87-B907-AB61C667E6CD} = {662268E9-BD01-43C7-924B-F4F285C8D391}
+		{50D16062-504F-4B4B-B0AC-4994AC7D32BA} = {662268E9-BD01-43C7-924B-F4F285C8D391}
 	EndGlobalSection
 EndGlobal

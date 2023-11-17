@@ -1,49 +1,23 @@
-﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using GamerVII.Launcher.Models.Client;
-using GamerVII.Launcher.Models.Mods;
-using GamerVII.Launcher.Models.Mods.Modrinth;
-using Newtonsoft.Json;
+using Modrinth.Api;
+using Modrinth.Api.Core.Filter;
+using Modrinth.Api.Models.Projects;
 
 namespace GamerVII.Launcher.Services.Mods;
 
 public class ModrinthModsService : IModsService
 {
-    private readonly HttpClient _httpClient = new HttpClient
+    private readonly ModrinthApi _modrinthApi = new();
+
+    public async Task<IEnumerable<IMod>> GetModsAsync(ProjectFilter filter, CancellationToken cancellationToken)
     {
-        Timeout = TimeSpan.FromSeconds(30),
-        BaseAddress = new Uri("https://api.modrinth.com")
-    };
+        var mods = await _modrinthApi.Mods.FindAsync<ModProject>(filter, cancellationToken);
 
-    private IEnumerable<IModCategory> _categoriesStorage = Enumerable.Empty<MCategory>();
-    private IEnumerable<IMinecraftVersion> _minecraftVersionsStorage = Enumerable.Empty<IMinecraftVersion>();
-
-    public ModrinthModsService()
-    {
-        // _httpClient.DefaultRequestHeaders.Add("User-Agent", "GamerVII-NET/minecraft-vanilla-launcher/1.1.0 (launcher.recloud.tech)");
-    }
-
-    public async Task<IEnumerable<IMod>> GetModsAsync(IFilter<IFilterItem> filter, CancellationToken cancellationToken)
-    {
-        filter.AddIfNotExists(new ModrinthFilterItem("project_type", "mod"));
-
-        var uri = filter.GetParametersString("/v2/search");
-
-        var request = await _httpClient.GetAsync(uri, cancellationToken);
-
-        if (!request.IsSuccessStatusCode)
-            return Enumerable.Empty<IMod>();
-
-        var data = await request.Content.ReadAsStringAsync(cancellationToken);
-
-        var rootData = JsonConvert.DeserializeObject<MSearch>(data);
-
-        return rootData?.Hits.Select(c => new ClientMod
+        return mods.Hits.Select(c => new ClientMod
         {
             Author = c.Author,
             Description = c.Description,
@@ -56,94 +30,63 @@ public class ModrinthModsService : IModsService
             IconUrl = c.IconUrl,
             Slug = c.Slug,
             LatestVersion = c.LatestVersion
-        }) ?? Enumerable.Empty<IMod>();
+        });
     }
 
     public async Task<IEnumerable<IMinecraftVersion>> GetMinecraftVersionsAsync(CancellationToken cancellationToken)
     {
-        if (_minecraftVersionsStorage.Any()) return _minecraftVersionsStorage;
+        var versions = await _modrinthApi.Other.GetMinecraftVersionsAsync(cancellationToken);
 
-        var request = await _httpClient.GetAsync("/v2/tag/game_version", cancellationToken);
-
-        if (!request.IsSuccessStatusCode)
-            return Enumerable.Empty<IMinecraftVersion>();
-
-        var data = await request.Content.ReadAsStringAsync(cancellationToken);
-
-        _minecraftVersionsStorage = JsonConvert.DeserializeObject<IEnumerable<MGameVersion>>(data)
-                                    ?? Enumerable.Empty<IMinecraftVersion>();
-
-        return _minecraftVersionsStorage;
+        return versions.Select(c => new MinecraftVersion
+        {
+            Version = c.Version,
+            VersionType = c.VersionType
+        });
     }
 
     public async Task<IEnumerable<IModCategory>> GetCategoriesAsync(CancellationToken cancellationToken)
     {
-        if (_categoriesStorage.Any()) return _categoriesStorage;
+        var versions = await _modrinthApi.Other.GetCategoriesAsync(cancellationToken);
 
-        var request = await _httpClient.GetAsync("/v2/tag/category", cancellationToken);
-
-        if (!request.IsSuccessStatusCode)
-            return Enumerable.Empty<IModCategory>();
-
-        var data = await request.Content.ReadAsStringAsync(cancellationToken);
-
-        _categoriesStorage = JsonConvert.DeserializeObject<IEnumerable<MCategory>>(data)
-                             ?? Enumerable.Empty<IModCategory>();
-
-        return _categoriesStorage;
+        return versions.Select(c => new ModCategory
+        {
+            Name = c.Name,
+            Type = c.ProjectType
+        });
     }
 
-    public async Task<IEnumerable<IModVersion>> GetModVersions(string modSlug,
-        CancellationToken cancellationToken)
+    public async Task<IModInfo?> GetModInfoAsync(string selectedModSlug, CancellationToken token)
     {
-        var request = await _httpClient.GetAsync($"/v2/project/{modSlug}/version", cancellationToken);
+        var modProject = await _modrinthApi.Mods.FindAsync<ModProject>(selectedModSlug, token);
 
-        if (!request.IsSuccessStatusCode)
-            return Enumerable.Empty<IModVersion>();
-
-        var data = await request.Content.ReadAsStringAsync(cancellationToken);
-
-        var modeVersions = JsonConvert.DeserializeObject<IEnumerable<MVersion>>(data)
-                           ?? Enumerable.Empty<IModVersion>();
-
-        return modeVersions;
+        return new ClientModInfo
+        {
+            Name = modProject.Title,
+            Slug = modProject.Slug,
+            FullDescription = modProject.Body,
+            ShortDescription = modProject.Description
+        };
     }
 
-    public async Task<IModVersion?> GetLatestVersionAsync(string modSlug, string clientVersion, CancellationToken cancellationToken)
+    public async Task LoadModAsync(string modsFolder, string slug, CancellationToken token)
     {
-        var versions = await GetModVersions(modSlug, cancellationToken);
+        var modVersion = await _modrinthApi.Mods.GetLastVersionAsync(slug, token);
 
-        var modVersions = versions.ToList();
-
-        return modVersions.OfType<MVersion>().OrderByDescending(c => c.DatePublished).FirstOrDefault(c => c.GameVersions.Contains(clientVersion) && c.VersionType == "release")
-               ?? modVersions.OfType<MVersion>().OrderByDescending(c => c.DatePublished).FirstOrDefault(c => c.GameVersions.Contains(clientVersion));
+        if (modVersion != null)
+        {
+            await _modrinthApi.Mods.DownloadAsync(modsFolder, modVersion, true, token);
+        }
     }
 
-    public async Task<IModVersion?> GetVersionAsync(string projectId, string versionId, CancellationToken cancellationToken)
+    public async Task<IModVersion?> GetLatestVersionAsync(string modSlug, CancellationToken cancellationToken)
     {
-        var versions = await GetModVersions(projectId, cancellationToken);
+        var version = await _modrinthApi.Mods.GetLastVersionAsync(modSlug, cancellationToken);
 
-        return versions.OfType<MVersion>().MaxBy(c => c.DatePublished);
-    }
-
-    public async Task<IModInfo?> GetModInfoAsync(string modSlug, CancellationToken cancellationToken)
-    {
-        var request = await _httpClient.GetAsync($"/v2/project/{modSlug}", cancellationToken);
-
-        if (!request.IsSuccessStatusCode)
-            return null;
-
-        var data = await request.Content.ReadAsStringAsync(cancellationToken);
-
-        var modInfo = JsonConvert.DeserializeObject<MProjectInfo>(data);
-
-        if (modInfo != null)
-            return new ClientModInfo
+        if (version != null)
+            return new ModVersion
             {
-                Slug = modSlug,
-                Name = modInfo.Title,
-                ShortDescription = modInfo.Description,
-                FullDescription = modInfo.Body
+                Name = version.Name,
+                Files = version.Files.Select(c => c.Filename)
             };
 
         return null;
