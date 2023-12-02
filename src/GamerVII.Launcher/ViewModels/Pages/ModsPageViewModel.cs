@@ -402,7 +402,7 @@ namespace GamerVII.Launcher.ViewModels.Pages
                 InstalledMods.Remove(mod);
 
                 var gameDirectory = await _systemService.GetGamePath();
-                var minecraftVersion = await _modsService.GetLatestVersionAsync(mod.Slug, cancellationToken);
+                var minecraftVersion = await _modsService.GetLatestVersionAsync(mod.Slug, SelectClient!.ModLoaderName,  cancellationToken);
 
 
                 minecraftVersion?.Files
@@ -432,7 +432,7 @@ namespace GamerVII.Launcher.ViewModels.Pages
             foreach (var mod in modsToInstall)
             {
                 var modsFolder = Path.Combine(await _systemService.GetGamePath(), "mods");
-                await _modsService.LoadModAsync(modsFolder, mod.Slug, token);
+                await _modsService.LoadModAsync(modsFolder, mod.Slug, SelectClient!.ModLoaderName.ToLower(), token);
                 ModsToInstall.Remove(mod);
                 InstalledMods.Add(mod);
             }

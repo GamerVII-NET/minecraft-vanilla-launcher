@@ -12,6 +12,6 @@ public interface IModsService
     Task<IEnumerable<IMinecraftVersion>> GetMinecraftVersionsAsync(CancellationToken cancellationToken);
     Task<IEnumerable<IModCategory>> GetCategoriesAsync(CancellationToken cancellationToken);
     Task<IModInfo?> GetModInfoAsync(string selectedModSlug, CancellationToken cancellationToken);
-    Task LoadModAsync(string modsFolder, string slug, CancellationToken token);
-    Task<IModVersion?> GetLatestVersionAsync(string modSlug, CancellationToken cancellationToken);
+    Task LoadModAsync(string modsFolder, string slug, string loaderName, CancellationToken token);
+    Task<IModVersion?> GetLatestVersionAsync(string modSlug, string loaderName, CancellationToken cancellationToken);
 }

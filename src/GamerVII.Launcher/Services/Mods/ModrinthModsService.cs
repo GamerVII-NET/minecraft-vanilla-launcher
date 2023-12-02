@@ -68,19 +68,19 @@ public class ModrinthModsService : IModsService
         };
     }
 
-    public async Task LoadModAsync(string modsFolder, string slug, CancellationToken token)
+    public async Task LoadModAsync(string modsFolder, string slug, string loaderName, CancellationToken token)
     {
-        var modVersion = await _modrinthApi.Mods.GetLastVersionAsync(slug, token);
+        var modVersion = await _modrinthApi.Mods.GetLastVersionAsync(slug, loaderName, token);
 
         if (modVersion != null)
         {
-            await _modrinthApi.Mods.DownloadAsync(modsFolder, modVersion, true, token);
+            await _modrinthApi.Mods.DownloadAsync(modsFolder, modVersion, loaderName, true, token);
         }
     }
 
-    public async Task<IModVersion?> GetLatestVersionAsync(string modSlug, CancellationToken cancellationToken)
+    public async Task<IModVersion?> GetLatestVersionAsync(string modSlug, string loaderName, CancellationToken cancellationToken)
     {
-        var version = await _modrinthApi.Mods.GetLastVersionAsync(modSlug, cancellationToken);
+        var version = await _modrinthApi.Mods.GetLastVersionAsync(modSlug, loaderName, cancellationToken);
 
         if (version != null)
             return new ModVersion
