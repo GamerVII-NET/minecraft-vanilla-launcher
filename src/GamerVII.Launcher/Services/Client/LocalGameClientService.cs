@@ -11,15 +11,6 @@ public class LocalGameClientService : IGameClientService
     {
         var servers = new List<GameClient>();
 
-        // servers.Add(new GameClient
-        // {
-        //     Name = $"Название сервера",
-        //     Image = null,
-        //     Description = "Описание",
-        //     Version = "1.7.10",
-        //     ModLoaderType = ModLoaderType.Vanilla
-        // });
-
         return await Task.FromResult(servers);
     }
 }
